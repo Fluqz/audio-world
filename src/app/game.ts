@@ -61,7 +61,7 @@ export class Game {
     
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
         Game.renderer.setSize(this.w, this.h)
-        Game.renderer.setClearColor(0xFFFFFF)
+        Game.renderer.setClearColor(0xf4eedb)
         Game.renderer.shadowMap.enabled = true
         Game.renderer.shadowMap.type = THREE.PCFSoftShadowMap
         this.dom.append(Game.renderer.domElement)
@@ -77,7 +77,7 @@ export class Game {
     
         Game.scene = new THREE.Scene()
         // Game.scene.fog = new THREE.FogExp2( 0xefd1b5, .01 );
-        Game.scene.fog = new THREE.Fog(0xFFFFFF, 1, 50)
+        Game.scene.fog = new THREE.Fog(0xf4eedb, 1, 50)
 
         // Cubemap
         const cubeMap = new THREE.CubeTextureLoader()
@@ -93,7 +93,7 @@ export class Game {
         // Game.scene.background = cubeMap
         // Game.scene.add(new THREE.GridHelper(1000, 1000))
 
-        let dLight = new THREE.DirectionalLight(0xFFFFFF, .8)
+        let dLight = new THREE.DirectionalLight(0xf4eedb, .8)
         dLight.position.set(50, 50, 50)
         dLight.castShadow = true
         dLight.shadow.camera.far = 200
@@ -105,7 +105,7 @@ export class Game {
         dLight.shadow.mapSize.width = 4096
         dLight.shadow.mapSize.height = 4096
         Game.scene.add(dLight)
-        Game.scene.add(new THREE.HemisphereLight(0xFFFFFF, 0xFFFFFF, .7))
+        Game.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
 
         new Input(this.dom)
 

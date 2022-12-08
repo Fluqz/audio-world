@@ -6,7 +6,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { AssetManager } from './asset-manager'
 import { Game } from './game'
 import { GameObject } from './object'
-import { Tree } from './tree'
+import { Tree } from './objects/tree'
 import { Utils } from './util/utils'
 import { Player } from './player'
 
@@ -33,7 +33,6 @@ export class Environment extends GameObject {
         // let ground = new Mesh(new PlaneGeometry(500, 500), new MeshDistanceMaterial())
         let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
 
-        console.log('tex',Game.renderTarget.texture.userData)
         ground.geometry.rotateX(-Math.PI / 2)
         ground.receiveShadow = true
 
@@ -62,7 +61,6 @@ export class Environment extends GameObject {
     }
 
     update(delta: number) {
-        console.log('tex',Game.renderTarget.texture)
 
         this.obj.traverseVisible(o => {
 

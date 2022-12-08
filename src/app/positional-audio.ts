@@ -32,7 +32,7 @@ export class PositionalAudio {
         this.oscillator.type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
 
         // this.envelope = new Tone.AmplitudeEnvelope(0, 1, 1, 1)
-        this.gain = new Tone.Gain(.5)
+        this.gain = new Tone.Gain(0)
         this.oscillator.connect(this.gain)
         this.gain.connect(Game.master)
     }
@@ -44,14 +44,18 @@ export class PositionalAudio {
     update(position: Vector3, delta: number) : void {
 
         const d = this.position.distanceTo(position)
-        
+
         if(d > this.range) {
         
+            if(this.gain.gain.value == 0) return
             this.gain.gain.setValueAtTime(0, delta)
-            return
         }
+        else {
 
-        this.gain.gain.setValueAtTime(M.map(d, 0, this.range, .7, 0), delta)
+            let gain = M.map(d, 0, this.range, .7, 0)
+            if(this.gain.gain.value == gain) return
+            this.gain.gain.setValueAtTime(gain, delta)
+        }
     }
     stop(delta: number) : void {
 

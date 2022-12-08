@@ -1,7 +1,7 @@
 import { BufferGeometry, InstancedMesh, Material, Mesh, Object3D, Quaternion, Vector3 } from "three";
 import { Oscillator, AmplitudeEnvelope, Gain } from "tone";
-import { AEOLIAN_SCALE, getNote, getScale, HEPTATONIC_SCALE, HIRAJOSHI_SCALE } from "./data/note-frequencies";
-import { PositionalAudio } from "./positional-audio";
+import { AEOLIAN_SCALE, getNote, getScale, HEPTATONIC_SCALE, HIRAJOSHI_SCALE } from "../data/note-frequencies";
+import { PositionalAudio } from "../positional-audio";
 
  // Extends Mesh?
 export class Tree extends PositionalAudio{
