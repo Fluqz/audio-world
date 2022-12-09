@@ -10,13 +10,13 @@ export const getNote = (note: string) => {
 
     for(let n of notes) {
 
-        if(n.note === note || n.note.length !== note.length &&  n.note.includes(note)) return n
+        if(n.note === note) return n
     }
 
     return null
 }
 
-/** Returns the 8 notes of a tonleiter. Pass in the prime note. */
+/** Returns the 8 notes of a scale. Pass in the prime note. */
 export const getScale = (prime: Note, scale: number[]) : Note[] => {
 
     const i = notes.indexOf(prime)
