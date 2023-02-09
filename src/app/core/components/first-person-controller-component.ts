@@ -1,4 +1,3 @@
-import { Object3D } from "three";
 import { Component } from "./i-component";
 
 
@@ -7,10 +6,8 @@ export class GraphicsComponent implements Component {
 
     name: string
 
-    object: Object3D
 
-    constructor(object: Object3D) {
+    constructor() {
 
-        this.object = object
     }
 }

@@ -4,13 +4,10 @@ import { EInput, Input } from './core/input'
 import { Globals } from './core/globals'
 import { ThirdPersonControl } from './core/third-person-controls'
 import { M } from './util/math'
-import { GameObject } from './core/object'
-import { AnimationComponent } from './core/components/animation-component'
-import { GraphicsComponent } from './core/components/graphics-component'
-import { AudioListenerComponent } from './core/components/audio-listener-component'
+import { Entity } from './core/entity'
 
 
-export class Player extends GameObject {
+export class Player extends Entity {
     
     static list: Player[] = []
 

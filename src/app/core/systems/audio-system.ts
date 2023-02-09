@@ -1,5 +1,5 @@
-import { AudioComponent } from "../audio-component";
-import { AudioListenerComponent } from "../audio-listener-component";
+import { AudioComponent } from "../components/audio-component";
+import { AudioListenerComponent } from "../components/audio-listener-component";
 
 export class AudioSystems {
 

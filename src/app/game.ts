@@ -1,16 +1,15 @@
-
 import * as THREE from 'three'
-
-import { World } from './world'
-import { AssetManager } from './core/asset-manager'
-import { Input } from './core/input'
-import { Player } from './player'
-import { Utils } from './util/utils'
-import { GameObject } from './core/object'
 import * as Tone from 'tone'
 
+import { Globals } from './core/globals'
+import { AssetManager } from './core/asset-manager'
+import { Input } from './core/input'
+
+import { World } from './world'
+import { Utils } from './util/utils'
+import { Entity } from './core/entity'
+
 import * as Stats from 'stats.js'
-import { GraphicsComponent } from './core/components/graphics-component'
 
 export class Game {
 
@@ -18,23 +17,12 @@ export class Game {
 
     public dom: HTMLElement
 
-    public w: number
-    public h: number
-    public ratio: number
-
     public static renderer: THREE.WebGLRenderer
     public static camera: THREE.PerspectiveCamera
-    public static scene: THREE.Scene
-    public static renderTarget: THREE.WebGLRenderTarget
+
+    public static world: World
 
     public static master: Tone.Gain
-
-
-    objects: GameObject[]
-
-    player: Player
-
-    world: World
 
     private clock: THREE.Clock
     private AFID: number
@@ -49,9 +37,9 @@ export class Game {
         // this.clock
         this.dom = dom
 
-        this.w = window.innerWidth
-        this.h = window.innerHeight
-        this.ratio = window.devicePixelRatio
+        Globals.w = window.innerWidth
+        Globals.h = window.innerHeight
+        Globals.ratio = window.devicePixelRatio
 
         this.stats = new Stats()
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -61,24 +49,17 @@ export class Game {
         Game.master.toDestination()
     
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
-        Game.renderer.setSize(this.w, this.h)
+        Game.renderer.setSize(Globals.w, Globals.h)
         Game.renderer.setClearColor(0xf4eedb)
         Game.renderer.shadowMap.enabled = true
         Game.renderer.shadowMap.type = THREE.PCFSoftShadowMap
         this.dom.append(Game.renderer.domElement)
     
-        Game.camera = new THREE.PerspectiveCamera(100, this.w / this.h, .1, 1000)
+        Game.camera = new THREE.PerspectiveCamera(100, Globals.w / Globals.h, .1, 1000)
         Game.camera.position.set(0, 3, 0)
 
-        Game.renderTarget = new THREE.WebGLRenderTarget(this.w, this.h, {
-            wrapS: THREE.RepeatWrapping,
-            wrapT: THREE.RepeatWrapping,
-
-        })
-    
-        Game.scene = new THREE.Scene()
         // Game.scene.fog = new THREE.FogExp2( 0xefd1b5, .01 );
-        Game.scene.fog = new THREE.Fog(0xf4eedb, 1, 50)
+        Game.world.scene.fog = new THREE.Fog(0xf4eedb, 1, 50)
 
         // Cubemap
         const cubeMap = new THREE.CubeTextureLoader()
@@ -105,12 +86,10 @@ export class Game {
         dLight.shadow.camera.right = 200
         dLight.shadow.mapSize.width = 4096
         dLight.shadow.mapSize.height = 4096
-        Game.scene.add(dLight)
-        Game.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
+        Game.world.scene.add(dLight)
+        Game.world.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
 
         new Input(this.dom)
-
-        this.objects = []
     }
 
     private isMuted: boolean = false
@@ -136,19 +115,11 @@ export class Game {
 
         this.clock = new THREE.Clock()
 
+        Game.world = new World()
+
         this.loadAssets().then(() => {
 
             return new Promise((resolve) => {
-
-                this.world = new World()
-                this.world.construct()
-                Game.scene.add(this.world)
-
-                this.player = new Player(Game.camera)
-                Game.scene.add(this.player)
-
-                this.player.addComponent(new GraphicsComponent())
-                console.log('GET C',this.player.getComponent<GraphicsComponent>())
 
                 this.loop()
     
@@ -183,24 +154,18 @@ export class Game {
 
         // UPDATE SYSTEMS
 
-        for(let p of Player.list) p.update(this.clock.getDelta())
-
-        this.world.update(this.clock.getDelta())
+        // for(let p of Player.list) p.update(this.clock.getDelta())
     }
 
     loop() {
 
-        this.stats.begin()
+        if(Globals.debug) this.stats.begin()
 
         this.update()
 
-        // Game.renderer.setRenderTarget(Game.renderTarget)
-        // Game.renderer.render(Game.scene, Game.camera)
-    
-        // Game.renderer.setRenderTarget(null)
-        Game.renderer.render(Game.scene, Game.camera)
+        Game.renderer.render(Game.world.scene, Game.camera)
 
-        this.stats.end()
+        if(Globals.debug) this.stats.end()
 
         window.cancelAnimationFrame(this.AFID)
         this.AFID = window.requestAnimationFrame(this.loop.bind(this))
@@ -234,14 +199,14 @@ export class Game {
 
     resize() {
 
-        this.w = window.innerWidth
-        this.h = window.innerHeight
-        this.ratio = window.devicePixelRatio
+        Globals.w = window.innerWidth
+        Globals.h = window.innerHeight
+        Globals.ratio = window.devicePixelRatio
 
-        Game.renderer.setSize(this.w, this.h)
-        Game.renderer.setPixelRatio(this.ratio)
+        Game.renderer.setSize(Globals.w, Globals.h)
+        Game.renderer.setPixelRatio(Globals.ratio)
 
-        Game.camera.aspect = this.w / this.h
+        Game.camera.aspect = Globals.w / Globals.h
         Game.camera.updateProjectionMatrix()
     }
 

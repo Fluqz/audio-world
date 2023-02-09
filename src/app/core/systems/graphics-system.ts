@@ -1,16 +1,16 @@
-import { AnimationComponent } from "../animation-component"
+import { GraphicsComponent } from "../components/graphics-component"
 
-export class AnimationSystem {
+export class GraphicsSystem {
 
-    private static animations: Map<string, AnimationComponent> = new Map()
+    private static animations: Map<string, GraphicsComponent> = new Map()
 
-    public static add(id: string, animation: AnimationComponent) {
+    public static add(id: string, animation: GraphicsComponent) {
         
         if(this.animations.has(id)) return
         this.animations.set(id, animation)
     }
 
-    public static remove(id: string, animation: AnimationComponent) {
+    public static remove(id: string, animation: GraphicsComponent) {
 
         if(this.animations.has(id)) return
         this.animations.delete(id)

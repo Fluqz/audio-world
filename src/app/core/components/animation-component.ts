@@ -1,21 +1,7 @@
-import { GameObject } from "../object";
-import { Component } from "./component";
+import { Component } from "./i-component";
 
 
+export class AnimationComponent implements Component {
 
-export class AnimationComponent extends Component {
-
-    constructor(object: GameObject) {
-
-        super()
-    }
-
-    animation: () => void
-
-    construct() {}
-    update(delta: number) {
-
-        if(this.animation) this.animation()
-    }
-    destruct() {}
+    name: string
 }

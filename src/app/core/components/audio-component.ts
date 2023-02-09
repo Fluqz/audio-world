@@ -1,20 +1,19 @@
 import * as Tone from "tone";
 import { Game } from "../../game";
-import { GameObject } from "../object";
 import { M } from "../../util/math";
 import { AudioListenerComponent } from "./audio-listener-component";
-import { Component } from "./component";
+import { Component } from "./i-component";
 
 
 
 
-export class AudioComponent extends Component {
+export class AudioComponent implements Component {
+
+    name: string
 
     listener: AudioListenerComponent
     frequency: number = 400
     range: number = 30
-
-    object: GameObject
 
     oscillator: Tone.Oscillator
     envelope: Tone.AmplitudeEnvelope

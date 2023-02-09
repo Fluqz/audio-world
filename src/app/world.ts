@@ -1,78 +1,48 @@
-import * as Tone from 'tone'
-import * as THREE from 'three'
-import { BoxGeometry, Group, Mesh, MeshPhongMaterial, MeshDepthMaterial, MeshNormalMaterial, Object3D, PlaneGeometry, MeshStandardMaterial, MeshDistanceMaterial } from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-
-import { AssetManager } from './core/asset-manager'
-import { Game } from './game'
-import { GameObject } from './core/object'
-import { Tree } from './objects/tree'
-import { Utils } from './util/utils'
-import { Player } from './player'
+import { Scene } from "three";
+import { Entity } from "./core/entity";
+import { System } from "./core/systems/system";
 
 
-export class World extends GameObject {
+export class World {
 
-    trees: Tree[]
-    ground: Mesh
+    /** Scene */
+    scene: Scene
+
+    /** All added entities */
+    entities: Entity[]
+
+    /** Registered Components */
+    components: string[]
+
+    systems: System[]
 
     constructor() {
-        super()
 
-        this.trees = []
+        this.scene = new Scene()
 
-        this.construct()
+        this.entities = []
+        this.components = []
+        this.systems = []
     }
 
-    construct() {
+    createEntity() : Entity {
 
-        // let ground = new Mesh(new PlaneGeometry(500, 500), new MeshDistanceMaterial())
-        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
+        const e = new Entity()
 
-        ground.geometry.rotateX(-Math.PI / 2)
-        ground.receiveShadow = true
+        this.entities.push(e)
 
-        this.add(ground)
-
-        let geometry = new BoxGeometry(1, 25, 1)
-        geometry.translate(0, 25 / 2, 0)
-        let material = new MeshPhongMaterial({ color: 0x000000 })
-        // let material = new MeshDistanceMaterial()
-        let tree: Tree
-
-        for(let i = 0; i < 70; i++) {
-
-            tree = new Tree(geometry, material)
-            tree.construct()
-
-            tree.position.set((Math.random() * 140) - 50, 0, (Math.random() * 140) - 50)
-            tree.updateMatrix()
-
-            this.add(tree)
-
-            this.trees.push(tree)
-        }
+        return e
     }
 
-    update(delta: number) {
+    removeEntity(entity: Entity) : Entity {
 
-        this.traverseVisible(o => {
+        let i = this.entities.indexOf(entity)
 
-            if(o instanceof Mesh) {
+        if(i == -1) return
 
-                o.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-                o.scale.y = Math.cos(Tone.context.currentTime) + 2
-                o.scale.z = Math.sin(Tone.context.currentTime) + 1.5
-                o.updateMatrix()
-            }
-        })
-
-        for(let t of this.trees) t.update(Tone.context.currentTime)
-        // for(let t of this.trees) t.update(Player.list[0].position, Tone.context.currentTime)
+        this.entities.splice(i, 1)
     }
 
-    destruct(): void {
-        
-        Utils.dispose(this)
-    }
+    registerComponent() {}
+    unregisterComponent() {}
 }

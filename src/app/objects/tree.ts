@@ -4,11 +4,11 @@ import { AnimationComponent } from "../core/components/animation-component";
 import { AudioComponent } from "../core/components/audio-component";
 import { AudioListenerComponent } from "../core/components/audio-listener-component";
 import { GraphicsComponent } from "../core/components/graphics-component";
-import { GameObject } from "../core/object";
+import { Entity } from "../core/entity";
 import { AEOLIAN_SCALE, getNote, getScale, HEPTATONIC_SCALE, HIRAJOSHI_SCALE } from "../data/note-frequencies";
 
  // Extends Mesh?
-export class Tree extends GameObject {
+export class Tree extends Entity {
 
     graphics: GraphicsComponent
     animation: AnimationComponent

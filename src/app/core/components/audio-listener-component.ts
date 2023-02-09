@@ -1,15 +1,6 @@
-import { GameObject } from "../object";
-import { Component } from "./component";
+import { Component } from "./i-component";
 
 export class AudioListenerComponent implements Component {
 
-    object: GameObject
-
-    constructor(object: GameObject) {
-
-    }
-
-    construct() {}
-    update(delta: number) {}
-    destruct() {}
+    name: string
 }
