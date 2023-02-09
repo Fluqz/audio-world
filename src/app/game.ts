@@ -1,15 +1,16 @@
 
 import * as THREE from 'three'
 
-import { Environment } from './environment'
-import { AssetManager } from './asset-manager'
-import { Input } from './input'
+import { World } from './world'
+import { AssetManager } from './core/asset-manager'
+import { Input } from './core/input'
 import { Player } from './player'
 import { Utils } from './util/utils'
-import { GameObject } from './object'
+import { GameObject } from './core/object'
 import * as Tone from 'tone'
 
 import * as Stats from 'stats.js'
+import { GraphicsComponent } from './core/components/graphics-component'
 
 export class Game {
 
@@ -33,7 +34,7 @@ export class Game {
 
     player: Player
 
-    env: Environment
+    world: World
 
     private clock: THREE.Clock
     private AFID: number
@@ -45,7 +46,7 @@ export class Game {
         Game.i = this
         
         this.AFID = undefined
-        this.clock
+        // this.clock
         this.dom = dom
 
         this.w = window.innerWidth
@@ -110,10 +111,6 @@ export class Game {
         new Input(this.dom)
 
         this.objects = []
-
-        this.player = undefined
-        this.env = undefined
-
     }
 
     private isMuted: boolean = false
@@ -143,12 +140,15 @@ export class Game {
 
             return new Promise((resolve) => {
 
-                this.env = new Environment()
-                this.env.create()
-                Game.scene.add(this.env.obj)
+                this.world = new World()
+                this.world.construct()
+                Game.scene.add(this.world)
 
                 this.player = new Player(Game.camera)
-                Game.scene.add(this.player.obj)
+                Game.scene.add(this.player)
+
+                this.player.addComponent(new GraphicsComponent())
+                console.log('GET C',this.player.getComponent<GraphicsComponent>())
 
                 this.loop()
     
@@ -163,18 +163,29 @@ export class Game {
         
         Tone.Transport.start()
 
-        for(let tree of this.env.trees) {
+        // for(let tree of this.world.trees) {
 
-            tree.start(Tone.context.currentTime)
-        }
+        //     tree.audio.start(Tone.context.currentTime)
+        // }
+    }
 
+    stop() {
+        
+        Tone.Transport.stop()
+
+        // for(let tree of this.world.trees) {
+
+        //     tree.audio.stop(Tone.context.currentTime)
+        // }
     }
 
     update() {
 
+        // UPDATE SYSTEMS
+
         for(let p of Player.list) p.update(this.clock.getDelta())
 
-        this.env.update(0)
+        this.world.update(this.clock.getDelta())
     }
 
     loop() {
@@ -203,6 +214,7 @@ export class Game {
                 console.log('Load fin')
                 resolve(null)
             }
+
             resolve(null)
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
@@ -234,6 +246,8 @@ export class Game {
     }
 
     destroy() {
+
+        this.stop()
 
         this.disposeAssets()
     }

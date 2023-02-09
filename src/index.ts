@@ -2,7 +2,7 @@
 
 import * as Tone from 'tone'
 import { Game } from './app/game'
-import { Globals } from "./app/globals"
+import { Globals } from "./app/core/globals"
 
 
 

@@ -1,10 +1,19 @@
 import { BufferGeometry, InstancedMesh, Material, Mesh, Object3D, Quaternion, Vector3 } from "three";
 import { Oscillator, AmplitudeEnvelope, Gain } from "tone";
+import { AnimationComponent } from "../core/components/animation-component";
+import { AudioComponent } from "../core/components/audio-component";
+import { AudioListenerComponent } from "../core/components/audio-listener-component";
+import { GraphicsComponent } from "../core/components/graphics-component";
+import { GameObject } from "../core/object";
 import { AEOLIAN_SCALE, getNote, getScale, HEPTATONIC_SCALE, HIRAJOSHI_SCALE } from "../data/note-frequencies";
-import { PositionalAudio } from "../positional-audio";
 
  // Extends Mesh?
-export class Tree extends PositionalAudio{
+export class Tree extends GameObject {
+
+    graphics: GraphicsComponent
+    animation: AnimationComponent
+    audio: AudioComponent
+    
 
     mesh: Mesh
 
@@ -17,12 +26,14 @@ export class Tree extends PositionalAudio{
 
     constructor(geometry, material) {
 
-        super(
-            getScale(
-                getNote('F' + Math.round((Math.random() * 3) + 1)),
-                AEOLIAN_SCALE
-            )[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
-        , 30)
+        super()
+
+        // super(
+        //     getScale(
+        //         getNote('F' + Math.round((Math.random() * 3) + 1)),
+        //         AEOLIAN_SCALE
+        //     )[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
+        // , 30)
         // super(notes[Math.round(Math.random() * (notes.length - 1))].frequency, 40)
         // super((Math.random() * 300) + 100, 40)
 
@@ -30,7 +41,8 @@ export class Tree extends PositionalAudio{
         this.material = material
     }
 
-    create() {
+
+    construct(): void {
 
         this.mesh = new Mesh(this.geometry, this.material)
         this.mesh.matrixAutoUpdate = false
@@ -38,14 +50,15 @@ export class Tree extends PositionalAudio{
         this.mesh.receiveShadow = true
 
         this.mesh.scale.set(1, 1 + (Math.random() * 1), 1)
+
+        this.add(this.mesh)
     }
 
+    update(delta: number): void {
+        throw new Error("Method not implemented.")
+    }
 
-    update(position: Vector3, delta: number): void {
-        
-        this.mesh.position.copy(this.position)
-        this.mesh.updateMatrix()
-
-        super.update(position, delta)
+    destruct(): void {
+        throw new Error("Method not implemented.")
     }
 }

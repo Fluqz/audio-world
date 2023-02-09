@@ -1,25 +1,18 @@
 
 import * as THREE from 'three'
-import { Input } from './input'
-import { Globals } from './globals'
-import { AssetManager } from './asset-manager'
-import { ThirdPersonControl } from './third-person-controls'
+import { EInput, Input } from './core/input'
+import { Globals } from './core/globals'
+import { ThirdPersonControl } from './core/third-person-controls'
 import { M } from './util/math'
-import { GameObject } from './object'
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GameObject } from './core/object'
+import { AnimationComponent } from './core/components/animation-component'
+import { GraphicsComponent } from './core/components/graphics-component'
+import { AudioListenerComponent } from './core/components/audio-listener-component'
 
 
 export class Player extends GameObject {
-
+    
     static list: Player[] = []
-
-    /** Player 3D container object */
-    obj: THREE.Object3D
-
-    /** Normalized direction of walking */
-    normal: THREE.Vector3
-    rotation: THREE.Quaternion
-    position: THREE.Vector3
 
     force = new THREE.Vector3()
 
@@ -42,40 +35,24 @@ export class Player extends GameObject {
         Player.list.push(this)
             
         this.camera = camera || new THREE.PerspectiveCamera()
-        this.normal = new THREE.Vector3()
-        this.position = new THREE.Vector3()
-        this.rotation = new THREE.Quaternion()
-        this.obj = new THREE.Object3D()
 
         this.construct()
+
+        this.computeNormal()
     }
 
     construct(): void {
         
         this.state = 'IDLE'
 
-        // AssetManager.get('https://hitpuzzle.b-cdn.net/06627.glb').then((gltf: GLTF) => {
-
-        //     let m = gltf.scene.clone()
-
-        //     m.rotation.y = Math.PI
-        //     m.scale.set(1, 1, 1)
-        //     m.position.set(0, 0, 0)
-        //     m.traverse(o => o.updateMatrix())
-
-        //     this.obj.add(m)
-
-        //     console.log(gltf)
-        // })
-
         let m = new THREE.Mesh(new THREE.SphereGeometry(.5, 32, 32), new THREE.MeshDistanceMaterial())
         // m.geometry.translate(0, .5, 0)
         // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         m.castShadow = true
         m.receiveShadow = true
-        this.obj.add(m)
+        this.add(m)
 
-        this.control = new ThirdPersonControl(this.obj, this.camera, Globals.dom)
+        this.control = new ThirdPersonControl(this, this.camera, Globals.dom)
         this.control.updateTarget(new THREE.Vector3())
     }
 
@@ -95,32 +72,32 @@ export class Player extends GameObject {
 
         this.directionOffset = 0
 
-        if(Input.on('forward')) {
+        if(Input.on(EInput.FORWARD)) {
 
             this.state = 'WALK'
 
             // console.log('forward')
-            if(Input.on('left')) {
+            if(Input.on(EInput.LEFT)) {
                 // console.log('right')
                 this.directionOffset = Math.PI / 4
             }
-            else if(Input.on('right')) {
+            else if(Input.on(EInput.RIGHT)) {
                 
                 // console.log('left')
                 this.directionOffset = -Math.PI / 4
             }
         }
-        else if(Input.on('back')) {
+        else if(Input.on(EInput.BACK)) {
 
             this.state = 'WALK'
 
             // console.log('back')
-            if(Input.on('left')) {
+            if(Input.on(EInput.LEFT)) {
 
                 // console.log('right')
                 this.directionOffset = Math.PI / 4 + Math.PI / 2
             }
-            else if(Input.on('right')) {
+            else if(Input.on(EInput.RIGHT)) {
                 
                 // console.log('left')
                 this.directionOffset = -Math.PI / 4 - Math.PI / 2
@@ -130,13 +107,13 @@ export class Player extends GameObject {
                 this.directionOffset = Math.PI
             }
         }
-        else if(Input.on('left')) {
+        else if(Input.on(EInput.LEFT)) {
             
             // console.log('left')
             this.state = 'WALK'
             this.directionOffset = Math.PI / 2
         }
-        else if(Input.on('right')) {
+        else if(Input.on(EInput.RIGHT)) {
 
             // console.log('right')
             this.state = 'WALK'
@@ -146,15 +123,15 @@ export class Player extends GameObject {
 
     get angleYCameraDirection() {
 
-        return Math.atan2((this.camera.position.x - this.obj.position.x), this.camera.position.z - this.obj.position.z)
+        return Math.atan2((this.camera.position.x - this.position.x), this.camera.position.z - this.position.z)
     }
 
     move(delta: number) {
 
-        this.rotation.setFromAxisAngle(M.UP, this.angleYCameraDirection + this.directionOffset)
-        this.obj.quaternion.rotateTowards(this.rotation, .24)
+        this.quaternion.setFromAxisAngle(M.UP, this.angleYCameraDirection + this.directionOffset)
+        this.quaternion.rotateTowards(this.quaternion, .24)
 
-        this.camera.getWorldDirection(this.normal)
+        this.getWorldDirection(this.normal)
         this.normal.y = 0
         this.normal.normalize()
         this.normal.applyAxisAngle(M.UP, this.directionOffset)
@@ -162,13 +139,19 @@ export class Player extends GameObject {
         this.force.x = this.normal.x * this.velocity * delta
         this.force.z = this.normal.z * this.velocity * delta
 
-        this.obj.position.x += this.force.x
-        this.obj.position.z += this.force.z
-        this.obj.updateMatrix()
+        this.position.x += this.force.x
+        this.position.z += this.force.z
+        this.updateMatrix()
 
-        this.position.copy(this.obj.position)
+        this.position.copy(this.position)
 
         this.control.updateTarget(this.force)
+    }
+
+    getWorldDirection(target: THREE.Vector3): THREE.Vector3 {
+        
+        if(this.camera) this.camera.getWorldDirection(target)
+        return target
     }
 
     destruct(): void {
