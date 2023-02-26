@@ -1,28 +1,32 @@
-import { Scene } from "three";
-import { Entity } from "./core/entity";
-import { System } from "./core/systems/system";
+import { AxesHelper, Scene } from "three";
+import { Entity } from "./entity";
+import { System } from "./systems/system";
 
 
 export class World {
 
-    /** Scene */
+    /** Container of all objects */
     scene: Scene
 
-    /** All added entities */
+    /** Array of added entities */
     entities: Entity[]
 
-    /** Registered Components */
-    components: string[]
-
+    /** Array of registered systems */
     systems: System[]
 
     constructor() {
 
         this.scene = new Scene()
 
+        this.scene.add(new AxesHelper())
+
         this.entities = []
-        this.components = []
         this.systems = []
+    }
+
+    update(delta: number) {
+
+        for(let s of this.systems) s.process(this.entities, delta)
     }
 
     createEntity() : Entity {
@@ -43,6 +47,9 @@ export class World {
         this.entities.splice(i, 1)
     }
 
-    registerComponent() {}
-    unregisterComponent() {}
+    registerSystem(system: System) {
+
+        this.systems.push(system)
+    }
+    unregisterSystem() {}
 }

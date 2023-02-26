@@ -5,11 +5,21 @@ import { Globals } from './core/globals'
 import { AssetManager } from './core/asset-manager'
 import { Input } from './core/input'
 
-import { World } from './world'
+import { World } from './core/world'
 import { Utils } from './util/utils'
 import { Entity } from './core/entity'
 
 import * as Stats from 'stats.js'
+import { GraphicsComponent } from './core/components/graphics-component'
+import { TransformationComponent } from './core/components/transformation-component'
+import { RenderSystem } from './core/systems/render-system'
+import { EComponents } from './core/components/component'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { FirstPersonControllerSystem } from './core/systems/first-person-controller-system'
+import { FirstPersonControllerComponent } from './core/components/first-person-controller-component'
+import { AEOLIAN_SCALE, getNote, getScale } from './data/note-frequencies'
+import { AudioComponent } from './core/components/audio-component'
+import { Prefabs } from './core/prefabs/prefabs'
 
 export class Game {
 
@@ -56,7 +66,10 @@ export class Game {
         this.dom.append(Game.renderer.domElement)
     
         Game.camera = new THREE.PerspectiveCamera(100, Globals.w / Globals.h, .1, 1000)
-        Game.camera.position.set(0, 3, 0)
+        Game.camera.position.set(0, 0, 5)
+        Game.camera.lookAt(0, 0, 0)
+
+        Game.world = new World()
 
         // Game.scene.fog = new THREE.FogExp2( 0xefd1b5, .01 );
         Game.world.scene.fog = new THREE.Fog(0xf4eedb, 1, 50)
@@ -114,8 +127,7 @@ export class Game {
         console.log('INIT')
 
         this.clock = new THREE.Clock()
-
-        Game.world = new World()
+        Tone.Transport.start()
 
         this.loadAssets().then(() => {
 
@@ -125,6 +137,22 @@ export class Game {
     
                 console.log('LOADED')
 
+                Game.world.registerSystem(new RenderSystem())
+                Game.world.registerSystem(new FirstPersonControllerSystem())
+
+                Prefabs.Player()
+
+                for(let i = 0; i < 100; i++) {
+
+                    let tree = Prefabs.Tree()
+                    let transform = tree.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+                    transform.position.set(
+                        (Math.random() * 100) - 50,
+                        0,
+                        (Math.random() * 100) - 50,
+                    )
+                }
+
                 resolve(null)
             })
         })
@@ -132,29 +160,21 @@ export class Game {
 
     start() {
         
-        Tone.Transport.start()
 
-        // for(let tree of this.world.trees) {
-
-        //     tree.audio.start(Tone.context.currentTime)
-        // }
     }
 
     stop() {
         
         Tone.Transport.stop()
 
-        // for(let tree of this.world.trees) {
-
-        //     tree.audio.stop(Tone.context.currentTime)
-        // }
     }
 
     update() {
 
         // UPDATE SYSTEMS
 
-        // for(let p of Player.list) p.update(this.clock.getDelta())
+        Game.world.update(this.clock.getDelta())
+
     }
 
     loop() {

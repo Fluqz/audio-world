@@ -1,4 +1,4 @@
-import { Component } from "./i-component";
+import { Component } from "./component";
 
 
 export class AnimationComponent implements Component {

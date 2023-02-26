@@ -1,29 +1,57 @@
+import { GraphicsComponent } from "../components/graphics-component"
+import { Component, EComponents } from "../components/component";
+import { Entity } from "../entity";
+import { System } from "./system";
 import { AudioComponent } from "../components/audio-component";
-import { AudioListenerComponent } from "../components/audio-listener-component";
+import { TransformationComponent } from "../components/transformation-component";
+import { M } from "../../util/math";
 
-export class AudioSystems {
+export class AudioSystem implements System {
 
-    private static sources: Map<string, AudioComponent> = new Map()
-    // private static listeners: Map<string, AudioListenerComponent> = new Map()
+    requiredComponents: EComponents[] = [EComponents.AUDIO, EComponents.TRANSFORMATION]
 
-    public static add(id: string, animation: AudioComponent) {
-        
-        if(this.sources.has(id)) return
-        this.sources.set(id, animation)
-    }
+    private audio: AudioComponent
+    private transform: TransformationComponent
 
-    public static remove(id: string, animation: AudioComponent) {
+    process(entities: Entity[], ...args: any[]): void {
 
-        if(this.sources.has(id)) return
-        this.sources.delete(id)
-    }
+        let process: boolean
+        for(let e of entities) {
 
-    public static update(delta:number) {
+            process = true
 
-        for(let a of this.sources.values()) {
+            for(let c of this.requiredComponents) {
+                
+                if(!e.getComponent(c)) {
 
-            a.update(delta)
+                    process = false
+                }
+            }
+                        
+            if(!process) continue
+
+            this.audio = e.getComponent(EComponents.AUDIO) as AudioComponent
+            this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
         }
     }
-}
 
+
+    update(delta: number) : void {
+
+        // if(this.listener)
+
+        // const d = this.transform.position.distanceTo(this.listener.transform.position)
+
+        // if(d > this.audio.range) {
+        
+        //     if(this.audio.gain.gain.value == 0) return
+        //     this.audio.gain.gain.setValueAtTime(0, delta)
+        // }
+        // else {
+
+        //     let gain = M.map(d, 0, this.audio.range, .7, 0)
+        //     if(this.audio.gain.gain.value == gain) return
+        //     this.audio.gain.gain.setValueAtTime(gain, delta)
+        // }
+    }
+}

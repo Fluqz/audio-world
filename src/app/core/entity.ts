@@ -1,4 +1,5 @@
-import { Component } from "./components/i-component";
+import { Component, EComponents } from "./components/component";
+import { TransformationComponent } from "./components/transformation-component";
 
 export class Entity {
 
@@ -7,7 +8,7 @@ export class Entity {
     id: string
 
     /** Array of all components of this Entity */
-    components: Map<string, Component>
+    components: Component[]
 
 
     constructor() {
@@ -15,33 +16,55 @@ export class Entity {
         this.id = (+new Date()).toString(16) + (Math.random() * 100000000 | 0).toString(16) + Entity.count
 
         Entity.count++
+
+        this.components = []
     }
 
     /** Add component to this Entity */
     addComponent(component: Component) {
 
-        this.components.set(component.name, component)
+        let i = this.components.indexOf(component)
+        if (i != -1) return this.components.length
+        this.components.push(component)
+        console.log(this.components)
+        return this.components.length
     }
 
     /** Remove component from this Entity */
     removeComponent(component: Component) {
 
-        this.components.delete(component.name)
+        let i = this.components.indexOf(component)
+        if (i == -1) return this.components.length
+        this.components.splice(i, 1)
+        return this.components.length
     }
 
     /** Get component of this Entity */
-    getComponent<T extends Component>() : T {
+    getComponent(name: EComponents): Component {
 
-        for(let c of this.components.values()) {
+        for (let c of this.components) {
 
-            if(c) return c as T
+            if (c.name == name) return c
         }
 
         return null
     }
 
+    /** Get component of this Entity */
+    getComponents(name: EComponents): Component[] {
+
+        let array = []
+
+        for (let c of this.components) {
+
+            if (c.name == name) array.push(c)
+        }
+
+        return array
+    }
+
     print() {
 
-        console.log('ENTITY',this.id, this.components)
+        console.log('ENTITY', this.id, this.components)
     }
 }

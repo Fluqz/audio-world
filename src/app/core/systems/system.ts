@@ -1,8 +1,10 @@
+import { Component } from "../components/component"
+import { Entity } from "../entity"
 
 
 export interface System {
 
-    usedComponents: string[]
+    requiredComponents: string[]
 
-    process(...args) : void
+    process(entities: Entity[], ...args) : void
 }

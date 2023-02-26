@@ -2,79 +2,46 @@ import * as Tone from "tone";
 import { Game } from "../../game";
 import { M } from "../../util/math";
 import { AudioListenerComponent } from "./audio-listener-component";
-import { Component } from "./i-component";
-
-
-
+import { Component, EComponents } from "./component";
 
 export class AudioComponent implements Component {
 
     name: string
 
-    listener: AudioListenerComponent
     frequency: number = 400
     range: number = 30
+    wave: OscillatorType
 
     oscillator: Tone.Oscillator
     envelope: Tone.AmplitudeEnvelope
     gain: Tone.Gain
 
-    constructor(object: GameObject, listener: AudioListenerComponent, frequency: number, range: number) {
+    constructor(frequency: number, wave:OscillatorType, range: number) {
 
-        super()
+        this.name = EComponents.AUDIO
 
-        this.object = object
-        this.listener = listener
         this.frequency = frequency
         this.range = range
-    }
+        this.wave = wave
 
-    construct(): void {
-        
         this.oscillator = new Tone.Oscillator(this.frequency)
-        this.oscillator.type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
+        this.oscillator.type = wave
 
         // this.envelope = new Tone.AmplitudeEnvelope(0, 1, 1, 1)
         this.gain = new Tone.Gain(0)
         this.oscillator.connect(this.gain)
         this.gain.connect(Game.master)
-
-        this.start(Tone.context.currentTime)
+        this.oscillator.start()
     }
 
-    start(delta: number) : void {
 
-        this.oscillator.start(delta)
-    }
 
-    update(delta: number) : void {
+//     destruct() {
 
-        const d = this.object.position.distanceTo(this.listener.object.position)
-
-        if(d > this.range) {
-        
-            if(this.gain.gain.value == 0) return
-            this.gain.gain.setValueAtTime(0, delta)
-        }
-        else {
-
-            let gain = M.map(d, 0, this.range, .7, 0)
-            if(this.gain.gain.value == gain) return
-            this.gain.gain.setValueAtTime(gain, delta)
-        }
-    }
-    
-    stop(delta: number) : void {
-
-        this.oscillator.stop(delta)
-    }
-
-    destruct() {
-
-        this.stop(Tone.context.currentTime)
-        this.gain.disconnect()
-        this.oscillator.disconnect()
-        this.gain.dispose()
-        this.oscillator.dispose()
-    }
+//         this.stop(Tone.context.currentTime)
+//         this.gain.disconnect()
+//         this.oscillator.disconnect()
+//         this.gain.dispose()
+//         this.oscillator.dispose()
+//     }
 }
