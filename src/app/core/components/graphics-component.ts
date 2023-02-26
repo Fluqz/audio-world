@@ -22,14 +22,5 @@ export class GraphicsComponent implements Component {
         })
 
         Game.world.scene.add(this.object)
-
-        console.log('GRAPHICS')
-
-        // let m = new THREE.Mesh(new THREE.SphereGeometry(.5, 32, 32), new THREE.MeshDistanceMaterial())
-        // // m.geometry.translate(0, .5, 0)
-        // // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
-        // m.castShadow = true
-        // m.receiveShadow = true
-        // this.add(m)
     }
 }

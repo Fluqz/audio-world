@@ -33,6 +33,8 @@ export class RenderSystem implements System {
 
             if(!this.transform.needsUpdate) continue
 
+            this.transform.needsUpdate = false
+
             this.graphics.object.position.copy(this.transform.position)
             this.graphics.object.scale.copy(this.transform.scale)
 

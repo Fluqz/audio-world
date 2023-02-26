@@ -20,6 +20,7 @@ import { FirstPersonControllerComponent } from './core/components/first-person-c
 import { AEOLIAN_SCALE, getNote, getScale } from './data/note-frequencies'
 import { AudioComponent } from './core/components/audio-component'
 import { Prefabs } from './core/prefabs/prefabs'
+import { AudioSystem } from './core/systems/audio-system'
 
 export class Game {
 
@@ -105,24 +106,6 @@ export class Game {
         new Input(this.dom)
     }
 
-    private isMuted: boolean = false
-    private stored_volume:number
-    toggleMute(m?: boolean) {
-
-        if(m == undefined) m = !this.isMuted
-
-        if(!this.isMuted) this.stored_volume = Game.master.gain.value
-        
-        this.isMuted = m
-
-        if(this.isMuted) {
-            Game.master.gain.linearRampToValueAtTime(0, Tone.context.currentTime + .03)
-        }
-        else {
-            Game.master.gain.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .03)
-        }
-    }
-
     init() {
         console.log('INIT')
 
@@ -138,19 +121,37 @@ export class Game {
 
                 Game.world.registerSystem(new RenderSystem())
                 Game.world.registerSystem(new FirstPersonControllerSystem())
+                Game.world.registerSystem(new AudioSystem())
 
                 Prefabs.Player()
 
-                for(let i = 0; i < 20; i++) {
+                let amount = 200
+                let range = 500
+
+                for(let i = 0; i < amount; i++) {
 
                     let tree = Prefabs.Tree()
                     let transform = tree.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
                     
                     transform.position.set(
-                        (Math.random() * 100) - 50,
+                        (Math.random() * range) - (range / 2),
                         0,
-                        (Math.random() * 100) - 50,
+                        (Math.random() * range) - (range / 2),
                     )
+                    transform.needsUpdate = true
+                }
+
+                for(let i = 0; i < amount; i++) {
+
+                    let stone = Prefabs.Stone()
+                    let transform = stone.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+                    
+                    transform.position.set(
+                        (Math.random() * range) - (range / 2),
+                        0,
+                        (Math.random() * range) - (range / 2),
+                    )
+                    transform.needsUpdate = true
                 }
 
                 resolve(null)
@@ -169,6 +170,25 @@ export class Game {
         Tone.Transport.stop()
 
     }
+
+    private isMuted: boolean = false
+    private stored_volume:number
+    toggleMute(m?: boolean) {
+
+        if(m == undefined) m = !this.isMuted
+
+        if(!this.isMuted) this.stored_volume = Game.master.gain.value
+        
+        this.isMuted = m
+
+        if(this.isMuted) {
+            Game.master.gain.linearRampToValueAtTime(0, Tone.context.currentTime + .03)
+        }
+        else {
+            Game.master.gain.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .03)
+        }
+    }
+
 
     update() {
 

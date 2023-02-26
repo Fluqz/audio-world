@@ -28,7 +28,6 @@ export class Entity {
         let i = this.components.indexOf(component)
         if (i != -1) return this.components.length
         this.components.push(component)
-        console.log(this.components)
         return this.components.length
     }
 
@@ -67,6 +66,6 @@ export class Entity {
 
     print() {
 
-        console.log('ENTITY', this.id, this.components)
+        console.log('ENTITY', this.name, this.id, this.components)
     }
 }

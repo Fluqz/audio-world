@@ -18,7 +18,7 @@ export class FirstPersonControllerComponent implements Component {
     /** Velocity of walking speed */
     velocity = 10
     /** Velocity of running speed */
-    runVeclocity = 15
+    runVeclocity = 20
 
     control: ThirdPersonControl
     camera: PerspectiveCamera

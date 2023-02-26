@@ -22,6 +22,6 @@ export class TransformationComponent implements Component {
         this.quaternion = new Quaternion()
         this.scale = new Vector3(1, 1, 1)
 
-        this.needsUpdate = true
+        this.needsUpdate = false
     }
 }

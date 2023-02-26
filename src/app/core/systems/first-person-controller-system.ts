@@ -7,6 +7,13 @@ import { EInput, Input } from "../input"
 import { System } from "./system"
 
 
+export enum FPSState {
+
+    IDLE,
+    WALK,
+    RUN,
+}
+
 export class FirstPersonControllerSystem implements System {
 
     requiredComponents: EComponents[] = [EComponents.FIRST_PERSON_CONTROLLER, EComponents.TRANSFORMATION]
@@ -32,8 +39,6 @@ export class FirstPersonControllerSystem implements System {
                         
             if(!process) continue
             
-            console.log('fps')
-
             this.FPSComponent = e.getComponent(EComponents.FIRST_PERSON_CONTROLLER) as FirstPersonControllerComponent
             this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
 
@@ -108,6 +113,8 @@ export class FirstPersonControllerSystem implements System {
 
     move(delta: number) {
 
+        const vel = Input.on(EInput.RUN) == false ? this.FPSComponent.velocity : this.FPSComponent.runVeclocity
+
         this.transform.quaternion.setFromAxisAngle(M.UP, this.angleYCameraDirection + this.FPSComponent.directionOffset)
         this.transform.quaternion.rotateTowards(this.transform.quaternion, .24)
 
@@ -116,13 +123,13 @@ export class FirstPersonControllerSystem implements System {
         this.FPSComponent.normal.normalize()
         this.FPSComponent.normal.applyAxisAngle(M.UP, this.FPSComponent.directionOffset)
 
-        this.FPSComponent.force.x = this.FPSComponent.normal.x * this.FPSComponent.velocity * delta
-        this.FPSComponent.force.z = this.FPSComponent.normal.z * this.FPSComponent.velocity * delta
+        this.FPSComponent.force.x = this.FPSComponent.normal.x * vel * delta
+        this.FPSComponent.force.z = this.FPSComponent.normal.z * vel * delta
 
         this.transform.position.x += this.FPSComponent.force.x
         this.transform.position.z += this.FPSComponent.force.z
 
-        this.transform.position.copy(this.transform.position)
+        this.transform.needsUpdate = true
 
         this.FPSComponent.control.updateTarget(this.FPSComponent.force)
     }

@@ -1,4 +1,4 @@
-import { AxesHelper, Scene } from "three";
+import { AxesHelper, Mesh, MeshStandardMaterial, PlaneGeometry, Scene } from "three";
 import { Entity } from "./entity";
 import { System } from "./systems/system";
 
@@ -19,6 +19,11 @@ export class World {
         this.scene = new Scene()
 
         this.scene.add(new AxesHelper())
+
+        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
+        ground.geometry.rotateX(-Math.PI / 2)
+        ground.receiveShadow = true
+        this.scene.add(ground)
 
         this.entities = []
         this.systems = []
@@ -51,5 +56,12 @@ export class World {
 
         this.systems.push(system)
     }
-    unregisterSystem() {}
+    unregisterSystem(system: System) {
+
+        let i = this.systems.indexOf(system)
+
+        if(i == -1) return
+
+        this.systems.splice(i, 1)
+    }
 }

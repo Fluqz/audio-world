@@ -10,6 +10,7 @@ export enum EInput {
     RIGHT = 'right',
     JUMP = 'jump',
     INTERACT = 'interact',
+    RUN = 'run'
 }
 
 /** Includes all usable keys.
@@ -41,6 +42,7 @@ export interface IMapping {
     right: number
     jump: number
     interact: number
+    run: number
 }
 
 /** Keeps track of mouse and keyboard input and serves
@@ -60,7 +62,8 @@ export class Input {
         left: EKey.A,
         right: EKey.D,
         jump: EKey.Space,
-        interact: EKey.Enter
+        interact: EKey.Enter,
+        run: EKey.Shift,
     }
 
     private dom: HTMLElement
