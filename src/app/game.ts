@@ -127,7 +127,6 @@ export class Game {
         console.log('INIT')
 
         this.clock = new THREE.Clock()
-        Tone.Transport.start()
 
         this.loadAssets().then(() => {
 
@@ -142,10 +141,11 @@ export class Game {
 
                 Prefabs.Player()
 
-                for(let i = 0; i < 100; i++) {
+                for(let i = 0; i < 20; i++) {
 
                     let tree = Prefabs.Tree()
                     let transform = tree.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+                    
                     transform.position.set(
                         (Math.random() * 100) - 50,
                         0,
@@ -160,6 +160,7 @@ export class Game {
 
     start() {
         
+        Tone.Transport.start()
 
     }
 

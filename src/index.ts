@@ -13,8 +13,12 @@ let isPause = true
 document.addEventListener('mousedown', () => {
 
     if(isPause) {
+        
         isPause = false
+        if (Tone.context.state !== 'running')
+            Tone.context.resume()
         game.start()
+
     }
 })
 

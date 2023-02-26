@@ -16,7 +16,7 @@ export class AudioComponent implements Component {
     envelope: Tone.AmplitudeEnvelope
     gain: Tone.Gain
 
-    constructor(frequency: number, wave:OscillatorType, range: number) {
+    constructor(frequency: number, wave: OscillatorType, range: number) {
 
         this.name = EComponents.AUDIO
 
@@ -28,10 +28,11 @@ export class AudioComponent implements Component {
         this.oscillator.type = wave
 
         // this.envelope = new Tone.AmplitudeEnvelope(0, 1, 1, 1)
-        this.gain = new Tone.Gain(0)
+        this.gain = new Tone.Gain(.1)
         this.oscillator.connect(this.gain)
         this.gain.connect(Game.master)
         this.oscillator.start()
+
     }
 
 

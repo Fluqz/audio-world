@@ -7,6 +7,8 @@ export class Entity {
 
     id: string
 
+    name: string
+
     /** Array of all components of this Entity */
     components: Component[]
 
