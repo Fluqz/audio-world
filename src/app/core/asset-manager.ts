@@ -1,7 +1,7 @@
 
 import * as THREE from "three"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Globals } from "./globals"
+import { Globals } from "../globals"
 
 export class AssetManager {
 

@@ -1,26 +1,22 @@
 import * as THREE from 'three'
 import * as Tone from 'tone'
+import * as Stats from 'stats.js'
 
-import { Globals } from './core/globals'
+import { Globals } from './globals'
 import { AssetManager } from './core/asset-manager'
 import { Input } from './core/input'
 
 import { World } from './core/world'
+import { Prefabs } from './core/prefabs'
 import { Utils } from './util/utils'
-import { Entity } from './core/entity'
 
-import * as Stats from 'stats.js'
-import { GraphicsComponent } from './core/components/graphics-component'
-import { TransformationComponent } from './core/components/transformation-component'
-import { RenderSystem } from './core/systems/render-system'
 import { EComponents } from './core/components/component'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { TransformationComponent } from './core/components/transformation-component'
+
+import { RenderSystem } from './core/systems/render-system'
 import { FirstPersonControllerSystem } from './core/systems/first-person-controller-system'
-import { FirstPersonControllerComponent } from './core/components/first-person-controller-component'
-import { AEOLIAN_SCALE, getNote, getScale } from './data/note-frequencies'
-import { AudioComponent } from './core/components/audio-component'
-import { Prefabs } from './core/prefabs/prefabs'
 import { AudioSystem } from './core/systems/audio-system'
+
 
 export class Game {
 
@@ -44,7 +40,6 @@ export class Game {
 
         Game.i = this
         
-        this.AFID = undefined
         // this.clock
         this.dom = dom
 
@@ -123,12 +118,12 @@ export class Game {
                 Game.world.registerSystem(new FirstPersonControllerSystem())
                 Game.world.registerSystem(new AudioSystem())
 
-                Prefabs.Player()
+                Prefabs.ControllablePlayer()
 
-                let amount = 200
+                let amount = 100
                 let range = 500
 
-                for(let i = 0; i < amount; i++) {
+                for(let i = 0; i < amount * 2; i++) {
 
                     let tree = Prefabs.Tree()
                     let transform = tree.getComponent(EComponents.TRANSFORMATION) as TransformationComponent

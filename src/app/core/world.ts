@@ -1,4 +1,4 @@
-import { AxesHelper, Mesh, MeshStandardMaterial, PlaneGeometry, Scene } from "three";
+import { AxesHelper, Mesh, MeshDistanceMaterial, MeshStandardMaterial, PlaneGeometry, Scene } from "three";
 import { Entity } from "./entity";
 import { System } from "./systems/system";
 
@@ -20,7 +20,7 @@ export class World {
 
         this.scene.add(new AxesHelper())
 
-        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
+        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshDistanceMaterial())
         ground.geometry.rotateX(-Math.PI / 2)
         ground.receiveShadow = true
         this.scene.add(ground)
@@ -43,7 +43,7 @@ export class World {
         return e
     }
 
-    removeEntity(entity: Entity) : Entity {
+    removeEntity(entity: Entity) {
 
         let i = this.entities.indexOf(entity)
 

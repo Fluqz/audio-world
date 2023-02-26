@@ -1,5 +1,5 @@
 import { Object3D, PerspectiveCamera, Vector3 } from "three";
-import { Globals } from "../globals";
+import { Globals } from "../../globals";
 import { ThirdPersonControl } from "../third-person-controls";
 import { Component, EComponents } from "./component";
 

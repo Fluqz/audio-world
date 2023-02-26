@@ -2,11 +2,11 @@
 
 import * as Tone from 'tone'
 import { Game } from './app/game'
-import { Globals } from "./app/core/globals"
+import { Globals } from "./app/globals"
 
 
 
-Globals.dom = document.getElementById('webGL')
+Globals.dom = document.getElementById('webGL') as HTMLElement
 
 let isPause = true
 
