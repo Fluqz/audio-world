@@ -1,8 +1,12 @@
 const path = require('path');
 
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+
+
 module.exports = {
     mode: 'development',
     devtool: 'inline-source-map',
+    target: 'node',
     module: {
         rules: [
             {
@@ -29,7 +33,7 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-    entry: path.resolve(__dirname, './src/index.ts'),
+    entry: path.resolve(__dirname, './src/server/index.ts'),
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, './docs'),
@@ -37,8 +41,17 @@ module.exports = {
     devServer: {
         static: {
             directory: path.join(__dirname, './docs'),
-          },
-          compress: true,
-          port: 9000,
+        },
+        compress: true,
+        port: 9000,
+        proxy: {
+            '/api': {
+                target: 'ws://[address]:[port]',
+                ws: true
+            },
+        },
     },
+    plugins: [
+        new NodePolyfillPlugin()
+    ]
 };
