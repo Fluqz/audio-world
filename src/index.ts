@@ -5,16 +5,19 @@ import { Game } from './app/game'
 import { Globals } from "./app/globals"
 
 
-
-Globals.dom = document.getElementById('webGL')
+Globals.dom = document.getElementById('webGL') as HTMLElement
 
 let isPause = true
 
 document.addEventListener('mousedown', () => {
 
     if(isPause) {
+        
         isPause = false
+        if (Tone.context.state !== 'running')
+            Tone.context.resume()
         game.start()
+
     }
 })
 

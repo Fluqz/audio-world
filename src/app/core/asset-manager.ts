@@ -1,7 +1,7 @@
 
 import * as THREE from "three"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Globals } from "./globals"
+import { Globals } from "../globals"
 
 export class AssetManager {
 
@@ -43,18 +43,4 @@ export class AssetManager {
         })
     }
 
-    static get(path: string) {
-
-        if(!path.startsWith('http')) path = Globals.path + path
-
-        return new Promise((resolve, reject) => {
-
-            if(!path) reject()
-
-            AssetManager.load(path).then((gltf)=> {
-
-                resolve(gltf)
-            })
-        })
-    }
 }

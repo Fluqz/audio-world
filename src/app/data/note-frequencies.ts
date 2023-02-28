@@ -6,7 +6,7 @@ export type Note = {
 
 
 /** Returns a Note by name = [Note + Octave] = C3, C#0, .. */
-export const getNote = (note: string) => { 
+export const getNote = (note: string) : Note => { 
 
     for(let n of notes) {
 
@@ -50,6 +50,7 @@ export const LYDIAN_SCALE: number[] = [ 2, 2, 2, 1, 2, 2, 1 ]
 export const MYXOLYDIAN_SCALE: number[] = [ 2, 2, 1, 2, 2, 1, 2 ]
 export const AEOLIAN_SCALE: number[] = [ 2, 1, 2, 2, 1, 2, 2 ]
 export const LOKRIAN_SCALE: number[] = [ 1, 2, 2, 1, 2, 2, 2 ]
+
 export const PENTATONIC_SCALE: number[] = [ 2, 3, 3, 2, 3 ]
 
 export const HIRAJOSHI_SCALE: number[] = [ 2, 1, 4, 1, 4 ]

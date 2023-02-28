@@ -1,15 +1,22 @@
-
 import * as THREE from 'three'
-
-import { Environment } from './environment'
-import { AssetManager } from './asset-manager'
-import { Input } from './input'
-import { Player } from './player'
-import { Utils } from './util/utils'
-import { GameObject } from './object'
 import * as Tone from 'tone'
-
 import * as Stats from 'stats.js'
+
+import { Globals } from './globals'
+import { AssetManager } from './core/asset-manager'
+import { Input } from './core/input'
+
+import { World } from './core/world'
+import { Prefabs } from './core/prefabs'
+import { Utils } from './util/utils'
+
+import { EComponents } from './core/components/component'
+import { TransformationComponent } from './core/components/transformation-component'
+
+import { RenderSystem } from './core/systems/render-system'
+import { FirstPersonControllerSystem } from './core/systems/first-person-controller-system'
+import { AudioSystem } from './core/systems/audio-system'
+
 
 export class Game {
 
@@ -17,23 +24,12 @@ export class Game {
 
     public dom: HTMLElement
 
-    public w: number
-    public h: number
-    public ratio: number
-
     public static renderer: THREE.WebGLRenderer
     public static camera: THREE.PerspectiveCamera
-    public static scene: THREE.Scene
-    public static renderTarget: THREE.WebGLRenderTarget
+
+    public static world: World
 
     public static master: Tone.Gain
-
-
-    objects: GameObject[]
-
-    player: Player
-
-    env: Environment
 
     private clock: THREE.Clock
     private AFID: number
@@ -44,40 +40,35 @@ export class Game {
 
         Game.i = this
         
-        this.AFID = undefined
-        this.clock
+        // this.clock
         this.dom = dom
 
-        this.w = window.innerWidth
-        this.h = window.innerHeight
-        this.ratio = window.devicePixelRatio
+        Globals.w = window.innerWidth
+        Globals.h = window.innerHeight
+        Globals.ratio = window.devicePixelRatio
 
         this.stats = new Stats()
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
         document.body.appendChild(this.stats.dom)
 
-        Game.master = new Tone.Gain(.7)
+        Game.master = new Tone.Gain(.9)
         Game.master.toDestination()
     
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
-        Game.renderer.setSize(this.w, this.h)
+        Game.renderer.setSize(Globals.w, Globals.h)
         Game.renderer.setClearColor(0xf4eedb)
         Game.renderer.shadowMap.enabled = true
         Game.renderer.shadowMap.type = THREE.PCFSoftShadowMap
         this.dom.append(Game.renderer.domElement)
     
-        Game.camera = new THREE.PerspectiveCamera(100, this.w / this.h, .1, 1000)
-        Game.camera.position.set(0, 3, 0)
+        Game.camera = new THREE.PerspectiveCamera(100, Globals.w / Globals.h, .1, 1000)
+        Game.camera.position.set(0, 0, 5)
+        Game.camera.lookAt(0, 0, 0)
 
-        Game.renderTarget = new THREE.WebGLRenderTarget(this.w, this.h, {
-            wrapS: THREE.RepeatWrapping,
-            wrapT: THREE.RepeatWrapping,
+        Game.world = new World()
 
-        })
-    
-        Game.scene = new THREE.Scene()
         // Game.scene.fog = new THREE.FogExp2( 0xefd1b5, .01 );
-        Game.scene.fog = new THREE.Fog(0xf4eedb, 1, 50)
+        Game.world.scene.fog = new THREE.Fog(0xf4eedb, 1, 50)
 
         // Cubemap
         const cubeMap = new THREE.CubeTextureLoader()
@@ -104,15 +95,74 @@ export class Game {
         dLight.shadow.camera.right = 200
         dLight.shadow.mapSize.width = 4096
         dLight.shadow.mapSize.height = 4096
-        Game.scene.add(dLight)
-        Game.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
+        Game.world.scene.add(dLight)
+        Game.world.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
 
         new Input(this.dom)
+    }
 
-        this.objects = []
+    init() {
+        console.log('INIT')
 
-        this.player = undefined
-        this.env = undefined
+        this.clock = new THREE.Clock()
+
+        this.loadAssets().then(() => {
+
+            return new Promise((resolve) => {
+
+                this.loop()
+    
+                console.log('LOADED')
+
+                Game.world.registerSystem(new RenderSystem())
+                Game.world.registerSystem(new FirstPersonControllerSystem())
+                Game.world.registerSystem(new AudioSystem())
+
+                Prefabs.ControllablePlayer()
+
+                let amount = 100
+                let range = 500
+
+                for(let i = 0; i < amount * 2; i++) {
+
+                    let tree = Prefabs.Tree()
+                    let transform = tree.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+                    
+                    transform.position.set(
+                        (Math.random() * range) - (range / 2),
+                        0,
+                        (Math.random() * range) - (range / 2),
+                    )
+                    transform.needsUpdate = true
+                }
+
+                for(let i = 0; i < amount; i++) {
+
+                    let stone = Prefabs.Stone()
+                    let transform = stone.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+                    
+                    transform.position.set(
+                        (Math.random() * range) - (range / 2),
+                        0,
+                        (Math.random() * range) - (range / 2),
+                    )
+                    transform.needsUpdate = true
+                }
+
+                resolve(null)
+            })
+        })
+    }
+
+    start() {
+        
+        Tone.Transport.start()
+
+    }
+
+    stop() {
+        
+        Tone.Transport.stop()
 
     }
 
@@ -134,62 +184,24 @@ export class Game {
         }
     }
 
-    init() {
-        console.log('INIT')
-
-        this.clock = new THREE.Clock()
-
-        this.loadAssets().then(() => {
-
-            return new Promise((resolve) => {
-
-                this.env = new Environment()
-                this.env.create()
-                Game.scene.add(this.env.obj)
-
-                this.player = new Player(Game.camera)
-                Game.scene.add(this.player.obj)
-
-                this.loop()
-    
-                console.log('LOADED')
-
-                resolve(null)
-            })
-        })
-    }
-
-    start() {
-        
-        Tone.Transport.start()
-
-        for(let tree of this.env.trees) {
-
-            tree.start(Tone.context.currentTime)
-        }
-
-    }
 
     update() {
 
-        for(let p of Player.list) p.update(this.clock.getDelta())
+        // UPDATE SYSTEMS
 
-        this.env.update(0)
+        Game.world.update(this.clock.getDelta())
+
     }
 
     loop() {
 
-        this.stats.begin()
+        if(Globals.debug) this.stats.begin()
 
         this.update()
 
-        // Game.renderer.setRenderTarget(Game.renderTarget)
-        // Game.renderer.render(Game.scene, Game.camera)
-    
-        // Game.renderer.setRenderTarget(null)
-        Game.renderer.render(Game.scene, Game.camera)
+        Game.renderer.render(Game.world.scene, Game.camera)
 
-        this.stats.end()
+        if(Globals.debug) this.stats.end()
 
         window.cancelAnimationFrame(this.AFID)
         this.AFID = window.requestAnimationFrame(this.loop.bind(this))
@@ -203,6 +215,7 @@ export class Game {
                 console.log('Load fin')
                 resolve(null)
             }
+
             resolve(null)
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
@@ -222,18 +235,20 @@ export class Game {
 
     resize() {
 
-        this.w = window.innerWidth
-        this.h = window.innerHeight
-        this.ratio = window.devicePixelRatio
+        Globals.w = window.innerWidth
+        Globals.h = window.innerHeight
+        Globals.ratio = window.devicePixelRatio
 
-        Game.renderer.setSize(this.w, this.h)
-        Game.renderer.setPixelRatio(this.ratio)
+        Game.renderer.setSize(Globals.w, Globals.h)
+        Game.renderer.setPixelRatio(Globals.ratio)
 
-        Game.camera.aspect = this.w / this.h
+        Game.camera.aspect = Globals.w / Globals.h
         Game.camera.updateProjectionMatrix()
     }
 
     destroy() {
+
+        this.stop()
 
         this.disposeAssets()
     }
