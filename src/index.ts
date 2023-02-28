@@ -5,7 +5,6 @@ import { Game } from './app/game'
 import { Globals } from "./app/globals"
 
 
-
 Globals.dom = document.getElementById('webGL') as HTMLElement
 
 let isPause = true

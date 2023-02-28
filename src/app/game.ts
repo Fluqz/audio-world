@@ -51,7 +51,7 @@ export class Game {
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
         document.body.appendChild(this.stats.dom)
 
-        Game.master = new Tone.Gain(.7)
+        Game.master = new Tone.Gain(.9)
         Game.master.toDestination()
     
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
