@@ -72,7 +72,7 @@ export class Game {
 
         // Cubemap
         const cubeMap = new THREE.CubeTextureLoader()
-            .setPath( Globals.path + '/assets/images/cubemap/' )
+            .setPath( Globals.path + 'assets/images/cubemap/' )
             .load( [
                 'px.png',
                 'nx.png',
