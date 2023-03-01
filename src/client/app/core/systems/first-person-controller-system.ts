@@ -6,6 +6,8 @@ import { Entity } from "../entity"
 import { EInput, Input } from "../input"
 import { System } from "./system"
 
+import io from "socket.io-client"
+const socket = io()
 
 export enum FPSState {
 
@@ -132,6 +134,8 @@ export class FirstPersonControllerSystem implements System {
         this.transform.needsUpdate = true
 
         this.FPSComponent.control.updateTarget(this.FPSComponent.force)
+
+        socket.emit('client-transform', socket.id, this.transform)
     }
 
     getWorldDirection(target: THREE.Vector3): THREE.Vector3 {

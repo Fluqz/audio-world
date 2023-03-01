@@ -17,6 +17,9 @@ import { RenderSystem } from './core/systems/render-system'
 import { FirstPersonControllerSystem } from './core/systems/first-person-controller-system'
 import { AudioSystem } from './core/systems/audio-system'
 
+import io from "socket.io-client"
+const socket = io()
+
 
 export class Game {
 
@@ -118,7 +121,20 @@ export class Game {
                 Game.world.registerSystem(new FirstPersonControllerSystem())
                 Game.world.registerSystem(new AudioSystem())
 
-                Prefabs.ControllablePlayer()
+                // Create Player
+                let player = Prefabs.ControllablePlayer()
+
+                socket.on('connecting', (id) => {
+
+                    player.id = id
+                })
+
+                socket.on('add-client', (id) => {
+
+                    console.log('Add another player')
+                    let e = Prefabs.Player()
+                    e.id = id
+                })
 
                 let amount = 100
                 let range = 500

@@ -2,6 +2,10 @@ import { AxesHelper, Mesh, MeshDistanceMaterial, MeshStandardMaterial, PlaneGeom
 import { Entity } from "./entity";
 import { System } from "./systems/system";
 
+import io from "socket.io-client"
+import { EComponents } from "./components/component";
+import { TransformationComponent } from "./components/transformation-component";
+const socket = io()
 
 export class World {
 
@@ -27,6 +31,23 @@ export class World {
 
         this.entities = []
         this.systems = []
+
+        socket.on('update-client', (id, transform) => {
+
+            let e = this.getEntityById(id)
+
+            if(!e) return
+
+            let t = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+
+            t.position.copy(transform.position)
+            t.quaternion.copy(transform.quaternion)
+            t.rotation.copy(transform.rotation)
+            t.scale.copy(transform.scale)
+            t.needsUpdate = true
+
+            console.log('updating clients transform')
+        })
     }
 
     update(delta: number) {
@@ -41,6 +62,11 @@ export class World {
         this.entities.push(e)
 
         return e
+    }
+
+    getEntityById(id: string) {
+
+        return this.entities.find(e => e.id == id)
     }
 
     removeEntity(entity: Entity) {

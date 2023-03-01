@@ -19,6 +19,7 @@ const port = 3000;
 class App {
     constructor(port) {
         this.clients = {};
+        console.log('SERVER');
         this.port = port;
         const app = (0, express_1.default)();
         app.use(express_1.default.static(path_1.default.join(__dirname, '../client')));
@@ -29,26 +30,21 @@ class App {
             this.clients[socket.id] = {};
             console.log(this.clients);
             console.log('a user connected : ' + socket.id);
-            socket.emit('id', socket.id);
+            socket.emit('connecting', socket.id);
+            socket.broadcast.emit('add-client', socket.id);
             socket.on('disconnect', () => {
                 console.log('socket disconnected : ' + socket.id);
                 if (this.clients && this.clients[socket.id]) {
                     console.log('deleting ' + socket.id);
                     delete this.clients[socket.id];
-                    this.io.emit('removeClient', socket.id);
+                    socket.broadcast.emit('remove-client', socket.id);
                 }
             });
-            socket.on('update', (message) => {
-                if (this.clients[socket.id]) {
-                    this.clients[socket.id].t = message.t; //client timestamp
-                    this.clients[socket.id].p = message.p; //position
-                    this.clients[socket.id].r = message.r; //rotation
-                }
+            socket.on('client-transform', (id, transform) => {
+                console.log('client moves', id, transform);
+                socket.broadcast.emit('update-client', socket.id, transform);
             });
         });
-        setInterval(() => {
-            this.io.emit('clients', this.clients);
-        }, 50);
     }
     start() {
         this.server.listen(this.port, () => {

@@ -7,6 +7,7 @@ import { Globals } from "./app/globals"
 Globals.dom = document.getElementById('webGL') as HTMLElement
 
 let game = new Game(Globals.dom)
+game.init()
 
 let isInit = true
 
@@ -19,7 +20,6 @@ document.addEventListener('mousedown', () => {
         if (Tone.context.state !== 'running')
             Tone.context.resume()
 
-        game.init()
         game.start()
     }
 })

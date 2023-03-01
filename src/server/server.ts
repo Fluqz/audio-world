@@ -25,6 +25,8 @@ class App {
 
     constructor(port: number) {
 
+        console.log('SERVER')
+
         this.port = port
         const app = express()
         app.use(express.static(path.join(__dirname, '../client')))
@@ -32,6 +34,7 @@ class App {
         this.server = new http.Server(app)
 
         this.io = new Server(this.server)
+
 
         this.io.on('connection', (socket: Socket) => {
 
@@ -42,7 +45,9 @@ class App {
             console.log(this.clients)
             console.log('a user connected : ' + socket.id)
 
-            socket.emit('id', socket.id)
+            socket.emit('connecting', socket.id)
+
+            socket.broadcast.emit('add-client', socket.id)
 
             socket.on('disconnect', () => {
 
@@ -51,26 +56,17 @@ class App {
                 if (this.clients && this.clients[socket.id]) {
                     console.log('deleting ' + socket.id)
                     delete this.clients[socket.id]
-                    this.io.emit('removeClient', socket.id)
+                    socket.broadcast.emit('remove-client', socket.id)
                 }
             })
 
-            socket.on('update', (message: any) => {
+            socket.on('client-transform', (id:string, transform) => {
 
-                if (this.clients[socket.id]) {
+                console.log('client moves', id, transform)
 
-                    this.clients[socket.id].t = message.t //client timestamp
-                    this.clients[socket.id].p = message.p //position
-                    this.clients[socket.id].r = message.r //rotation
-                }
+                socket.broadcast.emit('update-client', socket.id, transform)
             })
         })
-
-        setInterval(() => {
-
-            this.io.emit('clients', this.clients)
-
-        }, 50)
     }
 
     public start() {
