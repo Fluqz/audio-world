@@ -50,10 +50,10 @@ class App {
             this.io.emit('clients', this.clients);
         }, 50);
     }
-    Start() {
+    start() {
         this.server.listen(this.port, () => {
             console.log(`Server listening on port ${this.port}.`);
         });
     }
 }
-new App(port).Start();
+new App(port).start();
