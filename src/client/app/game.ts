@@ -18,6 +18,8 @@ import { FirstPersonControllerSystem } from './core/systems/first-person-control
 import { AudioSystem } from './core/systems/audio-system'
 
 import io from "socket.io-client"
+import { Entity } from './core/entity'
+import { AudioListenerComponent } from './core/components/audio-listener-component'
 const socket = io()
 
 
@@ -32,7 +34,7 @@ export class Game {
 
     public static world: World
 
-    public static master: Tone.Gain
+    public static master: Tone.Volume
 
     private clock: THREE.Clock
     private AFID: number
@@ -54,7 +56,7 @@ export class Game {
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
         document.body.appendChild(this.stats.dom)
 
-        Game.master = new Tone.Gain(.9)
+        Game.master = new Tone.Volume(.9)
         Game.master.toDestination()
     
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -64,7 +66,7 @@ export class Game {
         Game.renderer.shadowMap.type = THREE.PCFSoftShadowMap
         this.dom.append(Game.renderer.domElement)
     
-        Game.camera = new THREE.PerspectiveCamera(100, Globals.w / Globals.h, .1, 1000)
+        Game.camera = new THREE.PerspectiveCamera(40, Globals.w / Globals.h, 1, 1000)
         Game.camera.position.set(0, 0, 5)
         Game.camera.lookAt(0, 0, 0)
 
@@ -117,57 +119,66 @@ export class Game {
     
                 console.log('LOADED')
 
-                Game.world.registerSystem(new RenderSystem())
-                Game.world.registerSystem(new FirstPersonControllerSystem())
-                Game.world.registerSystem(new AudioSystem())
-
                 // Create Player
                 let player = Prefabs.ControllablePlayer()
 
-                socket.on('connecting', (id) => {
+                Game.world.registerSystem(new RenderSystem())
+                Game.world.registerSystem(new FirstPersonControllerSystem())
+                Game.world.registerSystem(new AudioSystem(player.getComponent(EComponents.AUDIO_LISTENER) as AudioListenerComponent))
+
+
+                socket.on('connecting', (id: string, clients) => {
 
                     player.id = id
+
+                    console.log('clients', clients)
+
+                    // Array.from(clients).forEach(c => {
+
+                    //     console.log(c)
+
+                    //     let p = Prefabs.Player()
+                    //     p.id = id
+                    // })
                 })
 
                 socket.on('add-client', (id) => {
 
                     console.log('Add another player')
-                    let e = Prefabs.Player()
-                    e.id = id
+                    let p = Prefabs.Player()
+                    p.id = id
                 })
 
-                let amount = 100
+                let amount = 30
                 let range = 500
 
-                for(let i = 0; i < amount * 2; i++) {
-
-                    let tree = Prefabs.Tree()
-                    let transform = tree.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
-                    
-                    transform.position.set(
-                        (Math.random() * range) - (range / 2),
-                        0,
-                        (Math.random() * range) - (range / 2),
-                    )
-                    transform.needsUpdate = true
-                }
-
-                for(let i = 0; i < amount; i++) {
-
-                    let stone = Prefabs.Stone()
-                    let transform = stone.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
-                    
-                    transform.position.set(
-                        (Math.random() * range) - (range / 2),
-                        0,
-                        (Math.random() * range) - (range / 2),
-                    )
-                    transform.needsUpdate = true
-                }
+                // this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
+                // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
+                // this.instanciateRandomly(Prefabs.Stone, amount, range)
+                this.instanciateRandomly(Prefabs.Tree, 1, 2)
 
                 resolve(null)
             })
         })
+    }
+
+    private instanciateRandomly(instaciateFunc: () => Entity, amount: number, range: number) {
+
+        for(let i = 0; i < amount; i++) {
+
+            let prefab = instaciateFunc()
+            let transform = prefab.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+            
+            if(transform) {
+                
+                transform.position.set(
+                    (Math.random() * range) - (range / 2),
+                    0,
+                    (Math.random() * range) - (range / 2),
+                )
+                transform.needsUpdate = true   
+            }
+        }
     }
 
     start() {
@@ -188,15 +199,15 @@ export class Game {
 
         if(m == undefined) m = !this.isMuted
 
-        if(!this.isMuted) this.stored_volume = Game.master.gain.value
+        if(!this.isMuted) this.stored_volume = Game.master.volume.value
         
         this.isMuted = m
 
         if(this.isMuted) {
-            Game.master.gain.linearRampToValueAtTime(0, Tone.context.currentTime + .03)
+            Game.master.volume.linearRampToValueAtTime(0, Tone.context.currentTime + .03)
         }
         else {
-            Game.master.gain.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .03)
+            Game.master.volume.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .03)
         }
     }
 

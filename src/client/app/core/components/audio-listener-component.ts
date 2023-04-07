@@ -3,7 +3,7 @@ import { TransformationComponent } from "./transformation-component";
 
 export class AudioListenerComponent implements Component {
 
-    name: string
+    name: EComponents
 
     public transform: TransformationComponent
 

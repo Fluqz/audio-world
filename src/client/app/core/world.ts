@@ -50,11 +50,13 @@ export class World {
         })
     }
 
+    /** Continues update. Updates all registered systems */
     update(delta: number) {
 
         for(let s of this.systems) s.process(this.entities, delta)
     }
 
+    /** Create a empty Entity */
     createEntity() : Entity {
 
         const e = new Entity()
@@ -64,11 +66,23 @@ export class World {
         return e
     }
 
+    /** Returns a Entity with the same id as param id if found */
     getEntityById(id: string) {
 
         return this.entities.find(e => e.id == id)
     }
 
+    /** Adds entity */
+    addEntity(entity: Entity) {
+
+        let i = this.entities.indexOf(entity)
+
+        if(i != -1) return
+
+        this.entities.push(entity)
+    }
+    
+    /** Removes entity */
     removeEntity(entity: Entity) {
 
         let i = this.entities.indexOf(entity)
@@ -78,10 +92,14 @@ export class World {
         this.entities.splice(i, 1)
     }
 
+    /** Register system to be used by world */
     registerSystem(system: System) {
+
+        if(this.systems.indexOf(system) != -1) return
 
         this.systems.push(system)
     }
+    /** Unregister system from world */
     unregisterSystem(system: System) {
 
         let i = this.systems.indexOf(system)

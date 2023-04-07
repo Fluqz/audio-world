@@ -13,6 +13,8 @@ export class ThirdPersonControl {
 
     public orbit: OrbitControls
 
+    public camDistance: number = 10
+
     constructor(obj: THREE.Object3D, camera: THREE.PerspectiveCamera, dom: HTMLElement) {
 
         this.obj = obj
@@ -20,6 +22,9 @@ export class ThirdPersonControl {
         this.dom = dom
 
         this.cameraTarget = new THREE.Vector3()
+
+        this.camera.position.setLength(this.camDistance)
+        this.camera.updateMatrix()
 
         this.orbit = new OrbitControls(this.camera, this.dom)
         this.orbit.enablePan = false

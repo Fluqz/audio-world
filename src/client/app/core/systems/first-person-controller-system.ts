@@ -25,21 +25,9 @@ export class FirstPersonControllerSystem implements System {
 
     process(entities: Entity[], delta: number): void {
 
-        let process: boolean
+        entities = Entity.filterByComponents(entities, this.requiredComponents)
+
         for(let e of entities) {
-
-            process = true
-
-            for(let c of this.requiredComponents) {
-                
-                // console.log(c,e.getComponent(c))
-                if(!e.getComponent(c)) {
-
-                    process = false
-                }
-            }
-                        
-            if(!process) continue
             
             this.FPSComponent = e.getComponent(EComponents.FIRST_PERSON_CONTROLLER) as FirstPersonControllerComponent
             this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent

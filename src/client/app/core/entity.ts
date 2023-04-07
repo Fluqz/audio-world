@@ -64,6 +64,21 @@ export class Entity {
         return array
     }
 
+    /** Filter entities that dont use the required components */
+    static filterByComponents(entities: Entity[], rcs: EComponents[]) {
+
+        return entities.filter(e => {
+
+            let p = true
+            for(let rc of rcs) {
+
+                if(!e.getComponent(rc)) p = false
+            }
+
+            return p
+        })
+    }
+
     print() {
 
         console.log('ENTITY', this.name, this.id, this.components)

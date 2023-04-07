@@ -6,7 +6,7 @@ import { Component, EComponents } from "./component";
 
 export class GraphicsComponent implements Component {
 
-    name: string
+    name: EComponents
 
     object: Object3D
 

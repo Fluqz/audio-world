@@ -18,7 +18,7 @@ const socket_io_1 = require("socket.io");
 const port = 3000;
 class App {
     constructor(port) {
-        this.clients = {};
+        this.clients = new Map();
         console.log('SERVER');
         this.port = port;
         const app = (0, express_1.default)();
@@ -26,17 +26,16 @@ class App {
         this.server = new http_1.default.Server(app);
         this.io = new socket_io_1.Server(this.server);
         this.io.on('connection', (socket) => {
-            console.log(socket.constructor.name);
-            this.clients[socket.id] = {};
-            console.log(this.clients);
+            socket.emit('connecting', socket.id, Object.keys(this.io.sockets.sockets));
+            this.clients.set(socket.id, { id: socket.id });
+            console.log('cs', this.clients);
             console.log('a user connected : ' + socket.id);
-            socket.emit('connecting', socket.id);
             socket.broadcast.emit('add-client', socket.id);
             socket.on('disconnect', () => {
                 console.log('socket disconnected : ' + socket.id);
                 if (this.clients && this.clients[socket.id]) {
                     console.log('deleting ' + socket.id);
-                    delete this.clients[socket.id];
+                    this.clients.delete(socket.id);
                     socket.broadcast.emit('remove-client', socket.id);
                 }
             });

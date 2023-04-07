@@ -1,49 +1,32 @@
 import * as Tone from "tone";
-import { Game } from "../../game";
-import { M } from "../../util/math";
-import { AudioListenerComponent } from "./audio-listener-component";
+import { AudioEffectComponent } from "./audio-effect-component";
+import { AudioSourceComponent } from "./audio-source-component";
 import { Component, EComponents } from "./component";
 
 export class AudioComponent implements Component {
 
-    name: string
+    name: EComponents
 
-    frequency: number = 400
-    range: number = 30
-    wave: OscillatorType
-    volume: number
+    source: AudioSourceComponent
 
-    oscillator: Tone.Oscillator
-    envelope: Tone.AmplitudeEnvelope
-    gain: Tone.Gain
+    effects: AudioEffectComponent[]
 
-    constructor(frequency: number, wave: OscillatorType, volume: number, range: number) {
+    range: number
+
+    output: Tone.ToneAudioNode
+
+    constructor(source: AudioSourceComponent, effects?: AudioEffectComponent[], range?:number) {
 
         this.name = EComponents.AUDIO
 
-        this.frequency = frequency
+        this.source = source
+
+        this.effects = effects
+
         this.range = range
-        this.wave = wave
-        this.volume = volume
 
-        this.oscillator = new Tone.Oscillator(this.frequency)
-        this.oscillator.type = wave
-
-        // this.envelope = new Tone.AmplitudeEnvelope(0, 1, 1, 1)
-        this.gain = new Tone.Gain(.1)
-        this.oscillator.connect(this.gain)
-        this.gain.connect(Game.master)
-        this.oscillator.start()
+        // if(effects == undefined) 
+        this.output = source.output
+        // else this.output = effects[effects.length-1].output
     }
-
-
-
-//     destruct() {
-
-//         this.stop(Tone.context.currentTime)
-//         this.gain.disconnect()
-//         this.oscillator.disconnect()
-//         this.gain.dispose()
-//         this.oscillator.dispose()
-//     }
 }

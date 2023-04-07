@@ -3,7 +3,7 @@ import { Component, EComponents } from "./component";
 
 export class TransformationComponent implements Component {
 
-    name: string
+    name: EComponents
 
     position: Vector3
     rotation: Euler

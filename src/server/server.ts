@@ -21,7 +21,7 @@ class App {
     private port: number
 
     private io: Server
-    private clients: any = {}
+    private clients: Map<string, {}> = new Map()
 
     constructor(port: number) {
 
@@ -38,14 +38,12 @@ class App {
 
         this.io.on('connection', (socket: Socket) => {
 
-            console.log(socket.constructor.name)
+            socket.emit('connecting', socket.id, Object.keys(this.io.sockets.sockets))
 
-            this.clients[socket.id] = {}
+            this.clients.set(socket.id, { id: socket.id })
+            console.log('cs', this.clients)
+            console.log('a user connected : ' + socket.id, )
 
-            console.log(this.clients)
-            console.log('a user connected : ' + socket.id)
-
-            socket.emit('connecting', socket.id)
 
             socket.broadcast.emit('add-client', socket.id)
 
@@ -55,7 +53,7 @@ class App {
 
                 if (this.clients && this.clients[socket.id]) {
                     console.log('deleting ' + socket.id)
-                    delete this.clients[socket.id]
+                    this.clients.delete(socket.id)
                     socket.broadcast.emit('remove-client', socket.id)
                 }
             })

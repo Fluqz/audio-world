@@ -1,12 +1,12 @@
-import { Object3D } from "three";
+import { AnimationClip, Object3D } from "three";
 import { Game } from "../../game";
 import { Component, EComponents } from "./component";
 
 export class AnimationComponent implements Component {
     
-        name: string
+        name: EComponents
     
-        constructor(object: Object3D) {
+        constructor(object: Object3D, animation: Function | AnimationClip[]) {
     
             this.name = EComponents.ANIMATION
     

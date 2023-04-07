@@ -13,20 +13,9 @@ export class RenderSystem implements System {
 
     process(entities: Entity[], ...args: any[]): void {
 
-        let process: boolean
+        entities = Entity.filterByComponents(entities, this.requiredComponents)
+
         for(let e of entities) {
-
-            process = true
-
-            for(let c of this.requiredComponents) {
-                
-                if(!e.getComponent(c)) {
-
-                    process = false
-                }
-            }
-                        
-            if(!process) continue
 
             this.graphics = e.getComponent(EComponents.GRAPHICS) as GraphicsComponent
             this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
