@@ -14,7 +14,7 @@ export class AudioSystem implements System {
 
     public listener: AudioListenerComponent
 
-    private minVolume: number = -45
+    private minVolume: number = -150
     private maxVolume: number = 3
 
     constructor(listener: AudioListenerComponent) {
@@ -32,7 +32,7 @@ export class AudioSystem implements System {
 
     process(entities: Entity[], ...args: any[]): void {
 
-        entities = Entity.filterByComponents(entities, this.requiredComponents)
+        // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
         for(let e of entities) {
 
@@ -51,28 +51,35 @@ export class AudioSystem implements System {
         // Instead of distance to center point,
         // use distance to min max of boundingbox 
         const d = this.transform.position.distanceTo(this.listener.transform.position)
-        
+
         // MUTE
         if(d > this.audio.range) {
             
             // if(this.audio.source.volume.volume.value == 0) return
-            this.audio.source.volume.volume.exponentialRampToValueAtTime(this.minVolume, Tone.context.currentTime)
-            console.log('update mute',this.audio.source.volume.volume.value == this.minVolume)
+            this.audio.source.volume.volume.value = this.minVolume
+            // this.audio.source.volume.volume.exponentialRampToValueAtTime(this.minVolume, Tone.context.currentTime)
+            // console.log('update mute',this.audio.source.volume.volume.value == this.minVolume)
             // this.audio.source.volume.mute = true
         }
         else { // UNMUTE
 
-            let log = Math.log10(d)
-            let volume = M.map(d, 0, this.audio.range, 3, -30)
+
+            // let v = M.map(d, 0, this.audio.range, 0, 1)
+            // let volume = M.mapLog(v, this.minVolume, this.maxVolume)
+
             // let volume = M.map(d, 0, this.audio.range, 1, 0)
+
+            let volume = M.map(d, 0, this.audio.range, this.minVolume, this.maxVolume)
+
+            // let volume = M.map(d, 0, this.audio.range, this.maxVolume, this.minVolume)
 
             this.audio.source.volume.mute = false
 
             // if(this.audio.source.volume.volume.value == volume) return
-            this.audio.source.volume.volume.setValueAtTime(volume, Tone.context.currentTime)
-            console.log('update unmute',this.audio.source.volume.volume.value, volume, log)
+            this.audio.source.volume.volume.value = volume
+            // console.log('update unmute',this.audio.source.volume.volume.value, volume, log)
         }
 
-        console.log('update', this.audio.source.volume.volume.value)
+        // console.log('update', this.audio.source.volume.volume.value)
     }
 }

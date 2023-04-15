@@ -13,7 +13,7 @@ export class RenderSystem implements System {
 
     process(entities: Entity[], ...args: any[]): void {
 
-        entities = Entity.filterByComponents(entities, this.requiredComponents)
+        // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
         for(let e of entities) {
 

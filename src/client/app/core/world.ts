@@ -22,9 +22,9 @@ export class World {
 
         this.scene = new Scene()
 
-        this.scene.add(new AxesHelper())
+        // this.scene.add(new AxesHelper())
 
-        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshDistanceMaterial())
+        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
         ground.geometry.rotateX(-Math.PI / 2)
         ground.receiveShadow = true
         this.scene.add(ground)
@@ -32,28 +32,33 @@ export class World {
         this.entities = []
         this.systems = []
 
-        socket.on('update-client', (id, transform) => {
+        // socket.on('update-client', (id, transform) => {
 
-            let e = this.getEntityById(id)
+        //     let e = this.getEntityById(id)
 
-            if(!e) return
+        //     if(!e) return
 
-            let t = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+        //     let t = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
 
-            t.position.copy(transform.position)
-            t.quaternion.copy(transform.quaternion)
-            t.rotation.copy(transform.rotation)
-            t.scale.copy(transform.scale)
-            t.needsUpdate = true
+        //     t.position.copy(transform.position)
+        //     t.quaternion.copy(transform.quaternion)
+        //     t.rotation.copy(transform.rotation)
+        //     t.scale.copy(transform.scale)
+        //     t.needsUpdate = true
 
-            console.log('updating clients transform')
-        })
+        //     console.log('updating clients transform')
+        // })
     }
 
     /** Continues update. Updates all registered systems */
     update(delta: number) {
 
-        for(let s of this.systems) s.process(this.entities, delta)
+        for(let s of this.systems) {
+
+            const entities = Entity.filterByComponents(this.entities, s.requiredComponents)
+
+            s.process(entities, delta)
+        }
     }
 
     /** Create a empty Entity */
@@ -99,6 +104,7 @@ export class World {
 
         this.systems.push(system)
     }
+    
     /** Unregister system from world */
     unregisterSystem(system: System) {
 

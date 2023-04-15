@@ -1,3 +1,6 @@
+three.js-typescript-boilerplate - check npm run build 
+
+
 
 
 test

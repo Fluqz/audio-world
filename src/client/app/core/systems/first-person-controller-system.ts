@@ -7,6 +7,8 @@ import { EInput, Input } from "../input"
 import { System } from "./system"
 
 import io from "socket.io-client"
+import { GraphicsComponent } from "../components/graphics-component"
+import { Vector3 } from "three"
 const socket = io()
 
 export enum FPSState {
@@ -23,11 +25,15 @@ export class FirstPersonControllerSystem implements System {
     private FPSComponent: FirstPersonControllerComponent
     private transform: TransformationComponent
 
+    private entity: Entity
+
     process(entities: Entity[], delta: number): void {
 
-        entities = Entity.filterByComponents(entities, this.requiredComponents)
+        // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
         for(let e of entities) {
+
+            this.entity = e
             
             this.FPSComponent = e.getComponent(EComponents.FIRST_PERSON_CONTROLLER) as FirstPersonControllerComponent
             this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
@@ -103,6 +109,8 @@ export class FirstPersonControllerSystem implements System {
 
     move(delta: number) {
 
+        const g = this.entity.getComponent(EComponents.GRAPHICS) as GraphicsComponent
+
         const vel = Input.on(EInput.RUN) == false ? this.FPSComponent.velocity : this.FPSComponent.runVeclocity
 
         this.transform.quaternion.setFromAxisAngle(M.UP, this.angleYCameraDirection + this.FPSComponent.directionOffset)
@@ -121,9 +129,10 @@ export class FirstPersonControllerSystem implements System {
 
         this.transform.needsUpdate = true
 
-        this.FPSComponent.control.updateTarget(this.FPSComponent.force)
+        this.FPSComponent.control.updateCamera(this.FPSComponent.force)
+        this.FPSComponent.control.updateTarget(this.transform.position)
 
-        socket.emit('client-transform', socket.id, this.transform)
+        // socket.emit('client-transform', socket.id, this.transform)
     }
 
     getWorldDirection(target: THREE.Vector3): THREE.Vector3 {

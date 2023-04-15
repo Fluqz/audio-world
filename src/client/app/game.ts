@@ -7,7 +7,7 @@ import { AssetManager } from './core/asset-manager'
 import { Input } from './core/input'
 
 import { World } from './core/world'
-import { Prefabs } from './core/prefabs'
+import { Prefabs } from './data/prefabs'
 import { Utils } from './util/utils'
 
 import { EComponents } from './core/components/component'
@@ -20,6 +20,7 @@ import { AudioSystem } from './core/systems/audio-system'
 import io from "socket.io-client"
 import { Entity } from './core/entity'
 import { AudioListenerComponent } from './core/components/audio-listener-component'
+import { AnimationSystem, ScriptSystem } from './core'
 const socket = io()
 
 
@@ -56,8 +57,9 @@ export class Game {
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
         document.body.appendChild(this.stats.dom)
 
-        Game.master = new Tone.Volume(.9)
+        Game.master = new Tone.Volume(-2)
         Game.master.toDestination()
+        Tone.Destination
     
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
         Game.renderer.setSize(Globals.w, Globals.h)
@@ -122,39 +124,41 @@ export class Game {
                 // Create Player
                 let player = Prefabs.ControllablePlayer()
 
-                Game.world.registerSystem(new RenderSystem())
                 Game.world.registerSystem(new FirstPersonControllerSystem())
+                Game.world.registerSystem(new RenderSystem())
+                Game.world.registerSystem(new AnimationSystem())
                 Game.world.registerSystem(new AudioSystem(player.getComponent(EComponents.AUDIO_LISTENER) as AudioListenerComponent))
+                Game.world.registerSystem(new ScriptSystem())
 
 
-                socket.on('connecting', (id: string, clients) => {
+                // socket.on('connecting', (id: string, clients) => {
 
-                    player.id = id
+                //     player.id = id
 
-                    console.log('clients', clients)
+                //     console.log('clients', clients)
 
-                    // Array.from(clients).forEach(c => {
+                //     // Array.from(clients).forEach(c => {
 
-                    //     console.log(c)
+                //     //     console.log(c)
 
-                    //     let p = Prefabs.Player()
-                    //     p.id = id
-                    // })
-                })
+                //     //     let p = Prefabs.Player()
+                //     //     p.id = id
+                //     // })
+                // })
 
-                socket.on('add-client', (id) => {
+                // socket.on('add-client', (id) => {
 
-                    console.log('Add another player')
-                    let p = Prefabs.Player()
-                    p.id = id
-                })
+                //     console.log('Add another player')
+                //     let p = Prefabs.Player()
+                //     p.id = id
+                // })
 
-                let amount = 30
-                let range = 500
+                let amount = 50
+                let range = 300
 
-                // this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
-                // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
-                // this.instanciateRandomly(Prefabs.Stone, amount, range)
+                this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
+                this.instanciateRandomly(Prefabs.DeadTree, amount, range)
+                this.instanciateRandomly(Prefabs.Stone, amount, range)
                 this.instanciateRandomly(Prefabs.Tree, 1, 2)
 
                 resolve(null)

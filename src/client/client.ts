@@ -11,7 +11,7 @@ game.init()
 
 let isInit = true
 
-document.addEventListener('mousedown', () => {
+const init = () => {
 
     if(isInit) {
         
@@ -22,7 +22,10 @@ document.addEventListener('mousedown', () => {
 
         game.start()
     }
-})
+}
+document.addEventListener('pointerdown', init)
+document.addEventListener('touchstart', init)
+document.addEventListener('keydown', init)
 
 
 

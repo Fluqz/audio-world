@@ -13,6 +13,12 @@ export class AudioSourceComponent implements Component {
 
     output: Tone.ToneAudioNode
 
+    /**
+     * 
+     * @param source Tone.Source child class instance
+     * @param gain Gain level 0 to 1
+     * @param volume Volume output -100 to 3
+     */
     constructor(source: Source<SourceOptions>, gain: number, volume: number) {
 
         this.name = EComponents.AUDIO

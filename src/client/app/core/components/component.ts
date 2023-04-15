@@ -7,6 +7,7 @@ export interface Component {
 
 export enum EComponents {
 
+    SCRIPT = 'script-component',
     TRANSFORMATION = 'transformation-component',
     ANIMATION = 'animation-component',
     GRAPHICS = 'graphics-component',

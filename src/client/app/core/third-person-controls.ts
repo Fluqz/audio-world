@@ -32,17 +32,21 @@ export class ThirdPersonControl {
         this.orbit.screenSpacePanning = false
     }
 
-    update() {
+    update() {}
+
+
+    updateCamera(force: THREE.Vector3) {
+
+        this.camera.position.x += force.x
+        this.camera.position.z += force.z
     }
 
     updateTarget(position: THREE.Vector3) {
 
-        this.camera.position.x += position.x
-        this.camera.position.z += position.z
-
-        this.cameraTarget.x = this.obj.position.x
-        this.cameraTarget.y = this.obj.position.y + 1
-        this.cameraTarget.z = this.obj.position.z
+        this.cameraTarget.x = position.x
+        this.cameraTarget.y = position.y + 2
+        this.cameraTarget.z = position.z
+        
         this.orbit.target = this.cameraTarget
 
         this.orbit.update()
