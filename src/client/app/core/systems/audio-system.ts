@@ -36,10 +36,10 @@ export class AudioSystem implements System {
 
         for(let e of entities) {
 
-            this.audio = e.getComponent(EComponents.AUDIO) as AudioComponent
+            this.audio = e.getComponent<AudioComponent>(EComponents.AUDIO)
             this.audio.source.output.connect(this.master)
             // this.audio.output.connect(this.master)
-            this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+            this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
 
             this.update(args[0])
         }

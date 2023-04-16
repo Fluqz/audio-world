@@ -14,9 +14,9 @@ export class AnimationSystem implements System {
 
         for(const e of entities) {
 
-            const a = e.getComponent(EComponents.ANIMATION) as AnimationComponent
+            const a = e.getComponent<AnimationComponent>(EComponents.ANIMATION)
 
-            const transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+            const transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
 
             if(a && a.animation) a.animation(e, transform)
         }

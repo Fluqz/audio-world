@@ -11,7 +11,7 @@ export const TraceScript = (entity: Entity): IScript => {
 
     Game.world.scene.add(trace)
 
-    const transform = entity.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+    const transform = entity.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
 
     let v: Vector3
 

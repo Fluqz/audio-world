@@ -54,7 +54,7 @@ export const Prefabs = {
 
         e.addComponent(new ScriptComponent(TraceScript, e))
 
-        let g = e.getComponent(EComponents.GRAPHICS) as GraphicsComponent
+        let g = e.getComponent<GraphicsComponent>(EComponents.GRAPHICS)
         e.addComponent(new FirstPersonControllerComponent(Game.camera, g.object))
 
         return e

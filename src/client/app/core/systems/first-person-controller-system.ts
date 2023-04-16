@@ -35,8 +35,8 @@ export class FirstPersonControllerSystem implements System {
 
             this.entity = e
             
-            this.FPSComponent = e.getComponent(EComponents.FIRST_PERSON_CONTROLLER) as FirstPersonControllerComponent
-            this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+            this.FPSComponent = e.getComponent<FirstPersonControllerComponent>(EComponents.FIRST_PERSON_CONTROLLER)
+            this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
 
             this.checkInput()
 
@@ -108,8 +108,6 @@ export class FirstPersonControllerSystem implements System {
     }
 
     move(delta: number) {
-
-        const g = this.entity.getComponent(EComponents.GRAPHICS) as GraphicsComponent
 
         const vel = Input.on(EInput.RUN) == false ? this.FPSComponent.velocity : this.FPSComponent.runVeclocity
 

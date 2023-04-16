@@ -127,7 +127,7 @@ export class Game {
                 Game.world.registerSystem(new FirstPersonControllerSystem())
                 Game.world.registerSystem(new RenderSystem())
                 Game.world.registerSystem(new AnimationSystem())
-                Game.world.registerSystem(new AudioSystem(player.getComponent(EComponents.AUDIO_LISTENER) as AudioListenerComponent))
+                Game.world.registerSystem(new AudioSystem(player.getComponent<AudioListenerComponent>(EComponents.AUDIO_LISTENER)))
                 Game.world.registerSystem(new ScriptSystem())
 
 

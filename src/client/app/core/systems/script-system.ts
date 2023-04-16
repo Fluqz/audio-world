@@ -4,7 +4,7 @@ export class ScriptSystem implements System {
 
     requiredComponents: EComponents[] = [EComponents.SCRIPT]
 
-    private script: ScriptComponent
+    private scripts: ScriptComponent[]
 
     process(entities: Entity[], delta: number): void {
 
@@ -12,9 +12,12 @@ export class ScriptSystem implements System {
 
         for(const e of entities) {
 
-            this.script = e.getComponent(EComponents.SCRIPT) as ScriptComponent
+            this.scripts = e.getComponents<ScriptComponent>(EComponents.SCRIPT)
 
-            if(this.script.script.update) this.script.script.update(delta)
+            for(const s of this.scripts) {
+
+                if(s.script.update) s.script.update(delta)
+            }
         }
     }
 }

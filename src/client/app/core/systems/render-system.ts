@@ -17,8 +17,8 @@ export class RenderSystem implements System {
 
         for(let e of entities) {
 
-            this.graphics = e.getComponent(EComponents.GRAPHICS) as GraphicsComponent
-            this.transform = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+            this.graphics = e.getComponent<GraphicsComponent>(EComponents.GRAPHICS)
+            this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
 
             if(!this.transform.needsUpdate) continue
 

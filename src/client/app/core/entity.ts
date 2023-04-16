@@ -41,24 +41,24 @@ export class Entity {
     }
 
     /** Get component of this Entity */
-    getComponent(name: EComponents): Component {
+    getComponent<T>(name: EComponents): T {
 
         for (let c of this.components) {
 
-            if (c.name == name) return c
+            if (c.name == name) return c as T
         }
 
         return null
     }
 
     /** Get component of this Entity */
-    getComponents(name: EComponents): Component[] {
+    getComponents<T>(name: EComponents): T[] {
 
         let array = []
 
         for (let c of this.components) {
 
-            if (c.name == name) array.push(c)
+            if (c.name == name) array.push(c as T)
         }
 
         return array
