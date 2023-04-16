@@ -85,7 +85,9 @@ export class AudioSystem implements System {
             // this.audio.source.volume.volume.value = volume
 
             // Using gain instead of volume
-            let gain = M.map(d, 0, this.audio.range, 0, 1) 
+            let gain = M.map(d, 0, this.audio.range, 1, 0) 
+
+            console.log('gain',gain, d)
 
             if(this.audio.source.gain.gain.value == gain) return
 

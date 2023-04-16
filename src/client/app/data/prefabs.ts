@@ -13,6 +13,7 @@ import { TransformationComponent } from "../core/components/transformation-compo
 import { AnimationComponent, Entity, IScript, ScriptComponent } from "../core";
 import { TraceScript } from "../scripts/trace.script";
 import { AffectionScript } from "../scripts/affection.script";
+import { Utils } from "../util/utils";
 
 // export interface PrefabSettings {
 
@@ -22,17 +23,17 @@ import { AffectionScript } from "../scripts/affection.script";
 
 const samples = [ 
 
-    'assets/audio/drum/kick/hip-hop-kick.wav',
+    // 'assets/audio/drum/kick/hip-hop-kick.wav',
 
-    'assets/audio/flutes/craterlakeflute3.wav',
-    'assets/audio/flutes/craterlakeflute2.wav',
-    'assets/audio/flutes/elmorroflute1.wav',
-    'assets/audio/flutes/flutebadlands1.wav',
+    // 'assets/audio/flutes/craterlakeflute3.wav',
+    // 'assets/audio/flutes/craterlakeflute2.wav',
+    // 'assets/audio/flutes/elmorroflute1.wav',
+    // 'assets/audio/flutes/flutebadlands1.wav',
     'assets/audio/flutes/joshuatreeflutechord.wav',
 
-    'assets/audio/synth/ASoulStringF#7.wav',
+    'assets/audio/synth/ASoulStringFmajor.wav',
     'assets/audio/synth/Back_Home_F_01.wav',
-    'assets/audio/synth/StrummedRhodesF#7.wav',
+    'assets/audio/synth/StrummedRhodesFmajor7.wav',
     'assets/audio/synth/SweepFm7.wav',
 ]
 
@@ -113,7 +114,7 @@ export const Prefabs = {
 
     Player: () => {
 
-        let c = Math.round(Math.random() * 16777215)
+        let c = Utils.getRndColor()
 
         let t = new TransformationComponent()
         let m = new THREE.Mesh(new THREE.SphereGeometry(.5, 32, 32), new THREE.MeshStandardMaterial({ color: c }))
