@@ -61,6 +61,17 @@ export class World {
         }
     }
 
+    fixedUpdate(delta: number) {
+
+        // for(let s of this.systems) {
+
+        //     const entities = Entity.filterByComponents(this.entities, s.requiredComponents)
+
+        //     s.process(entities, delta)
+        // }
+    }
+
+
     /** Create a empty Entity */
     createEntity() : Entity {
 

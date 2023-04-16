@@ -5,7 +5,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export class ThirdPersonControl {
 
-    public obj: THREE.Object3D
     public camera: THREE.PerspectiveCamera
     public dom: HTMLElement
 
@@ -15,9 +14,8 @@ export class ThirdPersonControl {
 
     public camDistance: number = 10
 
-    constructor(obj: THREE.Object3D, camera: THREE.PerspectiveCamera, dom: HTMLElement) {
+    constructor(camera: THREE.PerspectiveCamera, dom: HTMLElement) {
 
-        this.obj = obj
         this.camera = camera
         this.dom = dom
 

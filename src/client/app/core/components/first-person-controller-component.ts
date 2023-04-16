@@ -27,16 +27,15 @@ export class FirstPersonControllerComponent implements Component {
 
     state: string
 
-    constructor(camera: THREE.PerspectiveCamera, object: Object3D) {
+    constructor(camera: THREE.PerspectiveCamera) {
 
         this.name = EComponents.FIRST_PERSON_CONTROLLER
 
         this.camera = camera
-        this.object = object
 
         this.state = 'IDLE'
 
-        this.control = new ThirdPersonControl(this.object, this.camera, Game.renderer.domElement)
+        this.control = new ThirdPersonControl(this.camera, Game.renderer.domElement)
         this.control.updateTarget(new Vector3())
     }
 }

@@ -1,6 +1,5 @@
 import { Utils } from "../util/utils";
 import { Component, EComponents } from "./components/component";
-import { TransformationComponent } from "./components/transformation-component";
 
 export class Entity {
 

@@ -46,9 +46,16 @@ window.addEventListener('focus', () => {
 window.addEventListener('blur', () => {
 
     game.toggleMute(true)
+
+    console.log('blur')
+
 })
             
 window.onbeforeunload = () => {
+
+    game.toggleMute(true)
+
+    console.log('onbeforeunload')
     
     // game.destroy()
     return

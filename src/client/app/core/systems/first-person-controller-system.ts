@@ -7,15 +7,13 @@ import { EInput, Input } from "../input"
 import { System } from "./system"
 
 import io from "socket.io-client"
-import { GraphicsComponent } from "../components/graphics-component"
-import { Vector3 } from "three"
 const socket = io()
 
 export enum FPSState {
 
     IDLE,
     WALK,
-    RUN,
+    RUN
 }
 
 export class FirstPersonControllerSystem implements System {
@@ -25,16 +23,12 @@ export class FirstPersonControllerSystem implements System {
     private FPSComponent: FirstPersonControllerComponent
     private transform: TransformationComponent
 
-    private entity: Entity
-
     process(entities: Entity[], delta: number): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
         for(let e of entities) {
 
-            this.entity = e
-            
             this.FPSComponent = e.getComponent<FirstPersonControllerComponent>(EComponents.FIRST_PERSON_CONTROLLER)
             this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
 

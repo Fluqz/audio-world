@@ -24,7 +24,9 @@ export class AudioSourceComponent implements Component {
         this.name = EComponents.AUDIO
 
         this.source = source
-        this.source.start()
+
+        if(this.source instanceof Tone.Player) this.source.autostart = true
+        else this.source.start()
 
         this.gain = new Tone.Gain(gain)
         this.source.connect(this.gain)

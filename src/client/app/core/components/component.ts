@@ -7,6 +7,7 @@ export interface Component {
 
 export enum EComponents {
 
+    BOUNDINGBOX = 'boundingbox-component',
     SCRIPT = 'script-component',
     TRANSFORMATION = 'transformation-component',
     ANIMATION = 'animation-component',
