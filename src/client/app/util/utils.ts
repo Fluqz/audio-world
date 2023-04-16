@@ -36,4 +36,9 @@ export class Utils {
             }
         }
     }
+
+    static makeUID() {
+
+        return (+new Date()).toString(16) + (Math.random() * 100000000 | 0).toString(16) + Entity.count
+    }
 }

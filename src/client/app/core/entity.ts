@@ -1,3 +1,4 @@
+import { Utils } from "../util/utils";
 import { Component, EComponents } from "./components/component";
 import { TransformationComponent } from "./components/transformation-component";
 
@@ -15,7 +16,7 @@ export class Entity {
 
     constructor() {
 
-        this.id = (+new Date()).toString(16) + (Math.random() * 100000000 | 0).toString(16) + Entity.count
+        this.id = Utils.makeUID()
 
         Entity.count++
 
@@ -25,7 +26,7 @@ export class Entity {
     /** Add component to this Entity */
     addComponent(component: Component) {
 
-        let i = this.components.indexOf(component)
+        const i = this.components.indexOf(component)
         if (i != -1) return this.components.length
         this.components.push(component)
         return this.components.length
@@ -34,7 +35,7 @@ export class Entity {
     /** Remove component from this Entity */
     removeComponent(component: Component) {
 
-        let i = this.components.indexOf(component)
+        const i = this.components.indexOf(component)
         if (i == -1) return this.components.length
         this.components.splice(i, 1)
         return this.components.length
@@ -43,7 +44,7 @@ export class Entity {
     /** Get component of this Entity */
     getComponent<T>(name: EComponents): T {
 
-        for (let c of this.components) {
+        for (const c of this.components) {
 
             if (c.name == name) return c as T
         }
@@ -54,9 +55,9 @@ export class Entity {
     /** Get component of this Entity */
     getComponents<T>(name: EComponents): T[] {
 
-        let array = []
+        const array = []
 
-        for (let c of this.components) {
+        for (const c of this.components) {
 
             if (c.name == name) array.push(c as T)
         }
