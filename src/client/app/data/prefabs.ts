@@ -31,7 +31,7 @@ export const Prefabs = {
         m.geometry.translate(0, m.geometry.parameters.radius / 2, 0)
 
         const e = Game.world.createEntity()
-        e.name = 'player'
+        e.name = 'Player'
         e.addComponent(t)
         e.addComponent(new GraphicsComponent(m))
         e.addComponent(new AudioListenerComponent(t))
@@ -47,7 +47,7 @@ export const Prefabs = {
         m.geometry.translate(0, .5, 0)
 
         const e = Game.world.createEntity()
-        e.name = 'player'
+        e.name = 'ControllablePlayer'
         e.addComponent(t)
         e.addComponent(new GraphicsComponent(m))
         e.addComponent(new AudioListenerComponent(t))
@@ -60,6 +60,11 @@ export const Prefabs = {
         return e
     },
 
+
+
+
+    /* Environment */
+
     Tree: () => {
 
         let s = (Math.random() * 3) + .7
@@ -71,7 +76,7 @@ export const Prefabs = {
         m.geometry.rotateZ((Math.random() * r) - r)
 
         const e = Game.world.createEntity()
-        e.name = 'tree'
+        e.name = 'Tree'
         e.addComponent(new GraphicsComponent(m))
         e.addComponent(new TransformationComponent())
         e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {
@@ -104,7 +109,7 @@ export const Prefabs = {
         m.geometry.rotateZ((Math.random() * r) - r)
 
         const e = Game.world.createEntity()
-        e.name = 'tree'
+        e.name = 'Stone'
         e.addComponent(new GraphicsComponent(m))
         e.addComponent(new TransformationComponent())
         e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {
@@ -138,7 +143,7 @@ export const Prefabs = {
         m.geometry.rotateX(Math.PI / 2)
 
         const e = Game.world.createEntity()
-        e.name = 'tree'
+        e.name = 'DeadTree'
         e.addComponent(new GraphicsComponent(m))
         e.addComponent(new TransformationComponent())
         e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {

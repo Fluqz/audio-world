@@ -6,7 +6,8 @@ export class Entity {
 
     static count: number = 0
 
-    id: string
+    private _id: string
+    get id() { return this._id }
 
     name: string
 
@@ -16,7 +17,7 @@ export class Entity {
 
     constructor() {
 
-        this.id = Utils.makeUID()
+        this._id = Utils.makeUID()
 
         Entity.count++
 
@@ -65,15 +66,21 @@ export class Entity {
         return array
     }
 
-    /** Filter entities that dont use the required components */
+    /**
+     * Filter entities that dont use the required components.
+     * 
+     * @param entities Entity array
+     * @param rcs Array of EComponents
+     * @returns a new, filtered Array of Entities
+     */
     static filterByComponents(entities: Entity[], rcs: EComponents[]) {
 
         return entities.filter(e => {
 
             let p = true
-            for(let rc of rcs) {
+            for (let rc of rcs) {
 
-                if(!e.getComponent(rc)) p = false
+                if (!e.getComponent(rc)) p = false
             }
 
             return p
