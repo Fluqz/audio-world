@@ -1,18 +1,18 @@
 import { AnimationClip, Object3D } from "three";
 import { Game } from "../../game";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 import { Entity } from "../entity";
 import { TransformationComponent } from "./transformation-component";
 
 export class AnimationComponent implements Component {
     
-        name: EComponents
+        name: EComponent
 
         animation: (entity: Entity, transform: TransformationComponent) => void
     
         constructor(animation: (entity: Entity, transform: TransformationComponent) => void | AnimationClip[]) {
     
-            this.name = EComponents.ANIMATION
+            this.name = EComponent.ANIMATION
     
             this.animation = animation
 

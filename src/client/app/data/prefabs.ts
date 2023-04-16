@@ -6,12 +6,35 @@ import { AudioComponent } from "../core/components/audio-component";
 import { AudioEffectComponent } from "../core/components/audio-effect-component";
 import { AudioListenerComponent } from "../core/components/audio-listener-component";
 import { AudioSourceComponent } from "../core/components/audio-source-component";
-import { EComponents } from "../core/components/component";
+import { EComponent } from "../core/components/component";
 import { FirstPersonControllerComponent } from "../core/components/first-person-controller-component";
 import { GraphicsComponent } from "../core/components/graphics-component";
 import { TransformationComponent } from "../core/components/transformation-component";
 import { AnimationComponent, Entity, IScript, ScriptComponent } from "../core";
 import { TraceScript } from "../scripts/trace.script";
+import { AffectionScript } from "../scripts/affection.script";
+
+// export interface PrefabSettings {
+
+
+// }
+
+
+const samples = [ 
+
+    'assets/audio/drum/kick/hip-hop-kick.wav',
+
+    'assets/audio/flutes/craterlakeflute3.wav',
+    'assets/audio/flutes/craterlakeflute2.wav',
+    'assets/audio/flutes/elmorroflute1.wav',
+    'assets/audio/flutes/flutebadlands1.wav',
+    'assets/audio/flutes/joshuatreeflutechord.wav',
+
+    'assets/audio/synth/ASoulStringF#7.wav',
+    'assets/audio/synth/Back_Home_F_01.wav',
+    'assets/audio/synth/StrummedRhodesF#7.wav',
+    'assets/audio/synth/SweepFm7.wav',
+]
 
 const material = new THREE.MeshStandardMaterial({
 
@@ -108,7 +131,7 @@ export const Prefabs = {
     ControllablePlayer: () => {
 
         const e = Game.world.createEntity()
-        e.name = 'ControllablePlayer'
+        e.name = 'Player'
 
         let t = new TransformationComponent()
         e.addComponent(t)
@@ -158,11 +181,10 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        const player = new Tone.Player("https://tonejs.github.io/audio/berklee/gong_1.mp3")
-        player.autostart = true
-        player.loop = true
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 40))
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, -5), undefined, 40))
+        e.addComponent(new ScriptComponent(AffectionScript, e))
+
 
         return e
     },
@@ -189,12 +211,15 @@ export const Prefabs = {
             transform.needsUpdate = true
         }))
 
-        let sourceOptions: OscillatorOptions = {
-            frequency: getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency,
-            type: 'triangle'
-        }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -8), undefined, 20))
+        const sample = samples[Math.round(Math.random() * samples.length - 1)]
+        const player = new Tone.Player(sample)
+        player.autostart = true
+        player.loop = true
+
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 40))
+
+        e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
     }
@@ -229,7 +254,9 @@ export const Prefabs = {
             type: 'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -5), undefined, 40))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 40))
+
+        e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
     }

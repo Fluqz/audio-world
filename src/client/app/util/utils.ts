@@ -1,6 +1,6 @@
 import { CubeTexture } from "three"
 import { Entity } from "../core/entity"
-import { EComponents } from "../core/components/component"
+import { EComponent } from "../core/components/component"
 
 export class Utils {
 

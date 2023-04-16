@@ -9,7 +9,7 @@ import { Input } from './core/input'
 import { Prefabs } from './data/prefabs'
 import { Utils } from './util/utils'
 
-import { Entity, World, AnimationSystem, ScriptSystem, AudioListenerComponent, AudioSystem, FirstPersonControllerSystem, RenderSystem, TransformationComponent, EComponents } from './core'
+import { Entity, World, AnimationSystem, ScriptSystem, AudioListenerComponent, AudioSystem, FirstPersonControllerSystem, RenderSystem, TransformationComponent, EComponent } from './core'
 
 import { Subject } from 'rxjs'
 
@@ -138,7 +138,7 @@ export class Game {
                 Game.world.registerSystem(new FirstPersonControllerSystem())
                 Game.world.registerSystem(new RenderSystem())
                 Game.world.registerSystem(new AnimationSystem())
-                Game.world.registerSystem(new AudioSystem(player.getComponent<AudioListenerComponent>(EComponents.AUDIO_LISTENER)))
+                Game.world.registerSystem(new AudioSystem(player.getComponent<AudioListenerComponent>(EComponent.AUDIO_LISTENER)))
                 Game.world.registerSystem(new ScriptSystem())
 
 
@@ -182,7 +182,7 @@ export class Game {
         for (let i = 0; i < amount; i++) {
 
             let prefab = instaciateFunc()
-            let transform = prefab.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+            let transform = prefab.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
             if (transform) {
 
@@ -221,9 +221,15 @@ export class Game {
 
         if (this.isMuted) {
 
-            Game.master.mute = true
-            Tone.Destination.mute = true
-            Game.master.volume.linearRampToValueAtTime(-1000, Tone.context.currentTime + .1)
+            setTimeout(() => {
+
+                Game.master.mute = true
+                Tone.Destination.mute = true
+                Game.master.volume.setValueAtTime(Number.NEGATIVE_INFINITY, Tone.context.currentTime)
+
+            }, 150)
+
+            Game.master.volume.linearRampToValueAtTime(-70, Tone.context.currentTime + .15)
         }
         else {
             

@@ -1,10 +1,10 @@
 import * as Tone from "tone";
 import { Source, SourceOptions } from "tone/build/esm/source/Source";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 export class AudioSourceComponent implements Component {
 
-    name: EComponents
+    name: EComponent
 
     source: Source<SourceOptions>
     envelope: Tone.AmplitudeEnvelope
@@ -21,7 +21,7 @@ export class AudioSourceComponent implements Component {
      */
     constructor(source: Source<SourceOptions>, gain: number, volume: number) {
 
-        this.name = EComponents.AUDIO
+        this.name = EComponent.AUDIO
 
         this.source = source
 

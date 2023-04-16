@@ -1,10 +1,7 @@
 import { AxesHelper, Mesh, MeshDistanceMaterial, MeshStandardMaterial, PlaneGeometry, Scene } from "three";
-import { Entity } from "./entity";
-import { System } from "./systems/system";
+import { Entity, System } from "./";
 
 import io from "socket.io-client"
-import { EComponents } from "./components/component";
-import { TransformationComponent } from "./components/transformation-component";
 const socket = io()
 
 export class World {
@@ -26,6 +23,7 @@ export class World {
 
         let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
         ground.geometry.rotateX(-Math.PI / 2)
+        ground.position.setY(-.01)
         ground.receiveShadow = true
         this.scene.add(ground)
 
@@ -38,7 +36,7 @@ export class World {
 
         //     if(!e) return
 
-        //     let t = e.getComponent(EComponents.TRANSFORMATION) as TransformationComponent
+        //     let t = e.getComponent(EComponent.TRANSFORMATION) as TransformationComponent
 
         //     t.position.copy(transform.position)
         //     t.quaternion.copy(transform.quaternion)
@@ -88,6 +86,12 @@ export class World {
         return this.entities.find(e => e.id == id)
     }
 
+    /** Returns a Entity with the same id as param id if found */
+    getEntityByName(name: string) {
+
+        return this.entities.find(e => e.name == name)
+    }
+
     /** Adds entity */
     addEntity(entity: Entity) {
 
@@ -124,5 +128,12 @@ export class World {
         if(i == -1) return
 
         this.systems.splice(i, 1)
+    }
+
+    load(map: {}) {
+
+        for(let m of Object.keys(map)) {
+
+        }
     }
 }

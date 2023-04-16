@@ -1,5 +1,5 @@
 import { BufferGeometry, Line, LineBasicMaterial, Vector2, Vector3 } from "three";
-import { EComponents, Entity, IScript, TransformationComponent } from "../core";
+import { EComponent, Entity, IScript, TransformationComponent } from "../core";
 import { Game } from "../game";
 
 
@@ -11,7 +11,7 @@ export const TraceScript = (entity: Entity): IScript => {
 
     Game.world.scene.add(trace)
 
-    const transform = entity.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
+    const transform = entity.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
     let v: Vector3
 

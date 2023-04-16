@@ -1,11 +1,11 @@
 import * as Tone from "tone";
 import { AudioEffectComponent } from "./audio-effect-component";
 import { AudioSourceComponent } from "./audio-source-component";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 export class AudioComponent implements Component {
 
-    name: EComponents
+    name: EComponent
 
     source: AudioSourceComponent
 
@@ -17,7 +17,7 @@ export class AudioComponent implements Component {
 
     constructor(source: AudioSourceComponent, effects?: AudioEffectComponent[], range?:number) {
 
-        this.name = EComponents.AUDIO
+        this.name = EComponent.AUDIO
 
         this.source = source
 

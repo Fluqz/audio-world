@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 
-import { Component, EComponents } from "../components/component";
+import { Component, EComponent } from "../components/component";
 import { Entity } from "../entity";
 import { System } from "./system";
 import { AudioComponent } from "../components/audio-component";
@@ -14,15 +14,15 @@ export class AudioSystem implements System {
 
     public listener: AudioListenerComponent
 
-    private minVolume: number = -150
-    private maxVolume: number = 3
+    private minVolume: number = -70
+    private maxVolume: number = 6
 
     constructor(listener: AudioListenerComponent) {
 
         this.listener = listener
     }
 
-    requiredComponents: EComponents[] = [EComponents.AUDIO, EComponents.TRANSFORMATION]
+    requiredComponents: EComponent[] = [EComponent.AUDIO, EComponent.TRANSFORMATION]
 
     private audio: AudioComponent
     private transform: TransformationComponent
@@ -30,16 +30,19 @@ export class AudioSystem implements System {
     // Master should not be in game should it?
     private get master() { return Game.master }
 
+    get volumeRange() { return Math.abs(this.maxVolume - this.minVolume) }
+
+
     process(entities: Entity[], ...args: any[]): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
         for(let e of entities) {
 
-            this.audio = e.getComponent<AudioComponent>(EComponents.AUDIO)
+            this.audio = e.getComponent<AudioComponent>(EComponent.AUDIO)
             this.audio.source.output.connect(this.master)
             // this.audio.output.connect(this.master)
-            this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
+            this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
             this.update(args[0])
         }
@@ -55,29 +58,38 @@ export class AudioSystem implements System {
         // MUTE
         if(d > this.audio.range) {
             
-            // if(this.audio.source.volume.volume.value == 0) return
-            this.audio.source.volume.volume.value = this.minVolume
-            // this.audio.source.volume.volume.exponentialRampToValueAtTime(this.minVolume, Tone.context.currentTime)
-            // console.log('update mute',this.audio.source.volume.volume.value == this.minVolume)
-            // this.audio.source.volume.mute = true
+
+            // Volume
+            // if(this.audio.source.volume.volume.value == Number.NEGATIVE_INFINITY) return
+
+            // this.audio.source.volume.volume.value = Number.NEGATIVE_INFINITY
+
+
+            // Using gain instead of volume
+            if(this.audio.source.gain.gain.value == 0) return
+
+            this.audio.source.gain.gain.value = 0
+
         }
         else { // UNMUTE
 
+            // Reverse Cool!
+            // let volume = M.map(d, 0, this.audio.range, this.minVolume, this.maxVolume) 
 
-            // let v = M.map(d, 0, this.audio.range, 0, 1)
-            // let volume = M.mapLog(v, this.minVolume, this.maxVolume)
-
-            // let volume = M.map(d, 0, this.audio.range, 1, 0)
-
-            let volume = M.map(d, 0, this.audio.range, this.minVolume, this.maxVolume)
-
-            // let volume = M.map(d, 0, this.audio.range, this.maxVolume, this.minVolume)
-
-            this.audio.source.volume.mute = false
+            // Logarithmic
+            // const r0to1 = M.map(d, 0, this.audio.range, 1, 0)
+            // const volume = M.linearTologarithmic(r0to1, 0, 1, 1, this.volumeRange + 1) + this.minVolume
 
             // if(this.audio.source.volume.volume.value == volume) return
-            this.audio.source.volume.volume.value = volume
-            // console.log('update unmute',this.audio.source.volume.volume.value, volume, log)
+
+            // this.audio.source.volume.volume.value = volume
+
+            // Using gain instead of volume
+            let gain = M.map(d, 0, this.audio.range, 0, 1) 
+
+            if(this.audio.source.gain.gain.value == gain) return
+
+            this.audio.source.gain.gain.value = gain
         }
 
         // console.log('update', this.audio.source.volume.volume.value)

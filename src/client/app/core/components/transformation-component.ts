@@ -1,9 +1,9 @@
 import { Euler, Matrix4, Quaternion, Vector3 } from "three";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 export class TransformationComponent implements Component {
 
-    name: EComponents
+    name: EComponent
 
     position: Vector3
     rotation: Euler
@@ -18,7 +18,7 @@ export class TransformationComponent implements Component {
 
     constructor() {
 
-        this.name = EComponents.TRANSFORMATION
+        this.name = EComponent.TRANSFORMATION
 
         this.position = new Vector3()
         this.rotation = new Euler()

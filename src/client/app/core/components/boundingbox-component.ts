@@ -1,11 +1,11 @@
 import { Object3D, Vector3 } from "three";
 import { Game } from "../../game";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 
 export class BoundingboxComponent implements Component {
 
-    name: EComponents
+    name: EComponent
 
     center: Vector3
 
@@ -18,7 +18,7 @@ export class BoundingboxComponent implements Component {
 
     constructor(center: Vector3, dimensions: Vector3) {
 
-        this.name = EComponents.BOUNDINGBOX
+        this.name = EComponent.BOUNDINGBOX
 
         this.center = center
         this.dimensions = dimensions

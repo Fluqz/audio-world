@@ -1,6 +1,6 @@
 import { M } from "../../util/math"
 import { FirstPersonControllerComponent } from "../components/first-person-controller-component"
-import { Component, EComponents } from "../components/component"
+import { Component, EComponent } from "../components/component"
 import { TransformationComponent } from "../components/transformation-component"
 import { Entity } from "../entity"
 import { EInput, Input } from "../input"
@@ -18,7 +18,7 @@ export enum FPSState {
 
 export class FirstPersonControllerSystem implements System {
 
-    requiredComponents: EComponents[] = [EComponents.FIRST_PERSON_CONTROLLER, EComponents.TRANSFORMATION]
+    requiredComponents: EComponent[] = [EComponent.FIRST_PERSON_CONTROLLER, EComponent.TRANSFORMATION]
 
     private FPSComponent: FirstPersonControllerComponent
     private transform: TransformationComponent
@@ -29,8 +29,8 @@ export class FirstPersonControllerSystem implements System {
 
         for(let e of entities) {
 
-            this.FPSComponent = e.getComponent<FirstPersonControllerComponent>(EComponents.FIRST_PERSON_CONTROLLER)
-            this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
+            this.FPSComponent = e.getComponent<FirstPersonControllerComponent>(EComponent.FIRST_PERSON_CONTROLLER)
+            this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
             this.checkInput()
 

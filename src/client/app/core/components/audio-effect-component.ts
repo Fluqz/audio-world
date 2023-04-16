@@ -4,11 +4,11 @@ import { Source, SourceOptions } from "tone/build/esm/source/Source";
 import { Game } from "../../game";
 import { M } from "../../util/math";
 import { AudioListenerComponent } from "./audio-listener-component";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 export class AudioEffectComponent implements Component {
 
-    name: EComponents
+    name: EComponent
 
     effect: Effect<EffectOptions>
 
@@ -16,7 +16,7 @@ export class AudioEffectComponent implements Component {
 
     constructor(effect: Effect<EffectOptions>) {
 
-        this.name = EComponents.AUDIO
+        this.name = EComponent.AUDIO
 
         this.effect = effect
 

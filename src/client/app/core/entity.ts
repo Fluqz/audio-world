@@ -1,5 +1,5 @@
 import { Utils } from "../util/utils";
-import { Component, EComponents } from "./components/component";
+import { Component, EComponent } from "./components/component";
 
 export class Entity {
 
@@ -42,7 +42,7 @@ export class Entity {
     }
 
     /** Get component of this Entity */
-    getComponent<T>(name: EComponents): T {
+    getComponent<T>(name: EComponent): T {
 
         for (const c of this.components) {
 
@@ -53,7 +53,7 @@ export class Entity {
     }
 
     /** Get component of this Entity */
-    getComponents<T>(name: EComponents): T[] {
+    getComponents<T>(name: EComponent): T[] {
 
         const array = []
 
@@ -69,10 +69,10 @@ export class Entity {
      * Filter entities that dont use the required components.
      * 
      * @param entities Entity array
-     * @param rcs Array of EComponents
+     * @param rcs Array of EComponent
      * @returns a new, filtered Array of Entities
      */
-    static filterByComponents(entities: Entity[], rcs: EComponents[]) {
+    static filterByComponents(entities: Entity[], rcs: EComponent[]) {
 
         return entities.filter(e => {
 

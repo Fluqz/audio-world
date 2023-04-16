@@ -2,10 +2,10 @@
 
 export interface Component {
 
-    name: EComponents
+    name: EComponent
 }
 
-export enum EComponents {
+export enum EComponent {
 
     BOUNDINGBOX = 'boundingbox-component',
     SCRIPT = 'script-component',

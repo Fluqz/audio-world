@@ -1,5 +1,5 @@
 import { Entity } from "../entity";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 export interface IScript {
 
@@ -12,12 +12,12 @@ export interface IScript {
 
 export class ScriptComponent implements Component {
 
-    name: EComponents
+    name: EComponent
     script: IScript
 
     constructor(script: (entity: Entity) => IScript, entity: Entity) {
 
-        this.name = EComponents.SCRIPT
+        this.name = EComponent.SCRIPT
 
         this.script = script(entity)
     }

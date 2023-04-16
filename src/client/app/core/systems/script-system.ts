@@ -1,8 +1,8 @@
-import { EComponents, Entity, ScriptComponent, System } from ".."
+import { EComponent, Entity, ScriptComponent, System } from ".."
 
 export class ScriptSystem implements System {
 
-    requiredComponents: EComponents[] = [EComponents.SCRIPT]
+    requiredComponents: EComponent[] = [EComponent.SCRIPT]
 
     private scripts: ScriptComponent[]
 
@@ -12,7 +12,7 @@ export class ScriptSystem implements System {
 
         for(const e of entities) {
 
-            this.scripts = e.getComponents<ScriptComponent>(EComponents.SCRIPT)
+            this.scripts = e.getComponents<ScriptComponent>(EComponent.SCRIPT)
 
             for(const s of this.scripts) {
 

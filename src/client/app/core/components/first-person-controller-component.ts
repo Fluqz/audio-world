@@ -2,13 +2,13 @@ import { Object3D, PerspectiveCamera, Vector3 } from "three";
 import { Game } from "../../game";
 import { Globals } from "../../globals";
 import { ThirdPersonControl } from "../third-person-controls";
-import { Component, EComponents } from "./component";
+import { Component, EComponent } from "./component";
 
 
 
 export class FirstPersonControllerComponent implements Component {
 
-    name: EComponents
+    name: EComponent
 
     /** vector 3 storing the force */
     force = new Vector3()
@@ -29,7 +29,7 @@ export class FirstPersonControllerComponent implements Component {
 
     constructor(camera: THREE.PerspectiveCamera) {
 
-        this.name = EComponents.FIRST_PERSON_CONTROLLER
+        this.name = EComponent.FIRST_PERSON_CONTROLLER
 
         this.camera = camera
 

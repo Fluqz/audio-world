@@ -1,12 +1,12 @@
 import { GraphicsComponent } from "../components/graphics-component"
-import { Component, EComponents } from "../components/component";
+import { Component, EComponent } from "../components/component";
 import { TransformationComponent } from "../components/transformation-component";
 import { Entity } from "../entity";
 import { System } from "./system";
 
 export class RenderSystem implements System {
 
-    requiredComponents: EComponents[] = [EComponents.GRAPHICS, EComponents.TRANSFORMATION]
+    requiredComponents: EComponent[] = [EComponent.GRAPHICS, EComponent.TRANSFORMATION]
 
     private graphics: GraphicsComponent
     private transform: TransformationComponent
@@ -17,8 +17,8 @@ export class RenderSystem implements System {
 
         for(let e of entities) {
 
-            this.graphics = e.getComponent<GraphicsComponent>(EComponents.GRAPHICS)
-            this.transform = e.getComponent<TransformationComponent>(EComponents.TRANSFORMATION)
+            this.graphics = e.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
+            this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
             if(!this.transform.needsUpdate) continue
 
