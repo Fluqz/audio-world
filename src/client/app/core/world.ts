@@ -81,7 +81,7 @@ export class World {
     }
 
     /** Returns a Entity with the same id as param id if found */
-    getEntityById(id: string) {
+    getEntityById(id: number) {
 
         return this.entities.find(e => e.id == id)
     }

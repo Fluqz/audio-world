@@ -1,5 +1,5 @@
-import { BufferGeometry, Line, LineBasicMaterial, LineDashedMaterial, Vector2, Vector3 } from "three";
-import { EComponent, Entity, IScript, TransformationComponent } from "../core";
+import { BufferGeometry, Line, LineBasicMaterial, LineDashedMaterial, Mesh, Vector2, Vector3 } from "three";
+import { EComponent, Entity, GraphicsComponent, IScript, TransformationComponent } from "../core";
 import { Game } from "../game";
 import { AudioComponent } from "../core/components/audio-component";
 import { Utils } from "../util/utils";
@@ -24,16 +24,20 @@ const randomNormal = () => {
 
 export const AffectionScript = (entity: Entity): IScript => {
 
-    const playerTransform = Game.world.getEntityByName('Player').getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
+    const player = Game.world.getEntityByName('Player')
+    const playerTransform = player.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
     const transform = entity.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
     const audio = entity.getComponent<AudioComponent>(EComponent.AUDIO)
+    const graphics = entity.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
+
+    const color = Utils.getRndColor()
 
     const points = [ p1, /*p2, p3, p4,*/ p5 ]
 
     const geometry = new BufferGeometry().setFromPoints(points)
 
     let m = lineMaterial.clone()
-    m.color.setHex(Utils.getRndColor())
+    m.color.setHex(color)
     const line = new Line(geometry, m)
 
     const update = (delta:number) => {
@@ -43,10 +47,17 @@ export const AffectionScript = (entity: Entity): IScript => {
         if(d > audio.range) {
 
             Game.world.scene.remove(line)
+
+            graphics.object.traverse(o => {
+
+                if(o instanceof Mesh && o.material) {
+                    
+                    if(o.userData.color) o.material.uniforms.color.value.setHex(o.userData.color)
+                }
+            })
         
         }
         else {
-
 
             p1.copy(transform.position).setY(.5)
             // p2.copy(transform.position).add(randomNormal())
@@ -55,6 +66,17 @@ export const AffectionScript = (entity: Entity): IScript => {
             p5.copy(playerTransform.position).setY(.5)
         
             Game.world.scene.add(line)
+
+
+            graphics.object.traverse(o => {
+
+                if(o instanceof Mesh && o.material) {
+                    
+                    o.userData.color = o.material.uniforms.color
+                    // o.material.color.setHex(color)
+                    o.material.uniforms.color.value.setHex(color)
+                }
+            })
         }
 
         geometry.setFromPoints(points)

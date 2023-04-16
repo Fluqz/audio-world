@@ -5,7 +5,7 @@ export class Entity {
 
     static count: number = 0
 
-    private _id: string
+    private _id: number
     get id() { return this._id }
 
     name: string
@@ -16,7 +16,7 @@ export class Entity {
 
     constructor() {
 
-        this._id = Utils.makeUID()
+        this._id = Entity.count
 
         Entity.count++
 

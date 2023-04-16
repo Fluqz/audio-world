@@ -7,6 +7,7 @@ export class M {
     static UP = new Vector3(0, 1, 0)
     static FORWARD = new Vector3(0, 0, 1)
 
+
     /** Map a value from one range (min, max) to another. 
      * @param v Value to map
      * @param iMin Input min value
@@ -18,13 +19,6 @@ export class M {
 
         return oMin + (oMax - oMin) * ((v - iMin) / (iMax - iMin))
     }
-
-
-
-
-
-
-
 
 
     /** Returns val between 0 and 10 000 000 */
@@ -53,6 +47,7 @@ export class M {
 
         return Math.exp(minv + scale * (v - vMin)) //- slMax
     }
+
 
     /** Returns val between 0 and 100 */
     static logsReverse(v) {

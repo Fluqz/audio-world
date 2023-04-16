@@ -53,11 +53,9 @@ t.wrapT = THREE.RepeatWrapping
 let u = {
 
     'amplitude': { value: 1.0 },
-    'color': { value: new THREE.Color( 0x00FFFF ) },
-    'colorTexture': { value: t }
+    'color': { value: new THREE.Color( 0x000000 ) },
 }
 
-u[ 'colorTexture' ].value.wrapS = u[ 'colorTexture' ].value.wrapT = THREE.RepeatWrapping;
 
 
 const shaderMaterial = new THREE.ShaderMaterial({
@@ -83,7 +81,6 @@ const shaderMaterial = new THREE.ShaderMaterial({
         varying vec2 vUv;
 
         uniform vec3 color;
-        uniform sampler2D colorTexture;
 
         void main() {
 
@@ -92,10 +89,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
 
             float dProd = dot( vNormal, light ) * 0.5 + 0.5;
 
-            vec4 tcolor = texture2D( colorTexture, vUv );
-            vec4 gray = vec4( vec3( tcolor.r * 0.3 + tcolor.g * 0.59 + tcolor.b * 0.11 ), 1.0 );
-
-            gl_FragColor = gray * vec4( vec3( dProd ) * vec3( color ), 1.0 );
+            gl_FragColor = vec4( vec3( dProd ) * vec3( color ), 1.0 );
 
         }
     `,
@@ -105,7 +99,6 @@ const shaderMaterial = new THREE.ShaderMaterial({
 		resolution: { value: new THREE.Vector2() },
         amplitude: u.amplitude,
         color: u.color,
-        colorTexture: u.colorTexture,
     }
 })
 
@@ -159,7 +152,7 @@ export const Prefabs = {
 
         let s = (Math.random() * 3) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 100, s), shaderMaterial)
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 100, s), shaderMaterial.clone())
         m.geometry.translate(0, (m.geometry.parameters.height / 2) - s, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateX((Math.random() * r) - r)
@@ -183,7 +176,6 @@ export const Prefabs = {
         }
 
         e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 40))
-
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -196,7 +188,7 @@ export const Prefabs = {
         e.name = 'Stone'
 
         const max = 10
-        let m = new THREE.Mesh(new THREE.BoxGeometry(Math.random() * max, Math.random() * max, Math.random() * max), shaderMaterial)
+        let m = new THREE.Mesh(new THREE.BoxGeometry(Math.random() * max, Math.random() * max, Math.random() * max), shaderMaterial.clone())
         // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateX((Math.random() * r) - r)
@@ -219,7 +211,6 @@ export const Prefabs = {
         player.loop = true
 
         e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 40))
-
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
@@ -233,7 +224,7 @@ export const Prefabs = {
 
         let s = (Math.random() * 3) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 60, s), shaderMaterial)
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 60, s), shaderMaterial.clone())
         m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateY((Math.random() * r) - r)
@@ -256,7 +247,6 @@ export const Prefabs = {
         }
 
         e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 40))
-
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
