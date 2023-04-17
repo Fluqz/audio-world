@@ -42,7 +42,7 @@ export class Entity {
     }
 
     /** Get component of this Entity */
-    getComponent<T>(name: EComponent): T {
+    getComponent<T extends Component>(name: EComponent): T {
 
         for (const c of this.components) {
 
@@ -53,7 +53,7 @@ export class Entity {
     }
 
     /** Get component of this Entity */
-    getComponents<T>(name: EComponent): T[] {
+    getComponents<T extends Component>(name: EComponent): T[] {
 
         const array = []
 
