@@ -4,15 +4,22 @@ import { EComponent } from "../components/component";
 import { Entity } from "../entity";
 import { System } from "./system";
 
-export class AnimationSystem implements System {
+export class AnimationSystem extends System {
 
     requiredComponents: EComponent[] = [ EComponent.ANIMATION ]
 
-    process(entities: Entity[], ...args: any[]): void {
+    initialize() {
+
+        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+    }
+
+    fixedUpdate?(...args: any[]): void {}
+
+    update(...args: any[]): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
-        for(const e of entities) {
+        for(const e of this.entities) {
 
             const a = e.getComponent<AnimationComponent>(EComponent.ANIMATION)
 

@@ -4,8 +4,6 @@ import { Globals } from "../../globals";
 import { ThirdPersonControl } from "../third-person-controls";
 import { Component, EComponent } from "./component";
 
-
-
 export class FirstPersonControllerComponent implements Component {
 
     name: EComponent
@@ -17,9 +15,9 @@ export class FirstPersonControllerComponent implements Component {
     /** Offset angle Y used for walking directions */
     directionOffset: number = 0
     /** Velocity of walking speed */
-    velocity = 10
+    velocity = 15
     /** Velocity of running speed */
-    runVeclocity = 20
+    runVeclocity = 30
 
     control: ThirdPersonControl
     camera: PerspectiveCamera

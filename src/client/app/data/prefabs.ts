@@ -10,10 +10,11 @@ import { EComponent } from "../core/components/component";
 import { FirstPersonControllerComponent } from "../core/components/first-person-controller-component";
 import { GraphicsComponent } from "../core/components/graphics-component";
 import { TransformationComponent } from "../core/components/transformation-component";
-import { AnimationComponent, Entity, IScript, ScriptComponent } from "../core";
+import { AnimationComponent, AssetManager, Entity, IScript, ScriptComponent } from "../core";
 import { TraceScript } from "../scripts/trace.script";
 import { AffectionScript } from "../scripts/affection.script";
 import { Utils } from "../util/utils";
+import { BoundingboxComponent } from "../core/components/boundingbox-component";
 
 // export interface PrefabSettings {
 
@@ -45,10 +46,10 @@ const material = new THREE.MeshStandardMaterial({
 })
 
 
-let t = new THREE.TextureLoader().load( 'assets//image2.png' )
+let texture = new THREE.TextureLoader().load( 'assets//image2.png' )
 
-t.wrapS = THREE.RepeatWrapping
-t.wrapT = THREE.RepeatWrapping
+texture.wrapS = THREE.RepeatWrapping
+texture.wrapT = THREE.RepeatWrapping
 
 let u = {
 
@@ -71,7 +72,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
             vNormal = normal;
             vUv = ( 0.5 + amplitude ) * uv + vec2( amplitude );
 
-            vec3 newPosition = position + amplitude * normal * vec3( 0.01 );
+            vec3 newPosition = position + amplitude * normal * vec3( 0.02 );
             gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
         }
     `,
@@ -135,7 +136,7 @@ export const Prefabs = {
         e.addComponent(new GraphicsComponent(m))
 
         e.addComponent(new AudioListenerComponent(t))
-        e.addComponent(new ScriptComponent(TraceScript, e))
+        // e.addComponent(new ScriptComponent(TraceScript, e))
         e.addComponent(new FirstPersonControllerComponent(Game.camera))
 
         return e
@@ -160,6 +161,7 @@ export const Prefabs = {
 
         e.addComponent(new GraphicsComponent(m))
         e.addComponent(new TransformationComponent())
+        // e.addComponent(new BoundingboxComponent())
         e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
             transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
@@ -175,12 +177,60 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 40))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 60))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
         return e
     },
+
+    RealTree: () => {
+
+        const e = Game.world.createEntity()
+        e.name = 'Tree'
+
+        let m
+        AssetManager.load('/assets/models/Tree'+ (Math.round(Math.random() * 2) + 1) +'.glb').then(glb => {
+
+            console.log('TREE LOADED', glb)
+
+            m = glb.scene
+
+            let r = (Math.PI / 8)
+            m.rotateX((Math.random() * r) - r)
+            m.rotateZ((Math.random() * r) - r)
+
+            const g = e.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
+            g.object.add(glb.scene)
+        })
+
+        e.addComponent(new GraphicsComponent(new THREE.Object3D()))
+        e.addComponent(new TransformationComponent())
+        // e.addComponent(new BoundingboxComponent())
+        e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {
+
+            // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
+            // transform.scale.y = Math.cos(Tone.context.currentTime) + 2
+            // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+
+            transform.rotation.y = Math.sin(Tone.context.currentTime / 10)
+            transform.needsUpdate = true
+        }))
+
+        const type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
+
+        let sourceOptions: OscillatorOptions = {
+            frequency: getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency,
+            type: type //'sine'
+        }
+
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 60))
+        e.addComponent(new ScriptComponent(AffectionScript, e))
+
+
+        return e
+    },
+
 
     Stone: () => {
 
@@ -210,7 +260,7 @@ export const Prefabs = {
         player.autostart = true
         player.loop = true
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 40))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 60))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
@@ -246,7 +296,7 @@ export const Prefabs = {
             type: 'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 40))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 60))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e

@@ -1,23 +1,32 @@
 import { BufferGeometry, Line, LineBasicMaterial, Vector2, Vector3 } from "three";
 import { EComponent, Entity, IScript, TransformationComponent } from "../core";
 import { Game } from "../game";
+import { Utils } from "../util/utils";
 
 
 export const TraceScript = (entity: Entity): IScript => {
 
     const points: Vector3[] = []
-    const geometry = new BufferGeometry().setFromPoints(points)
-    const trace = new Line(geometry, new LineBasicMaterial({ color: 0xFFFF00, depthTest: false, depthWrite: false }))
+    let geometry: BufferGeometry
+    let trace: Line
 
-    Game.world.scene.add(trace)
-
-    const transform = entity.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
+    let transform: TransformationComponent
 
     let v: Vector3
 
+    const initialize = () => {
+
+        geometry = new BufferGeometry().setFromPoints(points)
+        trace = new Line(geometry, new LineBasicMaterial({ color: 0xFFFF00, depthTest: false, depthWrite: false }))
+
+        transform = entity.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
+
+        Game.world.scene.add(trace)
+    }
+
     const update = (delta:number) => {
 
-        if(points.length > 10000) {
+        if(points.length > 5000) {
 
             v = points.shift()
             v.copy(transform.position).setY(.5)
@@ -30,8 +39,16 @@ export const TraceScript = (entity: Entity): IScript => {
         geometry.computeBoundingSphere()
     }
 
+    const destroy = () => {
+
+        Utils.dispose(trace)
+    }
+
+
     return {
         
-        update: update
+        update: update,
+        initialize: initialize,
+        destroy: destroy,
     }
 }

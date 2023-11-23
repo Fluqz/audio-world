@@ -1,6 +1,6 @@
 
 import * as THREE from "three"
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Globals } from "../globals"
 
 export class AssetManager {
@@ -21,7 +21,7 @@ export class AssetManager {
     static load(path: string) {
         console.log('load')
 
-        return new Promise((resolve, reject) => {
+        return new Promise<GLTF>((resolve, reject) => {
 
             if(!path) reject()
 

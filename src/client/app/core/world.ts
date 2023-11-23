@@ -53,20 +53,18 @@ export class World {
 
         for(let s of this.systems) {
 
-            const entities = Entity.filterByComponents(this.entities, s.requiredComponents)
-
-            s.process(entities, delta)
+            s.update(delta)
         }
     }
 
     fixedUpdate(delta: number) {
 
-        // for(let s of this.systems) {
+        for(let s of this.systems) {
 
-        //     const entities = Entity.filterByComponents(this.entities, s.requiredComponents)
+            if(!s.fixedUpdate) continue
 
-        //     s.process(entities, delta)
-        // }
+            s.fixedUpdate(delta)
+        }
     }
 
 
@@ -118,6 +116,8 @@ export class World {
         if(this.systems.indexOf(system) != -1) return
 
         this.systems.push(system)
+
+        system.initialize()
     }
     
     /** Unregister system from world */

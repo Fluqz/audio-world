@@ -3,10 +3,8 @@ import { Component, EComponent } from "./component";
 
 export interface IScript {
 
-    awake?: () => void
-    start?: () => void
+    initialize?: () => void
     update?: (delta:number) => void
-    stop?: () => void
     destroy?: () => void
 }
 

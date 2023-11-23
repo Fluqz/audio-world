@@ -16,18 +16,25 @@ export enum FPSState {
     RUN
 }
 
-export class FirstPersonControllerSystem implements System {
+export class FirstPersonControllerSystem extends System {
 
     requiredComponents: EComponent[] = [EComponent.FIRST_PERSON_CONTROLLER, EComponent.TRANSFORMATION]
 
     private FPSComponent: FirstPersonControllerComponent
     private transform: TransformationComponent
 
-    process(entities: Entity[], delta: number): void {
+    initialize() {
 
+        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+    }
+
+    update(delta: number): void {}
+
+    fixedUpdate(delta: number): void {
+        
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
-        for(let e of entities) {
+        for(let e of this.entities) {
 
             this.FPSComponent = e.getComponent<FirstPersonControllerComponent>(EComponent.FIRST_PERSON_CONTROLLER)
             this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
@@ -96,10 +103,6 @@ export class FirstPersonControllerSystem implements System {
         }
     }
 
-    get angleYCameraDirection() {
-
-        return Math.atan2((this.FPSComponent.camera.position.x - this.transform.position.x), this.FPSComponent.camera.position.z - this.transform.position.z)
-    }
 
     move(delta: number) {
 
@@ -131,5 +134,10 @@ export class FirstPersonControllerSystem implements System {
         
         if(this.FPSComponent.camera) this.FPSComponent.camera.getWorldDirection(target)
         return target
+    }
+
+    get angleYCameraDirection() {
+
+        return Math.atan2((this.FPSComponent.camera.position.x - this.transform.position.x), this.FPSComponent.camera.position.z - this.transform.position.z)
     }
 }

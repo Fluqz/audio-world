@@ -4,25 +4,32 @@ import { TransformationComponent } from "../components/transformation-component"
 import { Entity } from "../entity";
 import { System } from "./system";
 
-export class RenderSystem implements System {
+export class RenderSystem extends System {
 
     requiredComponents: EComponent[] = [EComponent.GRAPHICS, EComponent.TRANSFORMATION]
 
     private graphics: GraphicsComponent
     private transform: TransformationComponent
 
-    process(entities: Entity[], ...args: any[]): void {
+    initialize() {
+
+        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+    }
+
+    fixedUpdate?(...args: any[]): void {}
+
+    update(...args: any[]): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
-        for(let e of entities) {
+        for(let e of this.entities) {
 
-            this.graphics = e.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
             this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
-
             if(!this.transform.needsUpdate) continue
 
             this.transform.needsUpdate = false
+
+            this.graphics = e.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
 
             this.graphics.object.position.copy(this.transform.position)
             this.graphics.object.scale.copy(this.transform.scale)

@@ -9,20 +9,14 @@ import { M } from "../../util/math";
 import { AudioListenerComponent } from "../components/audio-listener-component";
 import { Game } from '../../game';
 import { Utils } from '../../util/utils';
+import { World } from '../world';
 
-export class AudioSystem implements System {
+export class AudioSystem extends System {
 
     public listener: AudioListenerComponent
 
     private minVolume: number = -70
     private maxVolume: number = 6
-
-    constructor(listener: AudioListenerComponent) {
-
-        this.listener = listener
-    }
-
-    requiredComponents: EComponent[] = [EComponent.AUDIO, EComponent.TRANSFORMATION]
 
     private audio: AudioComponent
     private transform: TransformationComponent
@@ -33,23 +27,43 @@ export class AudioSystem implements System {
     get volumeRange() { return Math.abs(this.maxVolume - this.minVolume) }
 
 
-    process(entities: Entity[], ...args: any[]): void {
+    constructor(world: World, listener: AudioListenerComponent) {
+        super(world)
 
-        // entities = Entity.filterByComponents(entities, this.requiredComponents)
+        this.listener = listener
 
-        for(let e of entities) {
+        this.requiredComponents = [EComponent.AUDIO, EComponent.TRANSFORMATION]
+    }
+
+
+    initialize() {
+
+        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+
+        for(let e of this.entities) {
 
             this.audio = e.getComponent<AudioComponent>(EComponent.AUDIO)
             this.audio.source.output.connect(this.master)
-            // this.audio.output.connect(this.master)
+        }
+    }
+
+    fixedUpdate?(...args: any[]): void {}
+
+    update(...args: any[]): void {
+
+        // entities = Entity.filterByComponents(entities, this.requiredComponents)
+
+        for(let e of this.entities) {
+
+            this.audio = e.getComponent<AudioComponent>(EComponent.AUDIO)
             this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
-            this.update(args[0])
+            this.updatePositionalAudio(args[0])
         }
     }
 
 
-    update(delta: number) : void {
+    updatePositionalAudio(delta: number) : void {
 
         // Instead of distance to center point,
         // use distance to min max of boundingbox 

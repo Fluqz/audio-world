@@ -1,16 +1,33 @@
 import { EComponent, Entity, ScriptComponent, System } from ".."
 
-export class ScriptSystem implements System {
+export class ScriptSystem extends System {
 
     requiredComponents: EComponent[] = [EComponent.SCRIPT]
 
     private scripts: ScriptComponent[]
 
-    process(entities: Entity[], delta: number): void {
+    initialize() {
+
+        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+
+        for(const e of this.entities) {
+
+            this.scripts = e.getComponents<ScriptComponent>(EComponent.SCRIPT)
+
+            for(const s of this.scripts) {
+
+                if(s.script.initialize) s.script.initialize()
+            }
+        }
+    }
+
+    fixedUpdate?(...args: any[]): void {}
+
+    update(delta: number): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
-        for(const e of entities) {
+        for(const e of this.entities) {
 
             this.scripts = e.getComponents<ScriptComponent>(EComponent.SCRIPT)
 

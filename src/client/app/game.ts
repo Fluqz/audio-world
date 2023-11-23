@@ -30,7 +30,9 @@ export class Game {
 
     public static master: Tone.Volume
 
-    private clock: THREE.Clock
+    private updateClock: THREE.Clock
+    private fixedUpdateClock: THREE.Clock
+    
     private AFID: number
 
     private stats: Stats
@@ -118,7 +120,8 @@ export class Game {
     init() {
         console.log('INIT')
 
-        this.clock = new THREE.Clock()
+        this.fixedUpdateClock = new THREE.Clock()
+        this.updateClock = new THREE.Clock()
 
         this.onAwake.next(null)
 
@@ -128,50 +131,15 @@ export class Game {
 
                 this.onStart.next(null)
 
+                Game.world.registerSystem(new FirstPersonControllerSystem(Game.world))
+                Game.world.registerSystem(new RenderSystem(Game.world))
+                Game.world.registerSystem(new AnimationSystem(Game.world))
+                Game.world.registerSystem(new AudioSystem(Game.world, Game.world.getEntityByName('Player').getComponent<AudioListenerComponent>(EComponent.AUDIO_LISTENER)))
+                Game.world.registerSystem(new ScriptSystem(Game.world))
+
                 this.loop()
 
                 console.log('LOADED')
-
-                // Create Player
-                let player = Prefabs.ControllablePlayer()
-
-                Game.world.registerSystem(new FirstPersonControllerSystem())
-                Game.world.registerSystem(new RenderSystem())
-                Game.world.registerSystem(new AnimationSystem())
-                Game.world.registerSystem(new AudioSystem(player.getComponent<AudioListenerComponent>(EComponent.AUDIO_LISTENER)))
-                Game.world.registerSystem(new ScriptSystem())
-
-
-                // socket.on('connecting', (id: string, clients) => {
-
-                //     player.id = id
-
-                //     console.log('clients', clients)
-
-                //     // Array.from(clients).forEach(c => {
-
-                //     //     console.log(c)
-
-                //     //     let p = Prefabs.Player()
-                //     //     p.id = id
-                //     // })
-                // })
-
-                // socket.on('add-client', (id) => {
-
-                //     console.log('Add another player')
-                //     let p = Prefabs.Player()
-                //     p.id = id
-                // })
-
-                let amount = 50
-                let range = 300
-
-                this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
-                this.instanciateRandomly(Prefabs.DeadTree, amount, range)
-                this.instanciateRandomly(Prefabs.Stone, amount, range)
-                this.instanciateRandomly(Prefabs.Tree, 1, 2)
-
                 resolve(null)
             })
         })
@@ -244,7 +212,7 @@ export class Game {
 
         this.onUpdate.next(null)
 
-        Game.world.update(this.clock.getDelta())
+        Game.world.update(this.updateClock.getDelta())
 
         Game.renderer.render(Game.world.scene, Game.camera)
     }
@@ -259,11 +227,10 @@ export class Game {
         while (this.physicsTimeSimulated < Date.now()) {
 
             this.physicsTimeSimulated += this.fixedUpdateTiming;
-     
 
             this.onFixedUpdate.next(null)
 
-            Game.world.fixedUpdate(this.clock.getDelta())
+            Game.world.fixedUpdate(this.fixedUpdateClock.getDelta())
         }
 
         this._deltaTime = Date.now() - this.lastUpdate;
@@ -292,11 +259,45 @@ export class Game {
                 resolve(null)
             }
 
-            resolve(null)
+            // Create Player
+            let player = Prefabs.ControllablePlayer()
+
+
+            // socket.on('connecting', (id: string, clients) => {
+
+            //     player.id = id
+
+            //     console.log('clients', clients)
+
+            //     // Array.from(clients).forEach(c => {
+
+            //     //     console.log(c)
+
+            //     //     let p = Prefabs.Player()
+            //     //     p.id = id
+            //     // })
+            // })
+
+            // socket.on('add-client', (id) => {
+
+            //     console.log('Add another player')
+            //     let p = Prefabs.Player()
+            //     p.id = id
+            // })
+
+            let amount = 100
+            let range = 300
+
+            this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
+            this.instanciateRandomly(Prefabs.DeadTree, amount, range)
+            this.instanciateRandomly(Prefabs.Stone, amount, range)
+            this.instanciateRandomly(Prefabs.Tree, 1, 2)
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/06627.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/LOWPOLY1%20(1).glb')
+
+            resolve(null)
 
         })
     }
