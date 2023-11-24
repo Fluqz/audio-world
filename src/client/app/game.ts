@@ -68,7 +68,7 @@ export class Game {
         Game.renderer.shadowMap.type = THREE.PCFSoftShadowMap
         this.dom.append(Game.renderer.domElement)
 
-        Game.camera = new THREE.PerspectiveCamera(40, Globals.w / Globals.h, .1, 1000)
+        Game.camera = new THREE.PerspectiveCamera(45, Globals.w / Globals.h, .1, 1000)
         Game.camera.position.set(0, 0, 5)
         Game.camera.lookAt(0, 0, 0)
 
@@ -289,9 +289,11 @@ export class Game {
             let range = 300
 
             this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
-            this.instanciateRandomly(Prefabs.DeadTree, amount, range)
+            // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
             this.instanciateRandomly(Prefabs.Stone, amount, range)
-            this.instanciateRandomly(Prefabs.Tree, 1, 2)
+            // this.instanciateRandomly(Prefabs.Tree, 1, 2)
+
+            Prefabs.Tree()
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/06627.glb')

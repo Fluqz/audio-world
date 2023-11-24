@@ -23,6 +23,12 @@ export abstract class System {
     /** Initializes the system */
     abstract initialize()
 
+    /** Checks all entities and filters by required components */
+    public filterRelevantEntities() {
+
+        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+    }
+
     /** Is called per frame. Processes all entities with the required components */
     abstract update(...args) : void
 

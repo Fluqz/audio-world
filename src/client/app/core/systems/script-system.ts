@@ -8,7 +8,7 @@ export class ScriptSystem extends System {
 
     initialize() {
 
-        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+        this.filterRelevantEntities()
 
         for(const e of this.entities) {
 

@@ -7,7 +7,7 @@ import { AudioEffectComponent } from "../core/components/audio-effect-component"
 import { AudioListenerComponent } from "../core/components/audio-listener-component";
 import { AudioSourceComponent } from "../core/components/audio-source-component";
 import { EComponent } from "../core/components/component";
-import { FirstPersonControllerComponent } from "../core/components/first-person-controller-component";
+import { ThirdPersonControllerComponent } from "../core/components/third-person-controller-component";
 import { GraphicsComponent } from "../core/components/graphics-component";
 import { TransformationComponent } from "../core/components/transformation-component";
 import { AnimationComponent, AssetManager, Entity, IScript, ScriptComponent } from "../core";
@@ -59,7 +59,7 @@ let u = {
 
 
 
-const shaderMaterial = new THREE.ShaderMaterial({
+let shaderMaterial: THREE.Material = new THREE.ShaderMaterial({
     vertexShader: `
 
         uniform float amplitude;
@@ -103,6 +103,7 @@ const shaderMaterial = new THREE.ShaderMaterial({
     }
 })
 
+shaderMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
 export const Prefabs = {
 
@@ -137,7 +138,7 @@ export const Prefabs = {
 
         e.addComponent(new AudioListenerComponent(t))
         // e.addComponent(new ScriptComponent(TraceScript, e))
-        e.addComponent(new FirstPersonControllerComponent(Game.camera))
+        e.addComponent(new ThirdPersonControllerComponent(Game.camera))
 
         return e
     },
@@ -177,7 +178,7 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 60))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 50))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -224,7 +225,7 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 60))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 50))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -260,7 +261,7 @@ export const Prefabs = {
         player.autostart = true
         player.loop = true
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 60))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 50))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
@@ -274,7 +275,7 @@ export const Prefabs = {
 
         let s = (Math.random() * 3) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 60, s), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 50, s), shaderMaterial.clone())
         m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateY((Math.random() * r) - r)
@@ -296,7 +297,7 @@ export const Prefabs = {
             type: 'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 60))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 50))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e

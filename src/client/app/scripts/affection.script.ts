@@ -45,6 +45,7 @@ export const AffectionScript = (entity: Entity): IScript => {
         graphics = entity.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
 
         color = Utils.getRndColor()
+        color = 0xFFFFFF
 
         points = [ p1, /*p2, p3, p4,*/ p5 ]
 
@@ -112,9 +113,9 @@ export const AffectionScript = (entity: Entity): IScript => {
 
                     if(o instanceof Mesh && o.material && o.material.uniforms) {
                         
-                        o.userData.color = o.material.uniforms.color
-                        // o.material.color.setHex(color)
-                        o.material.uniforms.color.value.setHex(color)
+                        // o.userData.color = o.material.uniforms.color
+                        o.material.color.setHex(color)
+                        // o.material.auniforms.color.value.setHex(color)
                     }
                 })
             }

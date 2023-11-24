@@ -13,7 +13,7 @@ export class RenderSystem extends System {
 
     initialize() {
 
-        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+        this.filterRelevantEntities()
     }
 
     fixedUpdate?(...args: any[]): void {}

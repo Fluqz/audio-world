@@ -15,8 +15,8 @@ export class AudioSystem extends System {
 
     public listener: AudioListenerComponent
 
-    private minVolume: number = -70
-    private maxVolume: number = 6
+    private minVolume: number = -90
+    private maxVolume: number = 0
 
     private audio: AudioComponent
     private transform: TransformationComponent
@@ -38,12 +38,14 @@ export class AudioSystem extends System {
 
     initialize() {
 
-        this.entities = Entity.filterByComponents(this.world.entities, this.requiredComponents)
+        this.filterRelevantEntities()
 
         for(let e of this.entities) {
 
             this.audio = e.getComponent<AudioComponent>(EComponent.AUDIO)
-            this.audio.source.output.connect(this.master)
+            this.audio.connect(this.master)
+
+            this.audio.connected = true
         }
     }
 
@@ -78,32 +80,44 @@ export class AudioSystem extends System {
 
             // this.audio.source.volume.volume.value = Number.NEGATIVE_INFINITY
 
+            if(this.audio.connected) {
+
+                this.audio.source.volume.volume.value = this.minVolume
+                this.audio.disconnect()
+            }   
+
+            if(this.audio.source.volume.volume.value == 0) return
 
             // Using gain instead of volume
-            if(this.audio.source.gain.gain.value == 0) return
+            // if(this.audio.source.gain.gain.value == 0) return
 
-            this.audio.source.gain.gain.value = 0
+            // this.audio.source.gain.gain.value = 0
+            this.audio.source.volume.volume.value = this.minVolume
+
 
         }
         else { // UNMUTE
 
-            // Reverse Cool!
+            if(this.audio.connected == false) this.audio.connect(this.master)
+
+            // // Reverse Cool!
             // let volume = M.map(d, 0, this.audio.range, this.minVolume, this.maxVolume) 
 
-            // Logarithmic
-            // const r0to1 = M.map(d, 0, this.audio.range, 1, 0)
+            // // Logarithmic
+            // const r0to1 = M.map(d, 0, this.audio.range, 0, 1)
             // const volume = M.linearTologarithmic(r0to1, 0, 1, 1, this.volumeRange + 1) + this.minVolume
 
-            // if(this.audio.source.volume.volume.value == volume) return
-
-            // this.audio.source.volume.volume.value = volume
+            let volume = M.map(d, 0, this.audio.range, this.maxVolume, this.minVolume)
 
             // Using gain instead of volume
-            let gain = M.map(d, 0, this.audio.range, 1, 0) 
+            // let gain = M.map(d, 0, this.audio.range, 1, 0)
 
-            if(this.audio.source.gain.gain.value == gain) return
+            // if(this.audio.source.gain.gain.value == gain) return
+            if(this.audio.source.volume.volume.value == volume) return
 
-            this.audio.source.gain.gain.value = gain
+            // this.audio.source.gain.gain.value = gain
+            this.audio.source.volume.volume.value = volume
+
         }
 
         // console.log('update', this.audio.source.volume.volume.value)

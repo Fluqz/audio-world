@@ -4,7 +4,7 @@ import { Globals } from "../../globals";
 import { ThirdPersonControl } from "../third-person-controls";
 import { Component, EComponent } from "./component";
 
-export class FirstPersonControllerComponent implements Component {
+export class ThirdPersonControllerComponent implements Component {
 
     name: EComponent
 

@@ -129,11 +129,4 @@ export class World {
 
         this.systems.splice(i, 1)
     }
-
-    load(map: {}) {
-
-        for(let m of Object.keys(map)) {
-
-        }
-    }
 }

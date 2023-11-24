@@ -17,7 +17,6 @@ export class AssetManager {
         this.mgmt.onLoad = this._onload
     }
 
-
     static load(path: string) {
         console.log('load')
 
