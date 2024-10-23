@@ -3,7 +3,6 @@ import * as Tone from "tone";
 import { getScale, getNote, AEOLIAN_SCALE, DORIAN_SCALE } from "./note-frequencies";
 import { Game } from "../game";
 import { AudioComponent } from "../core/components/audio-component";
-import { AudioEffectComponent } from "../core/components/audio-effect-component";
 import { AudioListenerComponent } from "../core/components/audio-listener-component";
 import { AudioSourceComponent } from "../core/components/audio-source-component";
 import { EComponent } from "../core/components/component";
@@ -11,10 +10,8 @@ import { ThirdPersonControllerComponent } from "../core/components/third-person-
 import { GraphicsComponent } from "../core/components/graphics-component";
 import { TransformationComponent } from "../core/components/transformation-component";
 import { AnimationComponent, AssetManager, Entity, IScript, ScriptComponent } from "../core";
-import { TraceScript } from "../scripts/trace.script";
 import { AffectionScript } from "../scripts/affection.script";
 import { Utils } from "../util/utils";
-import { BoundingboxComponent } from "../core/components/boundingbox-component";
 
 // export interface PrefabSettings {
 

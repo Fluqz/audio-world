@@ -1,4 +1,4 @@
-import { BufferGeometry, Line, LineBasicMaterial, LineDashedMaterial, Mesh, Vector2, Vector3 } from "three";
+import { BufferGeometry, Line, LineBasicMaterial, LineDashedMaterial, Mesh, ShaderMaterial, Vector2, Vector3 } from "three";
 import { EComponent, Entity, GraphicsComponent, IScript, TransformationComponent } from "../core";
 import { Game } from "../game";
 import { AudioComponent } from "../core/components/audio-component";
@@ -111,7 +111,7 @@ export const AffectionScript = (entity: Entity): IScript => {
 
                 graphics.object.traverse(o => {
 
-                    if(o instanceof Mesh && o.material && o.material.uniforms) {
+                    if(o instanceof Mesh&& o.material && !(o.material instanceof ShaderMaterial)  && o.material.uniforms) {
                         
                         // o.userData.color = o.material.uniforms.color
                         o.material.color.setHex(color)

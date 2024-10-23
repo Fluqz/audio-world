@@ -14,6 +14,8 @@ export const TraceScript = (entity: Entity): IScript => {
 
     let v: Vector3
 
+    let lastPosition: Vector3
+
     const initialize = () => {
 
         geometry = new BufferGeometry().setFromPoints(points)
@@ -22,9 +24,13 @@ export const TraceScript = (entity: Entity): IScript => {
         transform = entity.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
         Game.world.scene.add(trace)
+
+        lastPosition = new Vector3().copy(transform.position)
     }
 
     const update = (delta:number) => {
+
+        if(lastPosition.equals(transform.position)) return
 
         if(points.length > 5000) {
 

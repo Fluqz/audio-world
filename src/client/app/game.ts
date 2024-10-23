@@ -9,11 +9,13 @@ import { Input } from './core/input'
 import { Prefabs } from './data/prefabs'
 import { Utils } from './util/utils'
 
-import { Entity, World, AnimationSystem, ScriptSystem, AudioListenerComponent, AudioSystem, FirstPersonControllerSystem, RenderSystem, TransformationComponent, EComponent } from './core'
+import { Entity, World, AnimationSystem, ScriptSystem, AudioListenerComponent, AudioSystem, FirstPersonControllerSystem, RenderSystem, TransformationComponent, EComponent, GraphicsComponent } from './core'
 
 import { Subject } from 'rxjs'
 
 import io from "socket.io-client"
+import { ForestGenerator } from './core/generators/forest-generator/forest-generator'
+import { Tree } from './core/generators/forest-generator/tree'
 const socket = io()
 
 
@@ -219,8 +221,8 @@ export class Game {
 
     private fixedUpdateTiming: number = 20;
     private physicsTimeSimulated: number = Date.now();
-    private _deltaTime: number = 0;
-    private lastUpdate: number = Date.now();
+    // private _deltaTime: number = 0;
+    // private lastUpdate: number = Date.now();
 
     fixedUpdate() {
 
@@ -233,8 +235,9 @@ export class Game {
             Game.world.fixedUpdate(this.fixedUpdateClock.getDelta())
         }
 
-        this._deltaTime = Date.now() - this.lastUpdate;
-        this.lastUpdate = Date.now();
+        // this._deltaTime = Date.now() - this.lastUpdate;
+        // console.log('fix delta',this._deltaTime)
+        // this.lastUpdate = Date.now();
     }
 
     loop() {
@@ -262,7 +265,6 @@ export class Game {
             // Create Player
             let player = Prefabs.ControllablePlayer()
 
-
             // socket.on('connecting', (id: string, clients) => {
 
             //     player.id = id
@@ -288,16 +290,71 @@ export class Game {
             let amount = 100
             let range = 300
 
-            this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
-            // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
-            this.instanciateRandomly(Prefabs.Stone, amount, range)
-            // this.instanciateRandomly(Prefabs.Tree, 1, 2)
+            // this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
+            // // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
+            // this.instanciateRandomly(Prefabs.Stone, amount, range)
+            // // this.instanciateRandomly(Prefabs.Tree, 1, 2)
 
-            Prefabs.Tree()
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/06627.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/LOWPOLY1%20(1).glb')
+
+            const trees: { entity: Entity, tree: Tree}[] = []
+            const forestGenerator = new ForestGenerator(range, range, 50)
+
+            forestGenerator.generateBaseForest()
+            forestGenerator.iterate()
+
+            for (let t of forestGenerator.trees) {
+                
+                let prefab = Prefabs.Tree()
+
+                trees.push({
+                    entity: prefab,
+                    tree: t
+                })
+
+                let transform = prefab.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
+                
+                if (transform) {
+                    
+                    transform.position.set(t.position.x, 0, t.position.y)
+                    transform.needsUpdate = true
+                }
+                
+                let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
+                
+                const m = graphics.object as THREE.Mesh
+                
+                m.geometry = new THREE.BoxGeometry(t.diameter, t.height, t.diameter)
+                m.geometry.computeBoundingSphere()
+            }
+
+
+            const appylNextGeneration = () => {
+
+                for (let tree of trees) {
+
+                    const prefab = tree.entity
+                    const t = tree.tree
+                    
+                    let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
+                    
+                    const m = graphics.object as THREE.Mesh
+                    
+                    m.geometry = new THREE.BoxGeometry(t.diameter, t.height, t.diameter)
+                    m.geometry.computeBoundingSphere()
+                }
+            }
+
+            setInterval(() => {
+
+                forestGenerator.iterate()
+
+                appylNextGeneration()
+
+            }, 2000)
 
             resolve(null)
 
@@ -310,6 +367,8 @@ export class Game {
 
             Utils.dispose(a.scene)
         }
+
+        Utils.dispose(Game.world.scene)
     }
 
     resize() {
