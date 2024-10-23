@@ -20,7 +20,7 @@ export class TreeSpecies {
     seedSurvivability: number
     /** Amount of grow per iteration */
     growRate: number
-    /** Min age of reproduction */
+    /** Min age of reproduction. Year after reproduction works. */
     protected _minAgeOfReproduction: number
 
 

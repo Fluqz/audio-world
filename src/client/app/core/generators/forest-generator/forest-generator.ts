@@ -5,9 +5,9 @@ import { TreeSpecies } from "./tree-species";
 
 export class ForestGenerator {
 
-    cells: Vector2[][]
+    private cells: boolean[]
 
-    trees: Tree[]
+    private trees: Tree[]
 
     width: number
     height: number
@@ -21,114 +21,102 @@ export class ForestGenerator {
         this.generateCells(width, height, cellSize)
     }
 
+    getTrees() {
+
+        return this.trees.filter((t) => t != undefined)
+    }
+
     generateCells(width: number, height: number, cellSize: number) {
 
         this.width = width
         this.height = height
         this.cellSize = cellSize
 
-        this.cells.length = 0
+        for(let x = 0; x < this.width; x += 1) {
 
-        let i = 0
-        for(let x = -this.width / 2; x < this.width / 2; x+=cellSize) {
+            for(let y = 0; y < this.height; y += 1) {
 
-            this.cells[i] = []
-
-            let k = 0
-            for(let y = -this.height / 2; y < this.height / 2; y+=cellSize) {
-
-                this.cells[i][k] = new Vector2(x, y)
-
-                k++
+                const i = this.getIndex(x, y)
+                this.cells[i] = false
+                this.trees[i] = undefined
             }
-
-            i++
         }
 
-        console.log('Cells',this.cells)
+        console.log('Cells',this.cells, this.trees)
     }
 
     /** NOOOOOOOOOOOISE!!!! USE NOISE FOR BASIC TREE POSITIONS */
     generateBaseForest() {
 
-        for(let x = 0; x < this.cells.length; x++) {
+        const v = new Vector2()
 
-            for(let y = 0; y < this.cells[x].length; y++) {
+        for(let x = 0; x < this.width; x++) {
+
+            for(let y = 0; y < this.height; y++) {
 
                 if(Math.random() > .8) {
 
-                    this.cells[x][y] = new Vector2(x * this.cellSize, y * this.cellSize)
-                    this.addTree(
-                        this.getTreeBySpeciesName(Math.random() > .5 ? 'Beech' : 'Oak', 
-                        new Vector2(this.cells[x][y].x, this.cells[x][y].y), 
-                        0)
-                    )
+                    this.cells[this.getIndex(x, y)] = true
+
+                    v.set(x * this.cellSize, y * this.cellSize)
+
+                    this.addTree(this.getTreeBySpeciesName(Math.random() > .5 ? 'Beech' : 'Oak', v.clone(), 0))
                 }
             }
         }
     }
 
-    getClosestCellPoint(tree: Tree) {
+    getCellCoordinatesByTree(tree: Tree) {
 
-        let maxD = 0
-        let closestNeighbour
+        const x = tree.position.x / this.cellSize
+        const y = tree.position.y / this.cellSize
 
-        for(let x = 0; x < this.cells.length; x++) {
-
-            for(let y = 0; y < this.cells[x].length; y++) {
-
-                const d = this.cells[x][y].distanceTo(tree.position)
-                if(d > maxD) {
-    
-                    maxD = d
-                    closestNeighbour = this.cells[x][y]
-                }
-            }
-        }
-
-        console.log('getClosestCellPoint', tree, closestNeighbour)
-        return closestNeighbour
+        return new Vector2(x, y)
     }
 
-    getCellFromPoint(point: Vector2) {
+    getTreeByCell(cellIndex: number) {
 
-        console.log('getCellFromPoint', this.cells[point.x / this.cellSize][point.y / this.cellSize])
-        return this.cells[point.x / this.cellSize][point.y / this.cellSize]
+        return this.trees[cellIndex]
     }
 
-    getTreeByCell(cell: Vector2) {
+    getIndex(x: number, y: number) {
 
-        return this.trees.find((v) => {
-
-            if(v.position.x / this.cellSize == cell.x && v.position.y / this.cellSize == cell.y) return
-        })
-    }
-    getCellByTree(tree: Tree) {
-
-        console.log('getCellByTree', this.getCellFromPoint(tree.position))
-        return this.getCellFromPoint(tree.position)
+        return (y * this.height) + x
     }
 
-    getNeighbouringCells(cell: Vector2) {
+    getCoordinates(i: number) {
 
-        const arr: Vector2[] = []
+        if(i <= this.width) return this.width
 
-        if(this.cells[cell.x-1] && this.cells[cell.x-1][cell.y-1]) arr.push(this.cells[cell.x-1][cell.y-1])
-        if(this.cells[cell.x-1] && this.cells[cell.x-1][cell.y]) arr.push(this.cells[cell.x-1][cell.y])
-        if(this.cells[cell.x-1] && this.cells[cell.x-1][cell.y+1]) arr.push(this.cells[cell.x-1][cell.y+1])
-        if(this.cells[cell.x] && this.cells[cell.x][cell.y+1]) arr.push(this.cells[cell.x][cell.y+1])
-        if(this.cells[cell.x] && this.cells[cell.x][cell.y-1]) arr.push(this.cells[cell.x][cell.y-1])
-        if(this.cells[cell.x+1] && this.cells[cell.x+1][cell.y+1]) arr.push(this.cells[cell.x+1][cell.y+1])
-        if(this.cells[cell.x+1] && this.cells[cell.x+1][cell.y]) arr.push(this.cells[cell.x+1][cell.y])
-        if(this.cells[cell.x+1] && this.cells[cell.x+1][cell.y-1]) arr.push(this.cells[cell.x+1][cell.y-1])
+        return new Vector2(i % this.width, i / this.width)
+    }
 
-        console.log('getNeighbouringCells', arr)
+    getNeighbouringTrees(cell: Vector2) {
+
+        const arr: Tree[] = []
+
+        if(this.cells[this.getIndex(cell.x - 1, cell.y - 1)]) arr.push(this.trees[this.getIndex(cell.x - 1, cell.y - 1)])
+        if(this.cells[this.getIndex(cell.x    , cell.y - 1)]) arr.push(this.trees[this.getIndex(cell.x    , cell.y - 1)])
+        if(this.cells[this.getIndex(cell.x + 1, cell.y - 1)]) arr.push(this.trees[this.getIndex(cell.x + 1, cell.y - 1)])
+        if(this.cells[this.getIndex(cell.x - 1, cell.y    )]) arr.push(this.trees[this.getIndex(cell.x - 1, cell.y    )])
+        if(this.cells[this.getIndex(cell.x + 1, cell.y    )]) arr.push(this.trees[this.getIndex(cell.x + 1, cell.y    )])
+        if(this.cells[this.getIndex(cell.x - 1, cell.y + 1)]) arr.push(this.trees[this.getIndex(cell.x - 1, cell.y + 1)])
+        if(this.cells[this.getIndex(cell.x    , cell.y + 1)]) arr.push(this.trees[this.getIndex(cell.x    , cell.y + 1)])
+        if(this.cells[this.getIndex(cell.x + 1, cell.y + 1)]) arr.push(this.trees[this.getIndex(cell.x + 1, cell.y + 1)])
+
         return arr
     }
     
     addTree(tree: Tree) {
 
         if(this.trees.indexOf(tree) != -1) return
+
+        const c = this.getCellCoordinatesByTree(tree)
+        const i = this.getIndex(c.x, c.y)
+
+        this.cells[i] = true
+        this.trees[i] = tree
+
         this.trees.push(tree)
     }
 
@@ -137,7 +125,12 @@ export class ForestGenerator {
 
         let i = this.trees.indexOf(tree)
         if(i == -1) return
-        this.trees.splice(i, 1)
+
+        const c = this.getCellCoordinatesByTree(tree)
+        i = this.getIndex(c.x, c.y)
+
+        this.cells[i] = false
+        this.trees[i] = undefined
     }
 
     iterate() {
@@ -147,6 +140,8 @@ export class ForestGenerator {
         const treesToRemove: Tree[] = []
 
         for(let tree of this.trees) {
+
+            if(!tree) continue
 
             if(tree.isDead) {
 
@@ -167,9 +162,9 @@ export class ForestGenerator {
             }
 
             // Check if any tree grown too big and kills surrounding trees
-            for (let cell of this.getNeighbouringCells(this.getClosestCellPoint(tree))) {
+            for (let t of this.getNeighbouringTrees(this.getCellCoordinatesByTree(tree))) {
 
-                if(cell) tree.takeOver(this.getTreeByCell(cell))
+                if(t) tree.takeOver(t)
             }
 
             // Flower
@@ -225,7 +220,7 @@ export class ForestGenerator {
             1.5,
             1.03,
             60,
-            .6,
+            .1,
             8
         ), position, age)
     }

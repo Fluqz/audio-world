@@ -46,19 +46,19 @@ export class Tree {
 
         this.height = Math.min(h, this.species.maxHeight)
 
-        console.log('set height', h, this.height)
+        // console.log('set height', h, this.height)
     }
 
     private setDiameter(d: number) {
 
         this.diameter = Math.min(d, this.species.maxDiameter)
-        console.log('set diameter', d, this.diameter)
+        // console.log('set diameter', d, this.diameter)
     }
 
     private setAge(a: number) {
 
         this.age = Math.min(a, this.species.maxAge)
-        console.log('set age', a, this.age)
+        // console.log('set age', a, this.age)
     }
 
     /** Kills this tree */
@@ -81,11 +81,14 @@ export class Tree {
 
         if(this.isDead) return
 
-        console.log('grow', )
+        // console.log('grow', )
         
         this.setAge(this.age+=1)
-        this.setHeight((this.height / this.species.maxHeight) * this.species.growRate)
-        this.setDiameter((this.diameter / this.species.maxDiameter) * this.species.growRate)
+        this.setHeight(this.height + (this.height * this.species.growRate))
+        this.setDiameter(this.diameter + (this.diameter / this.species.maxDiameter * this.species.growRate))
+
+
+        console.log('grow', this.height, this.diameter, this.age)
 
         if(this.species.maxAge <= this.age) {
 
@@ -102,7 +105,10 @@ export class Tree {
 
     takeOver(tree: Tree) {
 
+        // console.log('takeover')
         if(!this.touch(tree)) return
+
+        // console.log('DIIIIIIIIIE')
 
         let dyingTree: Tree
 

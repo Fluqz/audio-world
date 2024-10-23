@@ -262,6 +262,7 @@ export class Game {
                 resolve(null)
             }
 
+            console.log('HAAAlo')
             // Create Player
             let player = Prefabs.ControllablePlayer()
 
@@ -288,7 +289,7 @@ export class Game {
             // })
 
             let amount = 100
-            let range = 300
+            let range = 10
 
             // this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
             // // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
@@ -301,12 +302,12 @@ export class Game {
             // AssetManager.load('https://hitpuzzle.b-cdn.net/LOWPOLY1%20(1).glb')
 
             const trees: { entity: Entity, tree: Tree}[] = []
-            const forestGenerator = new ForestGenerator(range, range, 50)
+            const forestGenerator = new ForestGenerator(range, range, 10)
 
             forestGenerator.generateBaseForest()
             forestGenerator.iterate()
 
-            for (let t of forestGenerator.trees) {
+            for (let t of forestGenerator.getTrees()) {
                 
                 let prefab = Prefabs.Tree()
 
@@ -327,8 +328,10 @@ export class Game {
                 
                 const m = graphics.object as THREE.Mesh
                 
+                m.geometry.dispose()
+                console.log('geio',t.diameter, t.height, t.diameter)
                 m.geometry = new THREE.BoxGeometry(t.diameter, t.height, t.diameter)
-                m.geometry.computeBoundingSphere()
+                // m.geometry.computeBoundingSphere()
             }
 
 
@@ -343,8 +346,9 @@ export class Game {
                     
                     const m = graphics.object as THREE.Mesh
                     
+                    m.geometry.dispose()
                     m.geometry = new THREE.BoxGeometry(t.diameter, t.height, t.diameter)
-                    m.geometry.computeBoundingSphere()
+                    // m.geometry.computeBoundingSphere()
                 }
             }
 
@@ -354,7 +358,7 @@ export class Game {
 
                 appylNextGeneration()
 
-            }, 2000)
+            }, 5000)
 
             resolve(null)
 
