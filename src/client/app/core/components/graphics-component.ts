@@ -1,4 +1,4 @@
-import { Object3D } from "three";
+import { Box3, Object3D, Vector3 } from "three";
 import { Game } from "../../game";
 import { Component, EComponent } from "./component";
 
@@ -22,5 +22,28 @@ export class GraphicsComponent implements Component {
         })
 
         Game.world.scene.add(this.object)
+    }
+
+
+    getSize() {
+
+        const bbox = new Box3()
+        bbox.setFromObject(this.object)
+
+        const size = new Vector3()
+        bbox.getSize(size)
+
+        return size
+    }
+
+    getCenter() {
+
+        const bbox = new Box3()
+        bbox.setFromObject(this.object)
+
+        const center = new Vector3()
+        bbox.getCenter(center)
+
+        return center
     }
 }

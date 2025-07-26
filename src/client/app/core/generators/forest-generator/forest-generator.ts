@@ -172,13 +172,15 @@ export class ForestGenerator {
 
                 for(let seed = 0; seed < tree.species.seedRate; seed++) {
 
-                    if(tree.species.seedSurvivability >= Math.random()) {
+                    if(tree.species.seedSurvivability >= Math.random() * 100) {
 
                         const x = (Math.random() * 2) - 1
                         const y = (Math.random() * 2) - 1
                         const n = new Vector2(x, y)
                         n.normalize().multiplyScalar(tree.species.seedSpreadDistance)
                         n.add(tree.position)
+                        n.round()
+                        if(this.getIndex(n.x, n.y))
                         this.addTree(this.getTreeBySpeciesName(tree.species.name, n, 0))
                     }
                 } 
@@ -202,8 +204,8 @@ export class ForestGenerator {
             50,
             2,
             1.05,
-            63,
-            .5,
+            4,
+            .2,
             10
         ), position, age)
     }
@@ -219,8 +221,8 @@ export class ForestGenerator {
             40,
             1.5,
             1.03,
-            60,
-            .1,
+            5,
+            .15,
             8
         ), position, age)
     }

@@ -4,6 +4,7 @@ import { Game } from "../game";
 import { Utils } from "../util/utils";
 
 
+/** Script class that draws a path which shows the way the entity was moving. */
 export const TraceScript = (entity: Entity): IScript => {
 
     const points: Vector3[] = []
@@ -19,7 +20,7 @@ export const TraceScript = (entity: Entity): IScript => {
     const initialize = () => {
 
         geometry = new BufferGeometry().setFromPoints(points)
-        trace = new Line(geometry, new LineBasicMaterial({ color: 0xFFFF00, depthTest: false, depthWrite: false }))
+        trace = new Line(geometry, new LineBasicMaterial({ color: 0x000000, depthTest: false, depthWrite: false }))
 
         transform = entity.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 

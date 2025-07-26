@@ -96,17 +96,17 @@ export class Tree {
         }
     }
 
-    touch(tree: Tree) {
+    touch(tree: Tree, minRange: number = 2) {
 
         const d = Math.sqrt(Math.pow(tree.position.x - this.position.x, 2) + Math.pow(tree.position.y - this.position.y, 2))
 
-        return d < (tree.diameter / 2) + (this.diameter / 2)
+        return d < (tree.diameter / 2) + (this.diameter / 2) + minRange
     }
 
     takeOver(tree: Tree) {
 
         // console.log('takeover')
-        if(!this.touch(tree)) return
+        if(!this.touch(tree, 4)) return
 
         // console.log('DIIIIIIIIIE')
 

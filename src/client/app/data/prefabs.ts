@@ -12,28 +12,10 @@ import { TransformationComponent } from "../core/components/transformation-compo
 import { AnimationComponent, AssetManager, Entity, IScript, ScriptComponent } from "../core";
 import { AffectionScript } from "../scripts/affection.script";
 import { Utils } from "../util/utils";
+import { TraceScript } from "../scripts/trace.script";
 
-// export interface PrefabSettings {
+import { drum_fills_samples, factory_samples } from './sample-db'
 
-
-// }
-
-
-const samples = [ 
-
-    // 'assets/audio/drum/kick/hip-hop-kick.wav',
-
-    // 'assets/audio/flutes/craterlakeflute3.wav',
-    // 'assets/audio/flutes/craterlakeflute2.wav',
-    // 'assets/audio/flutes/elmorroflute1.wav',
-    // 'assets/audio/flutes/flutebadlands1.wav',
-    'assets/audio/flutes/joshuatreeflutechord.wav',
-
-    'assets/audio/synth/ASoulStringFmajor.wav',
-    'assets/audio/synth/Back_Home_F_01.wav',
-    'assets/audio/synth/StrummedRhodesFmajor7.wav',
-    'assets/audio/synth/SweepFm7.wav',
-]
 
 const material = new THREE.MeshStandardMaterial({
 
@@ -100,7 +82,7 @@ let shaderMaterial: THREE.Material = new THREE.ShaderMaterial({
     }
 })
 
-shaderMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 })
+// shaderMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
 export const Prefabs = {
 
@@ -109,7 +91,7 @@ export const Prefabs = {
         let c = Utils.getRndColor()
 
         let t = new TransformationComponent()
-        let m = new THREE.Mesh(new THREE.SphereGeometry(.5, 32, 32), new THREE.MeshStandardMaterial({ color: c }))
+        let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshStandardMaterial({ color: c }))
         m.geometry.translate(0, m.geometry.parameters.radius / 2, 0)
 
         const e = Game.world.createEntity()
@@ -129,12 +111,12 @@ export const Prefabs = {
         let t = new TransformationComponent()
         e.addComponent(t)
 
-        let m = new THREE.Mesh(new THREE.SphereGeometry(.5, 32, 32), new THREE.MeshDistanceMaterial())
+        let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshDistanceMaterial())
         m.geometry.translate(0, .5, 0)
         e.addComponent(new GraphicsComponent(m))
 
         e.addComponent(new AudioListenerComponent(t))
-        // e.addComponent(new ScriptComponent(TraceScript, e))
+        e.addComponent(new ScriptComponent(TraceScript, e))
         e.addComponent(new ThirdPersonControllerComponent(Game.camera))
 
         return e
@@ -149,9 +131,9 @@ export const Prefabs = {
         const e = Game.world.createEntity()
         e.name = 'Tree'
 
-        let s = (Math.random() * 3) + .7
+        let s = (Math.random() * 4) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 100, s), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 99, s), shaderMaterial.clone())
         m.geometry.translate(0, (m.geometry.parameters.height / 2) - s, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateX((Math.random() * r) - r)
@@ -162,9 +144,9 @@ export const Prefabs = {
         // e.addComponent(new BoundingboxComponent())
         e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
-            transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
+            transform.scale.x = Math.sin(Tone.context.currentTime) + 1.8
             transform.scale.y = Math.cos(Tone.context.currentTime) + 2
-            transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+            transform.scale.z = Math.sin(Tone.context.currentTime) + 1.8
             transform.needsUpdate = true
         }))
 
@@ -175,7 +157,7 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 50))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 200))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -222,7 +204,7 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 50))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 200))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -237,6 +219,8 @@ export const Prefabs = {
 
         const max = 10
         let m = new THREE.Mesh(new THREE.BoxGeometry(Math.random() * max, Math.random() * max, Math.random() * max), shaderMaterial.clone())
+        m.castShadow = true
+        m.receiveShadow = true
         // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateX((Math.random() * r) - r)
@@ -253,17 +237,55 @@ export const Prefabs = {
         }))
 
 
-        const sample = samples[Math.round(Math.random() * samples.length - 1)]
+        const sample = drum_fills_samples[Math.round(Math.random() * drum_fills_samples.length - 1)]
         const player = new Tone.Player(sample)
         player.autostart = true
         player.loop = true
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .5, 0), undefined, 50))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 200))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
-    }
-    ,
+    },
+
+
+    smallStone: () => {
+
+        const e = Game.world.createEntity()
+        e.name = 'Stone'
+
+        const max = 1
+        // let m = new THREE.Mesh(new THREE.SphereGeometry(Math.random() * max, 64, 64), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.IcosahedronGeometry(Math.random() * max, 0), shaderMaterial.clone())
+        m.castShadow = true
+        m.receiveShadow = true
+        // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
+        let r = (Math.PI / 8)
+        m.geometry.rotateX((Math.random() * r) - r)
+        m.geometry.rotateZ((Math.random() * r) - r)
+
+        e.addComponent(new GraphicsComponent(m))
+        e.addComponent(new TransformationComponent())
+        e.addComponent(new AnimationComponent((e: Entity, transform: TransformationComponent) => {
+
+            // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
+            transform.scale.y = Math.cos(Tone.context.currentTime) + 2
+            // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+            transform.needsUpdate = true
+        }))
+
+
+        const sample = factory_samples[Math.round(Math.random() * factory_samples.length - 1)]
+        const player = new Tone.Player(sample)
+        player.autostart = true
+        player.loop = true
+
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 200))
+        e.addComponent(new ScriptComponent(AffectionScript, e))
+
+        return e
+    },
+
 
     DeadTree: () => {
 
@@ -272,7 +294,7 @@ export const Prefabs = {
 
         let s = (Math.random() * 3) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 50, s), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 49, s), shaderMaterial.clone())
         m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateY((Math.random() * r) - r)
@@ -294,7 +316,7 @@ export const Prefabs = {
             type: 'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, 0), undefined, 50))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 200))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e

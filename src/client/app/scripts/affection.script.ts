@@ -12,16 +12,17 @@ const p3 = new Vector3()
 const p4 = new Vector3()
 const p5 = new Vector3()
 const n = new Vector3()
-let d = 0
+let distance = 0
 
 const randomNormal = () => {
 
     n.set(Math.random() * .1, Math.random() * .1, Math.random() * .1)
-    n.multiplyScalar(d / 3)
+    n.multiplyScalar(distance / 25)
 
     return n
 }
 
+/** Script class that draws lines from the player to the entity that runs this script. */
 export const AffectionScript = (entity: Entity): IScript => {
     
     let player: Entity
@@ -30,11 +31,13 @@ export const AffectionScript = (entity: Entity): IScript => {
     let audio: AudioComponent
     let graphics: GraphicsComponent
 
-    let points: [Vector3, Vector3]
+    let points: Vector3[]
     let geometry: BufferGeometry
     let color: number
 
     let line: Line
+
+    let entitySize: Vector3
 
     const initialize = () => {
             
@@ -45,24 +48,30 @@ export const AffectionScript = (entity: Entity): IScript => {
         graphics = entity.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
 
         color = Utils.getRndColor()
-        color = 0xFFFFFF
+        color = 0xFFFFFF // Show color white when far away and colorfull when close
 
-        points = [ p1, /*p2, p3, p4,*/ p5 ]
+        points = [ p1, p2, p3, p4, p5 ]
 
         geometry = new BufferGeometry().setFromPoints(points)
 
         let m = lineMaterial.clone()
         m.color.setHex(color)
         line = new Line(geometry, m)
+
+        const g = entity.getComponent(EComponent.GRAPHICS) as GraphicsComponent
+        entitySize = g.getSize()
+
+        distance = playerTransform.position.distanceTo(transform.position)
+
     }
 
     const update = (delta:number) => {
 
         // return
-        d = playerTransform.position.distanceTo(transform.position)
+        distance = playerTransform.position.distanceTo(transform.position)
 
         // Out of range
-        if(d > audio.range) {
+        if(distance > audio.range) {
 
             // Game.world.scene.remove(line)
 
@@ -88,10 +97,10 @@ export const AffectionScript = (entity: Entity): IScript => {
         }
         else { // In range
 
-            p1.copy(transform.position).setY(.5)
-            // p2.copy(transform.position).add(randomNormal())
-            // p3.copy(p2).add(randomNormal())
-            // p4.copy(p3).add(randomNormal())
+            p1.copy(transform.position).setY(entitySize.y * .25)
+            p2.copy(transform.position).add(randomNormal())
+            p3.copy(p2).add(randomNormal())
+            p4.copy(p3).add(randomNormal())
             p5.copy(playerTransform.position).setY(.5)
         
             geometry.setFromPoints(points)
@@ -111,7 +120,7 @@ export const AffectionScript = (entity: Entity): IScript => {
 
                 graphics.object.traverse(o => {
 
-                    if(o instanceof Mesh&& o.material && !(o.material instanceof ShaderMaterial)  && o.material.uniforms) {
+                    if(o instanceof Mesh && o.material && !(o.material instanceof ShaderMaterial)  && o.material.uniforms) {
                         
                         // o.userData.color = o.material.uniforms.color
                         o.material.color.setHex(color)

@@ -21,7 +21,7 @@ export class World {
 
         // this.scene.add(new AxesHelper())
 
-        let ground = new Mesh(new PlaneGeometry(500, 500), new MeshStandardMaterial({ color: 0x000000 }))
+        let ground = new Mesh(new PlaneGeometry(10000, 10000), new MeshStandardMaterial({ color: 0xff0000 }))
         ground.geometry.rotateX(-Math.PI / 2)
         ground.position.setY(-.01)
         ground.receiveShadow = true

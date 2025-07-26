@@ -28,12 +28,14 @@ export class AudioSourceComponent implements Component {
         if(this.source instanceof Tone.Player) this.source.autostart = true
         else this.source.start()
 
-        this.gain = new Tone.Gain(gain)
-        this.source.connect(this.gain)
+        // this.gain = new Tone.Gain(gain)
+        // this.source.connect(this.gain)
         
         // this.envelope = new Tone.AmplitudeEnvelope(0, 1, 1, 1)
         this.volume = new Tone.Volume(volume)
-        this.gain.connect(this.volume)
+        // this.gain.connect(this.volume)
+
+        this.source.connect(this.volume)
         
         this.output = this.volume
     }

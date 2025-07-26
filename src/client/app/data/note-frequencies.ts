@@ -39,6 +39,13 @@ export const getScale = (prime: Note, scale: number[]) : Note[] => {
     return ns
 }
 
+/** Pitches the incoming note by the pitch. Negative numbers to go lower, positive to go higher. */
+export const pitchNote = (note: Note, pitch: number) : Note => {
+
+    note.frequency += pitch
+
+    return note
+}
 
 
 /** Prime, Sekunde, Terz, Quarte, Quinte, Sexte, Septime, Oktave, */

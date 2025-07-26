@@ -15,8 +15,8 @@ export class AudioSystem extends System {
 
     public listener: AudioListenerComponent
 
-    private minVolume: number = -90
-    private maxVolume: number = 0
+    private mindB: number = -80
+    private maxdB: number = 0
 
     private audio: AudioComponent
     private transform: TransformationComponent
@@ -24,7 +24,7 @@ export class AudioSystem extends System {
     // Master should not be in game should it?
     private get master() { return Game.master }
 
-    get volumeRange() { return Math.abs(this.maxVolume - this.minVolume) }
+    get volumeRange() { return Math.abs(this.maxdB - this.mindB) }
 
 
     constructor(world: World, listener: AudioListenerComponent) {
@@ -43,7 +43,8 @@ export class AudioSystem extends System {
         for(let e of this.entities) {
 
             this.audio = e.getComponent<AudioComponent>(EComponent.AUDIO)
-            this.audio.connect(this.master)
+
+            if(!this.audio.connected) this.audio.connect(this.master)
 
             this.audio.connected = true
         }
@@ -51,7 +52,7 @@ export class AudioSystem extends System {
 
     fixedUpdate?(...args: any[]): void {}
 
-    update(...args: any[]): void {
+    update(delta: number): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
@@ -60,7 +61,7 @@ export class AudioSystem extends System {
             this.audio = e.getComponent<AudioComponent>(EComponent.AUDIO)
             this.transform = e.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
 
-            this.updatePositionalAudio(args[0])
+            this.updatePositionalAudio(delta)
         }
     }
 
@@ -69,10 +70,10 @@ export class AudioSystem extends System {
 
         // Instead of distance to center point,
         // use distance to min max of boundingbox 
-        const d = this.transform.position.distanceTo(this.listener.transform.position)
+        const distance = this.transform.position.distanceTo(this.listener.transform.position)
 
         // MUTE
-        if(d > this.audio.range) {
+        if(distance > this.audio.range) {
             
 
             // Volume
@@ -82,8 +83,8 @@ export class AudioSystem extends System {
 
             if(this.audio.connected) {
 
-                this.audio.source.volume.volume.value = this.minVolume
-                this.audio.disconnect()
+                this.audio.source.volume.volume.value = this.mindB
+                // this.audio.disconnect()
             }   
 
             if(this.audio.source.volume.volume.value == 0) return
@@ -92,22 +93,18 @@ export class AudioSystem extends System {
             // if(this.audio.source.gain.gain.value == 0) return
 
             // this.audio.source.gain.gain.value = 0
-            this.audio.source.volume.volume.value = this.minVolume
+            this.audio.source.volume.volume.value = this.mindB
 
 
         }
         else { // UNMUTE
 
-            if(this.audio.connected == false) this.audio.connect(this.master)
+            // if(this.audio.connected == false) this.audio.connect(this.master)
 
             // // Reverse Cool!
-            // let volume = M.map(d, 0, this.audio.range, this.minVolume, this.maxVolume) 
+            // let volume = M.map(d, 0, this.audio.range, this.mindB, this.maxdB) 
 
-            // // Logarithmic
-            // const r0to1 = M.map(d, 0, this.audio.range, 0, 1)
-            // const volume = M.linearTologarithmic(r0to1, 0, 1, 1, this.volumeRange + 1) + this.minVolume
-
-            let volume = M.map(d, 0, this.audio.range, this.maxVolume, this.minVolume)
+            let volume = this.distanceToDB(distance, 1, this.audio.range, this.mindB, this.maxdB)
 
             // Using gain instead of volume
             // let gain = M.map(d, 0, this.audio.range, 1, 0)
@@ -122,4 +119,36 @@ export class AudioSystem extends System {
 
         // console.log('update', this.audio.source.volume.volume.value)
     }
+
+    public distanceToDB(distance: number, d0: number = 1.0, maxDistance: number = 50.0, minDB: number = -80.0, maxDB: number = 0.0): number {
+
+        if (distance <= d0) return maxDB;           // Full volume
+        if (distance >= maxDistance) return minDB;  // Silent
+
+        const t = (distance - d0) / (maxDistance - d0); // Normalized [0, 1]
+        return (1 - t) * (maxDB - minDB) + minDB;       // Linearly interpolate dB
+    }
+
+    // bb() {
+
+
+    //         const referenceDistance = 1   // in meters
+    //         const referenceSPL = 90       // Sound Preasure level in dB at 1m
+    //         const maxDistance = this.audio.range
+    //         const currentSPL = referenceSPL - (20 * Math.log10(distance / referenceDistance))
+
+    //         // Scale the volume according to distance
+    //         const distanceFactor = Math.min(distance / maxDistance, 1);  // Clamping to maxDistance (30m)
+    //         const volumeDrop = (this.maxdB - this.mindB) * distanceFactor;
+
+    //         // Apply the SPL value to adjust the final volume
+    //         let toneJSVolume = this.maxdB - volumeDrop;
+
+    //         // Now adjust the volume based on the SPL at the current distance
+    //         toneJSVolume -= (currentSPL - 90);  // Assuming 90 dB at 1 meter as reference (adjust as needed)
+
+    //         // Ensure the volume doesn't go below -80 dB
+    //         toneJSVolume = Math.min(Math.max(toneJSVolume, this.mindB), this.maxdB);
+
+    // }
 }

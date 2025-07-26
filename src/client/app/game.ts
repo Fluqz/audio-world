@@ -34,6 +34,8 @@ export class Game {
 
     private updateClock: THREE.Clock
     private fixedUpdateClock: THREE.Clock
+
+    private backgroundColor = 0xffe800 // ffe5b9 0xf4eedb 0xffe800
     
     private AFID: number
 
@@ -65,7 +67,7 @@ export class Game {
 
         Game.renderer = new THREE.WebGLRenderer({ antialias: true })
         Game.renderer.setSize(Globals.w, Globals.h)
-        Game.renderer.setClearColor(0xf4eedb)
+        Game.renderer.setClearColor(this.backgroundColor)
         Game.renderer.shadowMap.enabled = true
         Game.renderer.shadowMap.type = THREE.PCFSoftShadowMap
         this.dom.append(Game.renderer.domElement)
@@ -78,7 +80,7 @@ export class Game {
         Game.world = new World()
 
         // Game.scene.fog = new THREE.FogExp2( 0xefd1b5, .01 );
-        Game.world.scene.fog = new THREE.Fog(0xf4eedb, 1, 100)
+        Game.world.scene.fog = new THREE.Fog(this.backgroundColor, 1, 750)
 
         // Cubemap
         const cubeMap = new THREE.CubeTextureLoader()
@@ -160,6 +162,12 @@ export class Game {
                     (Math.random() * range) - (range / 2),
                     0,
                     (Math.random() * range) - (range / 2),
+                )
+
+                transform.rotation.set(
+                    0,
+                    (Math.random() * 2 * Math.PI),
+                    0
                 )
                 transform.needsUpdate = true
             }
@@ -262,7 +270,6 @@ export class Game {
                 resolve(null)
             }
 
-            console.log('HAAAlo')
             // Create Player
             let player = Prefabs.ControllablePlayer()
 
@@ -288,77 +295,81 @@ export class Game {
             //     p.id = id
             // })
 
-            let amount = 100
-            let range = 10
+            let amount = 250
+            let range = 1000
 
-            // this.instanciateRandomly(Prefabs.Tree, amount * 2, range)
-            // // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
+            this.instanciateRandomly(Prefabs.Tree, amount, range)
+            // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
             // this.instanciateRandomly(Prefabs.Stone, amount, range)
-            // // this.instanciateRandomly(Prefabs.Tree, 1, 2)
+            // this.instanciateRandomly(Prefabs.smallStone, amount, range)
+            // this.instanciateRandomly(Prefabs.Tree, 1, 2)
 
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/06627.glb')
             // AssetManager.load('https://hitpuzzle.b-cdn.net/LOWPOLY1%20(1).glb')
 
-            const trees: { entity: Entity, tree: Tree}[] = []
-            const forestGenerator = new ForestGenerator(range, range, 10)
+        //     const trees: { entity: Entity, tree: Tree, state: 'DRAWN' | 'NEW' | 'DELETED' }[] = []
+        //     const forestGenerator = new ForestGenerator(range, range, 10)
 
-            forestGenerator.generateBaseForest()
-            forestGenerator.iterate()
+        //     forestGenerator.generateBaseForest()
+        //     forestGenerator.iterate()
 
-            for (let t of forestGenerator.getTrees()) {
+
+        //     const addTree = (tree: Tree) => {
+
+        //         let prefab = Prefabs.Tree()
+
+        //         trees.push({
+        //             entity: prefab,
+        //             tree: tree,
+        //             state: 'DRAWN'
+        //         })
+
+        //         let transform = prefab.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
                 
-                let prefab = Prefabs.Tree()
-
-                trees.push({
-                    entity: prefab,
-                    tree: t
-                })
-
-                let transform = prefab.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
-                
-                if (transform) {
+        //         if (transform) {
                     
-                    transform.position.set(t.position.x, 0, t.position.y)
-                    transform.needsUpdate = true
-                }
+        //             transform.position.set(tree.position.x, 0, tree.position.y)
+        //             transform.needsUpdate = true
+        //         }
                 
-                let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
+        //         let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
                 
-                const m = graphics.object as THREE.Mesh
+        //         const m = graphics.object as THREE.Mesh
                 
-                m.geometry.dispose()
-                console.log('geio',t.diameter, t.height, t.diameter)
-                m.geometry = new THREE.BoxGeometry(t.diameter, t.height, t.diameter)
-                // m.geometry.computeBoundingSphere()
-            }
+        //         m.geometry.dispose()
+        //         m.geometry = new THREE.BoxGeometry(tree.diameter, tree.height, tree.diameter)
+        //     }
+
+        //     for (let t of forestGenerator.getTrees()) {
+                
+        //         addTree(t)
+        //     }
 
 
-            const appylNextGeneration = () => {
+        //     const appylNextGeneration = () => {
 
-                for (let tree of trees) {
+        //         for (let tree of trees) {
 
-                    const prefab = tree.entity
-                    const t = tree.tree
+        //             Game.world.removeEntity(tree.entity)
+        //         }
+
+        //         for (let t of forestGenerator.getTrees()) {
                     
-                    let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
-                    
-                    const m = graphics.object as THREE.Mesh
-                    
-                    m.geometry.dispose()
-                    m.geometry = new THREE.BoxGeometry(t.diameter, t.height, t.diameter)
-                    // m.geometry.computeBoundingSphere()
-                }
-            }
+        //             addTree(t)
+        //         }
 
-            setInterval(() => {
+        //         for(let s of Game.world.systems) s.initialize()
+        //     }
 
-                forestGenerator.iterate()
+        //     setInterval(() => {
 
-                appylNextGeneration()
+        //         forestGenerator.iterate()
 
-            }, 5000)
+        //         appylNextGeneration()
+
+        //     }, 4000)
 
             resolve(null)
 
