@@ -21,9 +21,7 @@ export class ScriptSystem extends System {
         }
     }
 
-    fixedUpdate?(...args: any[]): void {}
-
-    update(delta: number): void {
+    fixedUpdate?(delta: number): void {
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
@@ -36,5 +34,9 @@ export class ScriptSystem extends System {
                 if(s.script.update) s.script.update(delta)
             }
         }
+    }
+
+    update(delta: number): void {
+
     }
 }
