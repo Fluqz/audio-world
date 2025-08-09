@@ -1,12 +1,15 @@
 import * as Tone from "tone";
 import { Source, SourceOptions } from "tone/build/esm/source/Source";
 import { Component, EComponent } from "./component";
+import { Instrument, InstrumentOptions } from "tone/build/esm/instrument/Instrument";
+
+export type AudioSource = Source<SourceOptions> | Instrument<InstrumentOptions>
 
 export class AudioSourceComponent implements Component {
 
     name: EComponent
 
-    source: Source<SourceOptions>
+    source: AudioSource
     envelope: Tone.AmplitudeEnvelope
     volume: Tone.Volume
     gain: Tone.Gain
@@ -19,14 +22,11 @@ export class AudioSourceComponent implements Component {
      * @param gain Gain level 0 to 1
      * @param volume Volume output -100 to 3
      */
-    constructor(source: Source<SourceOptions>, gain: number, volume: number) {
+    constructor(source: AudioSource, gain: number, volume: number) {
 
         this.name = EComponent.AUDIO
 
         this.source = source
-
-        if(this.source instanceof Tone.Player) this.source.autostart = true
-        else this.source.start()
 
         // this.gain = new Tone.Gain(gain)
         // this.source.connect(this.gain)
@@ -36,6 +36,8 @@ export class AudioSourceComponent implements Component {
         // this.gain.connect(this.volume)
 
         this.source.connect(this.volume)
+
+        
         
         this.output = this.volume
     }

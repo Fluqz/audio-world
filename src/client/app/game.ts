@@ -35,7 +35,7 @@ export class Game {
     private updateClock: THREE.Clock
     private fixedUpdateClock: THREE.Clock
 
-    private backgroundColor = 0xffe800 // ffe5b9 0xf4eedb 0xffe800
+    private backgroundColor = 0xffFF00 // ffe5b9 0xf4eedb 0xffe800
     
     private AFID: number
 
@@ -80,7 +80,7 @@ export class Game {
         Game.world = new World()
 
         // Game.scene.fog = new THREE.FogExp2( 0xefd1b5, .01 );
-        Game.world.scene.fog = new THREE.Fog(this.backgroundColor, 1, 750)
+        Game.world.scene.fog = new THREE.Fog(this.backgroundColor, 1, 500)
 
         // Cubemap
         const cubeMap = new THREE.CubeTextureLoader()
@@ -99,7 +99,7 @@ export class Game {
         let dLight = new THREE.DirectionalLight(0xf4eedb, .8)
         dLight.position.set(50, 50, 50)
         dLight.castShadow = true
-        dLight.shadow.camera.far = 200
+        dLight.shadow.camera.far = 2000
         dLight.shadow.camera.near = .1
         dLight.shadow.camera.top = 200
         dLight.shadow.camera.bottom = -200
@@ -136,12 +136,12 @@ export class Game {
                 this.onStart.next(null)
 
                 Game.world.registerSystem(new FirstPersonControllerSystem(Game.world))
-                Game.world.registerSystem(new RenderSystem(Game.world))
                 Game.world.registerSystem(new AnimationSystem(Game.world))
+                Game.world.registerSystem(new RenderSystem(Game.world))
                 Game.world.registerSystem(new AudioSystem(Game.world, Game.world.getEntityByName('Player').getComponent<AudioListenerComponent>(EComponent.AUDIO_LISTENER)))
                 Game.world.registerSystem(new ScriptSystem(Game.world))
 
-                this.loop()
+                this.loop(0)
 
                 console.log('LOADED')
                 resolve(null)
@@ -178,6 +178,7 @@ export class Game {
 
         Tone.Transport.start()
 
+        Tone.Destination.volume.exponentialRampTo(0, .5)
     }
 
     stop() {
@@ -188,7 +189,7 @@ export class Game {
     }
 
     private isMuted: boolean = false
-    private stored_volume: number
+    private stored_volume: number = -20
     toggleMute(m?: boolean) {
 
         if (m == undefined) m = !this.isMuted
@@ -197,7 +198,16 @@ export class Game {
 
         this.isMuted = m
 
-        if (this.isMuted) {
+        this.mute(this.isMuted)
+    }
+
+    mute(active: boolean) {
+
+        this.isMuted = active
+
+        if (!this.isMuted) this.stored_volume = Game.master.volume.value
+
+        if (active) {
 
             setTimeout(() => {
 
@@ -205,18 +215,17 @@ export class Game {
                 Tone.Destination.mute = true
                 Game.master.volume.setValueAtTime(Number.NEGATIVE_INFINITY, Tone.context.currentTime)
 
-            }, 150)
+            }, 200)
 
-            Game.master.volume.linearRampToValueAtTime(-70, Tone.context.currentTime + .15)
+            Game.master.volume.linearRampToValueAtTime(-80, Tone.context.currentTime + .2)
         }
         else {
             
             Game.master.mute = false
             Tone.Destination.mute = false
-            Game.master.volume.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .1)
+            Game.master.volume.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .2)
         }
     }
-
 
     update() {
 
@@ -248,7 +257,7 @@ export class Game {
         // this.lastUpdate = Date.now();
     }
 
-    loop() {
+    loop(time: number) {
 
         if (Globals.debug) this.stats.begin()
 
@@ -295,14 +304,11 @@ export class Game {
             //     p.id = id
             // })
 
-            let amount = 250
-            let range = 1000
 
-            this.instanciateRandomly(Prefabs.Tree, amount, range)
-            // this.instanciateRandomly(Prefabs.DeadTree, amount, range)
-            // this.instanciateRandomly(Prefabs.Stone, amount, range)
-            // this.instanciateRandomly(Prefabs.smallStone, amount, range)
-            // this.instanciateRandomly(Prefabs.Tree, 1, 2)
+            this.instanciateRandomly(Prefabs.Tree, 100, 500)
+            // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
+            this.instanciateRandomly(Prefabs.Stone, 50, 300)
+            // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
 
 
             // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')

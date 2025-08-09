@@ -23,7 +23,18 @@ export class ScriptSystem extends System {
 
     fixedUpdate?(delta: number): void {
 
-        // entities = Entity.filterByComponents(entities, this.requiredComponents)
+        for(const e of this.entities) {
+
+            this.scripts = e.getComponents<ScriptComponent>(EComponent.SCRIPT)
+
+            for(const s of this.scripts) {
+
+                if(s.script.fixedUpdate) s.script.fixedUpdate(delta)
+            }
+        }
+    }
+
+    update(delta: number): void {
 
         for(const e of this.entities) {
 
@@ -34,9 +45,5 @@ export class ScriptSystem extends System {
                 if(s.script.update) s.script.update(delta)
             }
         }
-    }
-
-    update(delta: number): void {
-
     }
 }

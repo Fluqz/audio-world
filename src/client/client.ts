@@ -4,6 +4,8 @@ import * as Tone from 'tone'
 import { Game } from './app/game'
 import { Globals } from "./app/globals"
 
+Tone.Destination.volume.setValueAtTime(-80, Tone.now())
+
 Globals.dom = document.getElementById('webGL') as HTMLElement
 
 let game = new Game(Globals.dom)
@@ -21,6 +23,7 @@ const init = () => {
             Tone.context.resume()
 
         game.start()
+
     }
 }
 document.addEventListener('pointerdown', init)

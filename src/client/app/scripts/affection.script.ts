@@ -62,10 +62,9 @@ export const AffectionScript = (entity: Entity): IScript => {
         entitySize = g.getSize()
 
         distance = playerTransform.position.distanceTo(transform.position)
-
     }
 
-    const update = (delta:number) => {
+    const fixedUpdate = (delta:number) => {
 
         // return
         distance = playerTransform.position.distanceTo(transform.position)
@@ -140,7 +139,7 @@ export const AffectionScript = (entity: Entity): IScript => {
 
     return {
         
-        update: update,
+        fixedUpdate: fixedUpdate,
         initialize: initialize,
         destroy: destroy,
     }

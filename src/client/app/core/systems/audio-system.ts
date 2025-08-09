@@ -104,7 +104,7 @@ export class AudioSystem extends System {
             // // Reverse Cool!
             // let volume = M.map(d, 0, this.audio.range, this.mindB, this.maxdB) 
 
-            let volume = this.distanceToDB(distance, 1, this.audio.range, this.mindB, this.maxdB)
+            let volume = this.distanceTodB(distance, .01, this.audio.range, -50, this.maxdB)
 
             // Using gain instead of volume
             // let gain = M.map(d, 0, this.audio.range, 1, 0)
@@ -120,13 +120,13 @@ export class AudioSystem extends System {
         // console.log('update', this.audio.source.volume.volume.value)
     }
 
-    public distanceToDB(distance: number, d0: number = 1.0, maxDistance: number = 50.0, minDB: number = -80.0, maxDB: number = 0.0): number {
+    public distanceTodB(distance: number, minDistance: number = .1, maxDistance: number = 50.0, mindB: number = -80.0, maxdB: number = 0.0): number {
 
-        if (distance <= d0) return maxDB;           // Full volume
-        if (distance >= maxDistance) return minDB;  // Silent
+        if (distance <= minDistance) return maxdB;           // Full volume
+        if (distance >= maxDistance) return mindB;  // Silent
 
-        const t = (distance - d0) / (maxDistance - d0); // Normalized [0, 1]
-        return (1 - t) * (maxDB - minDB) + minDB;       // Linearly interpolate dB
+        const t = (distance - minDistance) / (maxDistance - minDistance); // Normalized [0, 1]
+        return (1 - t) * (maxdB - mindB) + mindB;       // Linearly interpolate dB
     }
 
     // bb() {

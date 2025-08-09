@@ -11,7 +11,7 @@ export abstract class System {
     /** List of relevant entities to be processed */
     entities: Entity[]
 
-    /** Array if required components for this system to update. */
+    /** Array of required components for this system to update. */
     requiredComponents: EComponent[]
 
     constructor(world: World, requiredComponents?: EComponent[]) {

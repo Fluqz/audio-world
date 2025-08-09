@@ -71,6 +71,8 @@ export const HEPTATONIC_SCALE: number[] = [ 2, 1, 2, 1, 3, 1, 2 ]
 /** 9 Note blues scale */
 export const BLUES_9NOTE_SCALE: number[] = [ 2, 1, 1, 1, 2, 2, 1, 1, 1 ]
 
+export const CUSTOM_SCALE = [ 3, 4, 1, 2 ]
+
 
 /** List of all notes. https://pages.mtu.edu/~suits/notefreqs.html */
 export const notes: Note[] = [

@@ -156,8 +156,9 @@ export const Prefabs = {
             frequency: getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency,
             type: type //'sine'
         }
-
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 200))
+        const o = new Tone.Oscillator(sourceOptions)
+        o.start()
+        e.addComponent(new AudioComponent(new AudioSourceComponent(o, .5, -10), undefined, 100))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -204,7 +205,7 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 200))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
 
@@ -242,7 +243,7 @@ export const Prefabs = {
         player.autostart = true
         player.loop = true
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 200))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 100))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
@@ -280,7 +281,7 @@ export const Prefabs = {
         player.autostart = true
         player.loop = true
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 200))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 100))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e
@@ -316,7 +317,7 @@ export const Prefabs = {
             type: 'sine'
         }
 
-        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 200))
+        e.addComponent(new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
         e.addComponent(new ScriptComponent(AffectionScript, e))
 
         return e

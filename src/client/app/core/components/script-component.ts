@@ -5,6 +5,7 @@ export interface IScript {
 
     initialize?: () => void
     update?: (delta:number) => void
+    fixedUpdate?: (delta:number) => void
     destroy?: () => void
 }
 
