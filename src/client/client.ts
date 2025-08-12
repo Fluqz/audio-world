@@ -1,8 +1,28 @@
 
+import { io } from "socket.io-client";
 
 import * as Tone from 'tone'
-import { Game } from './app/game'
-import { Globals } from "./app/globals"
+import { Game } from '../game/game'
+import { Globals } from "../globals"
+
+
+
+
+const socket = io();
+
+// Listen for world state updates
+socket.on("state", (state) => {
+//   updateLocalWorld(state);
+});
+
+// // Send input to server
+// document.addEventListener("keydown", (e) => {
+//   socket.emit("input", { key: e.key });
+// });
+
+
+
+let hasStarted = true
 
 Tone.Destination.volume.setValueAtTime(-80, Tone.now())
 
@@ -11,13 +31,13 @@ Globals.dom = document.getElementById('webGL') as HTMLElement
 let game = new Game(Globals.dom)
 game.init()
 
-let isInit = true
 
-const init = () => {
 
-    if(isInit) {
+const startGame = () => {
+
+    if(hasStarted) {
         
-        isInit = false
+        hasStarted = false
         
         if (Tone.context.state !== 'running')
             Tone.context.resume()
@@ -26,10 +46,9 @@ const init = () => {
 
     }
 }
-document.addEventListener('pointerdown', init)
-document.addEventListener('touchstart', init)
-document.addEventListener('keydown', init)
-
+document.addEventListener('pointerdown', startGame)
+document.addEventListener('touchstart', startGame)
+document.addEventListener('keydown', startGame)
 
 
 
@@ -45,7 +64,6 @@ window.addEventListener('focus', () => {
 
     game.toggleMute(false)
 })
-            
 window.addEventListener('blur', () => {
 
     game.toggleMute(true)
@@ -53,7 +71,6 @@ window.addEventListener('blur', () => {
     console.log('blur')
 
 })
-            
 window.onbeforeunload = () => {
 
     game.toggleMute(true)
@@ -63,7 +80,6 @@ window.onbeforeunload = () => {
     // game.destroy()
     return
 }
-
 window.onresize = () => {
 
     game.resize()

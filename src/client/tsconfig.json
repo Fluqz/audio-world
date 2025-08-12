@@ -6,5 +6,5 @@
     },
     "include": [
         "**/*.ts"
-    ]
+, "../globals.ts", "../core/third-person-controls.ts"    ]
 }
