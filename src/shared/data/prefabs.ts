@@ -123,7 +123,7 @@ export const Prefabs = {
         t.needsUpdate = true
         ecs.addComponent(e, t)
 
-        let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshDistanceMaterial())
+        let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshNormalMaterial())
         m.geometry.translate(0, 0, 0)
         ecs.addComponent(e, new GraphicsComponent(m))
 

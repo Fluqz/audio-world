@@ -294,9 +294,9 @@ export class Game {
             // this.instanciateRandomly(Prefabs.Tree, 5, 20)
             // this.instanciateRandomly(Prefabs.Stone, 1, 20)
 
-            this.instanciateRandomly(Prefabs.Tree, 1000, 2000)
+            this.instanciateRandomly(Prefabs.Stone, 200, 500)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
-            this.instanciateRandomly(Prefabs.Stone, 500, 2000)
+            // this.instanciateRandomly(Prefabs.Stone, 200, 500)
             // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
 
 
