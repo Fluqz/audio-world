@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import * as Tone from "tone";
-import { getScale, getNote, AEOLIAN_SCALE, DORIAN_SCALE } from "./note-frequencies";
+import { getScale, getNote, AEOLIAN_SCALE, DORIAN_SCALE, CUSTOM_SCALE } from "./note-frequencies";
 import { Game } from "../../game/game";
 import { AffectionScript } from "./scripts/affection.script";
 import { Utils } from "../util/utils";
@@ -168,7 +168,7 @@ export const Prefabs = {
         const type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
 
         let sourceOptions: OscillatorOptions = {
-            frequency: getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency,
+            frequency: getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), CUSTOM_SCALE)[Math.round(Math.random() * CUSTOM_SCALE.length)].frequency,
             type: type //'sine'
         }
         const o = new Tone.Oscillator(sourceOptions)

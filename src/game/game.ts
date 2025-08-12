@@ -88,7 +88,7 @@ export class Game {
         let dLight = new THREE.DirectionalLight(0xf4eedb, .8)
         dLight.position.set(50, 50, 50)
         dLight.castShadow = true
-        dLight.shadow.camera.far = 2000
+        dLight.shadow.camera.far = 200
         dLight.shadow.camera.near = .1
         dLight.shadow.camera.top = 200
         dLight.shadow.camera.bottom = -200
@@ -294,9 +294,9 @@ export class Game {
             // this.instanciateRandomly(Prefabs.Tree, 5, 20)
             // this.instanciateRandomly(Prefabs.Stone, 1, 20)
 
-            this.instanciateRandomly(Prefabs.Tree, 200, 4000)
+            this.instanciateRandomly(Prefabs.Tree, 1000, 2000)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
-            this.instanciateRandomly(Prefabs.Stone, 500, 4000)
+            this.instanciateRandomly(Prefabs.Stone, 500, 2000)
             // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
 
 
