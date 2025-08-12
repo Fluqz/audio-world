@@ -7,7 +7,7 @@ import { Utils } from "../util/utils";
 import { TraceScript } from "./scripts/trace.script";
 
 import { drum_fills_samples, factory_samples } from './sample-db'
-import { AssetManager } from "../../core/asset-manager";
+import { AssetManager } from "../asset-manager";
 import { AnimationComponent } from "../../core/components/animation-component";
 import { AudioComponent } from "../../core/components/audio-component";
 import { AudioListenerComponent } from "../../core/components/audio-listener-component";
@@ -149,9 +149,9 @@ export const Prefabs = {
 
         let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 99, s), shaderMaterial.clone())
         m.geometry.translate(0, (m.geometry.parameters.height / 2) - s, 0)
-        let r = (Math.PI / 8)
-        m.geometry.rotateX((Math.random() * r) - r)
-        m.geometry.rotateZ((Math.random() * r) - r)
+        // let r = (Math.PI / 16)
+        // m.geometry.rotateX((Math.random() * r) - r)
+        // m.geometry.rotateZ((Math.random() * r) - r)
         m.castShadow = true
 
         ecs.addComponent(e, new GraphicsComponent(m))

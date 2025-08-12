@@ -3,8 +3,8 @@ import * as Stats from 'stats.js'
 import * as Tone from 'tone'
 
 import { Globals } from '../globals'
-import { AssetManager } from '../core/asset-manager'
-import { Input } from '../core/input'
+import { AssetManager } from '../shared/asset-manager'
+import { Input } from '../shared/input'
 
 import { Prefabs } from '../shared/data/prefabs'
 import { Utils } from '../shared/util/utils'
@@ -294,9 +294,9 @@ export class Game {
             // this.instanciateRandomly(Prefabs.Tree, 5, 20)
             // this.instanciateRandomly(Prefabs.Stone, 1, 20)
 
-            this.instanciateRandomly(Prefabs.Stone, 200, 500)
+            this.instanciateRandomly(Prefabs.Tree, 200, 500)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
-            // this.instanciateRandomly(Prefabs.Stone, 200, 500)
+            this.instanciateRandomly(Prefabs.Stone, 200, 500)
             // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
 
 

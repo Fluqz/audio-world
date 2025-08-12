@@ -1,6 +1,6 @@
 import { ThirdPersonControllerComponent } from "../components/third-person-controller-component"
 import { TransformationComponent } from "../components/transformation-component"
-import { EInput, Input } from "../input"
+import { EInput, Input } from "../../shared/input"
 import { System } from "./system"
 import { M } from "../../shared/util/math"
 
