@@ -3,28 +3,26 @@ import * as Stats from 'stats.js'
 import * as Tone from 'tone'
 
 import { Globals } from '../globals'
-import { AssetManager } from '../shared/asset-manager'
-import { Input } from '../shared/input'
 
-import { Prefabs } from '../shared/data/prefabs'
-import { Utils } from '../shared/util/utils'
+import { FirstPersonControllerSystem } from '../../core/systems/third-person-controller-system'
+import { AnimationSystem } from '../../core/systems/animation-system'
+import { AudioSystem } from '../../core/systems/audio-system'
+import { RenderSystem } from '../../core/systems/render-system'
+import { ScriptSystem } from '../../core/systems/script-system'
 
-
-import { FirstPersonControllerSystem } from '../core/systems/third-person-controller-system'
-import { AnimationSystem } from '../core/systems/animation-system'
-import { AudioSystem } from '../core/systems/audio-system'
-import { RenderSystem } from '../core/systems/render-system'
-import { ScriptSystem } from '../core/systems/script-system'
-
-import { ECS } from '../core/ecs'
+import { ECS } from '../../core/ecs'
 import { RenderManager } from '../client/render-manager'
-import { TransformationComponent } from '../core/components/transformation-component'
-import { Entity } from '../core/entity'
-import { AudioListenerComponent } from '../core/components/audio-listener-component'
-import { BVHShaderGLSL, FloatVertexAttributeTexture, MeshBVH, MeshBVHUniformStruct } from 'three-mesh-bvh'
+import { MeshBVH } from 'three-mesh-bvh'
 import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass'
 import { rtMaterial as RT_MATERIAL } from "../shared/data/material";
 import { GraphicsComponent } from '../core/components/graphics-component'
+import { TransformationComponent } from '../../core/components/transformation-component'
+import { Entity } from '../../core/entity'
+import { AudioListenerComponent } from '../../core/components/audio-listener-component'
+import { Input } from '../../shared/input'
+import { Prefabs } from '../../shared/data/prefabs'
+import { AssetManager } from '../../shared/asset-manager'
+import { Utils } from '../../shared/util/utils'
 
 
 export class Game {
@@ -145,7 +143,7 @@ export class Game {
                 this.ecs.registerSystem(new AnimationSystem())
                 this.ecs.registerSystem(new RenderSystem(this.ecs, this.manager))
 
-                const audioListener = this.ecs.getComponent<AudioListenerComponent>(player, AudioListenerComponent)
+                const audioListener = this.ecs.getComponent<AudioListenerComponent>(player, AudioListenerComponent) as AudioListenerComponent
                 this.ecs.registerSystem(new AudioSystem(audioListener))
 
                 this.ecs.registerSystem(new ScriptSystem())

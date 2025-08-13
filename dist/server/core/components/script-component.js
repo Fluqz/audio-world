@@ -7,3 +7,4 @@ class ScriptComponent {
     }
 }
 exports.ScriptComponent = ScriptComponent;
+//# sourceMappingURL=script-component.js.map

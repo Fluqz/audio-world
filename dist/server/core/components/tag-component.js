@@ -7,3 +7,4 @@ class TagComponent {
     }
 }
 exports.TagComponent = TagComponent;
+//# sourceMappingURL=tag-component.js.map

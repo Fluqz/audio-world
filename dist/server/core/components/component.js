@@ -45,3 +45,4 @@ class ComponentStore {
     }
 }
 exports.ComponentStore = ComponentStore;
+//# sourceMappingURL=component.js.map

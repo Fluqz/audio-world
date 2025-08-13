@@ -17,14 +17,13 @@ class ECS {
         return id;
     }
     destroyEntity(entity) {
-        var _a;
         if (!this.entities.has(entity))
             return;
         // Handle script cleanup if applicable
         const scriptComponent = this.getComponent(entity, script_component_1.ScriptComponent);
         if (scriptComponent) {
             for (const script of scriptComponent.scripts) {
-                (_a = script.destroy) === null || _a === void 0 ? void 0 : _a.call(script, entity, this);
+                script.destroy?.(entity, this);
             }
         }
         for (const [type, store] of this.componentStores.entries()) {
@@ -44,12 +43,10 @@ class ECS {
         this.componentStores.get(type).add(entity, component);
     }
     getComponent(entity, componentClass) {
-        var _a;
-        return (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.get(entity);
+        return this.componentStores.get(componentClass)?.get(entity);
     }
     removeComponent(entity, componentClass) {
-        var _a;
-        (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.remove(entity);
+        this.componentStores.get(componentClass)?.remove(entity);
     }
     registerSystem(system) {
         this.systems.push(system);
@@ -91,7 +88,7 @@ class ECS {
     }
     hasTag(entity, tagName) {
         const tag = this.getComponent(entity, tag_component_1.TagComponent);
-        return (tag === null || tag === void 0 ? void 0 : tag.tagName) === tagName;
+        return tag?.tagName === tagName;
     }
     *queryTagged(tagName, ...componentClasses) {
         const tagStore = this.componentStores.get(tag_component_1.TagComponent);
@@ -131,3 +128,4 @@ class ECS {
     }
 }
 exports.ECS = ECS;
+//# sourceMappingURL=ecs.js.map

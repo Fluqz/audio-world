@@ -16,3 +16,4 @@ class TransformationComponent {
     }
 }
 exports.TransformationComponent = TransformationComponent;
+//# sourceMappingURL=transformation-component.js.map
