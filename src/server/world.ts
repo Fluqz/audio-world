@@ -1,6 +1,6 @@
-import { Entity } from "../core/entity";
-import { ECS } from "../core/ecs";
-import { TransformationComponent } from "../core/components/transformation-component";
+import { Entity } from "../../core/entity";
+import { ECS } from "../../core/ecs";
+import { TransformationComponent } from "../../core/components/transformation-component";
 
 // ecs-world.js (server)
 export class World {
@@ -29,7 +29,7 @@ export class World {
   }
 
   serializeState() {
-    return this.players.map(p => ({
+    return this.players.forEach(p => ({
       id: p,
       position: this.ecs.getComponent(p, TransformationComponent),
     }));
