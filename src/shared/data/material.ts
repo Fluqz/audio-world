@@ -1,4 +1,4 @@
-import { BackSide, Color, FrontSide, ShaderMaterial, Vector2 } from "three";
+import { Color, DoubleSide, ShaderMaterial, Vector2 } from "three";
 
 
 

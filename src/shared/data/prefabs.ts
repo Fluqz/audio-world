@@ -19,13 +19,8 @@ import { ThirdPersonControllerComponent } from "../../core/components/third-pers
 import { TransformationComponent } from "../../core/components/transformation-component";
 import { Entity } from "../../core/entity";
 
+import { faceDisplacementShader } from "../data/material";
 
-const material = new THREE.MeshStandardMaterial({
-
-    color: 0x000000,
-    roughness: 0,
-    metalness: 1
-})
 
 
 let texture = new THREE.TextureLoader().load( 'assets//image2.png' )
@@ -33,59 +28,6 @@ let texture = new THREE.TextureLoader().load( 'assets//image2.png' )
 texture.wrapS = THREE.RepeatWrapping
 texture.wrapT = THREE.RepeatWrapping
 
-let u = {
-
-    'amplitude': { value: 1.0 },
-    'color': { value: new THREE.Color( 0x000000 ) },
-}
-
-
-
-let shaderMaterial: THREE.Material = new THREE.ShaderMaterial({
-    vertexShader: `
-
-        uniform float amplitude;
-
-        varying vec3 vNormal;
-        varying vec2 vUv;
-
-        void main() {
-
-            vNormal = normal;
-            vUv = ( 0.5 + amplitude ) * uv + vec2( amplitude );
-
-            vec3 newPosition = position + amplitude * normal * vec3( 0.02 );
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
-        }
-    `,
-    fragmentShader: `
-
-        varying vec3 vNormal;
-        varying vec2 vUv;
-
-        uniform vec3 color;
-
-        void main() {
-
-            vec3 light = vec3( 0.5, 0.2, 1.0 );
-            light = normalize( light );
-
-            float dProd = dot( vNormal, light ) * 0.5 + 0.5;
-
-            gl_FragColor = vec4( vec3( dProd ) * vec3( color ), 1.0 );
-
-        }
-    `,
-    uniforms: {
-
-		time: { value: 1.0 },
-		resolution: { value: new THREE.Vector2() },
-        amplitude: u.amplitude,
-        color: u.color,
-    }
-})
-
-// shaderMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
 export const Prefabs = {
 
@@ -98,6 +40,8 @@ export const Prefabs = {
         let t = new TransformationComponent()
         let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshStandardMaterial({ color: c }))
         m.geometry.translate(0, m.geometry.parameters.radius / 2, 0)
+        m.castShadow = true
+        m.receiveShadow = true
 
         const e = ecs.createEntity()
         
@@ -123,8 +67,10 @@ export const Prefabs = {
         t.needsUpdate = true
         ecs.addComponent(e, t)
 
-        let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshNormalMaterial())
+        let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshToonMaterial())
         m.geometry.translate(0, 0, 0)
+        m.castShadow = true
+        m.receiveShadow = true
         ecs.addComponent(e, new GraphicsComponent(m))
 
         ecs.addComponent(e, new AudioListenerComponent(t))
@@ -147,7 +93,7 @@ export const Prefabs = {
 
         let s = (Math.random() * 4) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 99, s), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 99, s), faceDisplacementShader(1, 0x000000).clone())
         m.geometry.translate(0, (m.geometry.parameters.height / 2) - s, 0)
         // let r = (Math.PI / 16)
         // m.geometry.rotateX((Math.random() * r) - r)
@@ -236,7 +182,7 @@ export const Prefabs = {
         ecs.addComponent(e, new TagComponent('Stone'))
 
         const max = 10
-        let m = new THREE.Mesh(new THREE.BoxGeometry(Math.random() * max, Math.random() * max, Math.random() * max), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.BoxGeometry(Math.random() * max, Math.random() * max, Math.random() * max), faceDisplacementShader(1, 0x000000).clone())
         m.castShadow = true
         m.receiveShadow = true
         // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
@@ -274,8 +220,8 @@ export const Prefabs = {
         ecs.addComponent(e, new TagComponent('SmallStone'))
 
         const max = 1
-        // let m = new THREE.Mesh(new THREE.SphereGeometry(Math.random() * max, 64, 64), shaderMaterial.clone())
-        let m = new THREE.Mesh(new THREE.IcosahedronGeometry(Math.random() * max, 0), shaderMaterial.clone())
+        // let m = new THREE.Mesh(new THREE.SphereGeometry(Math.random() * max, 64, 64), defShaderMaterial(1, 0x000000).clone())
+        let m = new THREE.Mesh(new THREE.IcosahedronGeometry(Math.random() * max, 0), faceDisplacementShader(1, 0x000000).clone())
         m.castShadow = true
         m.receiveShadow = true
         // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
@@ -314,7 +260,7 @@ export const Prefabs = {
 
         let s = (Math.random() * 3) + .7
 
-        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 49, s), shaderMaterial.clone())
+        let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 49, s), faceDisplacementShader(1, 0x000000).clone())
         m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
         let r = (Math.PI / 8)
         m.geometry.rotateY((Math.random() * r) - r)
