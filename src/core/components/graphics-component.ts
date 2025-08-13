@@ -1,6 +1,9 @@
-import { Box3, Object3D, Vector3 } from "three";
+import { Box3, Matrix4, Mesh, Object3D, ShaderMaterial, Vector3 } from "three";
 import { Component } from "./component";
 import { Game } from "../../game/game";
+import { BVHShaderGLSL, FloatVertexAttributeTexture, MeshBVH, MeshBVHUniformStruct } from "three-mesh-bvh";
+import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass";
+import { rtMaterial as RT_MATERIAL } from "../../shared/data/material";
 
 
 export class GraphicsComponent implements Component {
@@ -11,9 +14,46 @@ export class GraphicsComponent implements Component {
 
         this.object = object
 
+        // object.name = 'Graphics'
+
         this.object.traverse(o => {
 
             o.matrixAutoUpdate = false
+            o.matrixWorldAutoUpdate = false
+
+            o.updateMatrix()
+            o.updateWorldMatrix(true, true)
+            o.updateMatrixWorld(true)
+        })
+
+        this.object.traverse(o => {
+
+            if(o['isMesh']) {
+                console.log('Adding mesh bvh!')
+
+                const m = o as Mesh
+
+                m.geometry.computeVertexNormals();
+                const rtMaterial = RT_MATERIAL()
+
+                m.material = rtMaterial
+
+                // After creating the ShaderMaterial:
+                rtMaterial.depthTest = false;
+                rtMaterial.depthWrite = false;
+                rtMaterial.transparent = false;
+                // WebGL1 safety: enable frag-depth extension
+                // rtMaterial.extensions = { fragDepth: true };
+
+                const rtQuad = new FullScreenQuad( rtMaterial )
+
+                const bvh = new MeshBVH(m.geometry);
+                m.geometry.boundsTree = bvh
+                m.userData.rtQuad = rtQuad
+
+
+                console.log('bvh', m.geometry.boundsTree)
+            }
         })
 
         Game.i.manager.scene.add(this.object)

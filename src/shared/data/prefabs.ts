@@ -148,6 +148,7 @@ export const Prefabs = {
         let s = (Math.random() * 4) + .7
 
         let m = new THREE.Mesh(new THREE.BoxGeometry(s, Math.random() * 99, s), shaderMaterial.clone())
+        m.name = 'tree'
         m.geometry.translate(0, (m.geometry.parameters.height / 2) - s, 0)
         // let r = (Math.PI / 16)
         // m.geometry.rotateX((Math.random() * r) - r)

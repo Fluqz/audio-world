@@ -21,6 +21,10 @@ import { RenderManager } from '../client/render-manager'
 import { TransformationComponent } from '../core/components/transformation-component'
 import { Entity } from '../core/entity'
 import { AudioListenerComponent } from '../core/components/audio-listener-component'
+import { BVHShaderGLSL, FloatVertexAttributeTexture, MeshBVH, MeshBVHUniformStruct } from 'three-mesh-bvh'
+import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass'
+import { rtMaterial as RT_MATERIAL } from "../shared/data/material";
+import { GraphicsComponent } from '../core/components/graphics-component'
 
 
 export class Game {
@@ -99,11 +103,22 @@ export class Game {
         this.manager.scene.add(dLight)
         this.manager.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
 
-        let ground = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000), new THREE.MeshStandardMaterial({ color: 0xff0000 }))
-        ground.geometry.rotateX(-Math.PI / 2)
-        ground.position.setY(-.01)
-        ground.receiveShadow = true
-        this.manager.scene.add(ground)
+
+        const ground = this.ecs.createEntity()
+
+        let m = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000), RT_MATERIAL())
+        m.geometry.rotateX(-Math.PI / 2)
+        m.position.setY(-.01)
+        m.receiveShadow = true
+        this.ecs.addComponent(ground, new GraphicsComponent(m))
+
+        // WebGL1 safety: enable frag-depth extension
+        // rtMaterial.extensions = { fragDepth: true };
+        const rtQuad = new FullScreenQuad( m.material )
+        m.geometry.computeVertexNormals();
+        const bvh = new MeshBVH(m.geometry);
+        m.geometry.boundsTree = bvh
+        m.userData.rtQuad = rtQuad
 
         if (Globals.debug) {
 
@@ -291,12 +306,12 @@ export class Game {
             // })
 
 
-            // this.instanciateRandomly(Prefabs.Tree, 5, 20)
+            this.instanciateRandomly(Prefabs.Tree, 1, 20)
             // this.instanciateRandomly(Prefabs.Stone, 1, 20)
 
-            this.instanciateRandomly(Prefabs.Tree, 200, 500)
+            // this.instanciateRandomly(Prefabs.Tree, 200, 500)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
-            this.instanciateRandomly(Prefabs.Stone, 200, 500)
+            // this.instanciateRandomly(Prefabs.Stone, 200, 500)
             // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
 
 
