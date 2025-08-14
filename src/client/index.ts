@@ -2,7 +2,7 @@
 import { io } from "socket.io-client";
 
 import * as Tone from 'tone'
-import { Game } from '../game/game'
+import { Game } from '../client/game'
 import { Globals } from "../globals"
 
 
