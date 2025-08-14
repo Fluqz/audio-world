@@ -11,11 +11,11 @@ import { RenderSystem } from '../ecs/systems/render-system'
 import { ScriptSystem } from '../ecs/systems/script-system'
 
 import { ECS } from '../ecs/ecs'
-import { RenderManager } from './render-manager'
 import { MeshBVH } from 'three-mesh-bvh'
 import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass'
 import { rtMaterial as RT_MATERIAL } from "../shared/data/material";
 import { GraphicsComponent } from '../ecs/components/graphics-component'
+import { RenderManager } from '../client/render-manager'
 import { TransformationComponent } from '../ecs/components/transformation-component'
 import { Entity } from '../ecs/entity'
 import { AudioListenerComponent } from '../ecs/components/audio-listener-component'
