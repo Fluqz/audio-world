@@ -4,6 +4,8 @@ import { io } from "socket.io-client";
 import * as Tone from 'tone'
 import { Game } from '../client/game'
 import { Globals } from "../globals"
+import { saveScene } from "../ecs/scene";
+import { Entity } from "../ecs/entity";
 
 
 
@@ -22,7 +24,7 @@ socket.on("state", (state) => {
 
 
 
-let hasStarted = true
+let hasStarted = false
 
 Tone.Destination.volume.setValueAtTime(-80, Tone.now())
 
@@ -35,15 +37,23 @@ game.init()
 
 const startGame = () => {
 
-    if(hasStarted) {
+    if(!hasStarted) {
         
-        hasStarted = false
+        hasStarted = true
         
         if (Tone.context.state !== 'running')
             Tone.context.resume()
 
         game.start()
 
+    }
+    else {
+
+        game.ecs.entities.forEach((e: Entity) => {
+
+            console.log(e, game.ecs.getAllComponents(e))
+        })
+        // console.log('Save', JSON.stringify(saveScene(game.ecs)))
     }
 }
 document.addEventListener('pointerdown', startGame)

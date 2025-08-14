@@ -4,6 +4,7 @@ import { Game } from "../../client/game";
 
 
 export class GraphicsComponent implements Component {
+    __componentBrand: true
 
     object: Object3D
 
@@ -11,6 +12,7 @@ export class GraphicsComponent implements Component {
 
         this.object = object
 
+        console.log('GRAPHISC COMP YOOOO', this.object)
         this.object.traverse(o => {
 
             o.matrixAutoUpdate = false

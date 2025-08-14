@@ -1,7 +1,8 @@
 import { Euler, Quaternion, Vector3 } from "three";
-import { Component } from "./component";
+import { Component, ComponentData } from "./component";
 
 export class TransformationComponent implements Component {
+    __componentBrand: true
 
     position: Vector3
     rotation: Euler
@@ -14,18 +15,25 @@ export class TransformationComponent implements Component {
     // Graphics or Transform Component ???
     needsUpdate: boolean 
 
-    constructor(position?: Vector3, rotation?: Euler, quaternion?: Quaternion, scale?: Vector3) {
+    eulerOverQuaternions: boolean = false
 
-        this.position = position == undefined ? new Vector3() : position
-        this.rotation = rotation == undefined ? new Euler() : rotation
-        this.quaternion = quaternion == undefined ? new Quaternion() : quaternion
-        this.scale = scale == undefined ? new Vector3(1, 1, 1) : scale
+    constructor(position?: [number, number, number], rotation?: [number, number, number], quaternion?: [number, number, number, number], scale?: [number, number, number]) {
 
-        // this.matrix = new Matrix4().setPosition(this.position)
-        // this.matrix = new Matrix4().makeScale(this.scale.x, this.scale.y, this.scale.z)
-        // this.matrix = new Matrix4().makeRotationFromQuaternion(this.quaternion)
-        // this.matrix = new Matrix4().makeRotationFromEuler(this.rotation)
+        this.position = position == undefined ? new Vector3() : new Vector3().fromArray(position)
+        this.rotation = rotation == undefined ? new Euler() : new Euler().fromArray(rotation)
+        this.quaternion = quaternion == undefined ? new Quaternion() : new Quaternion().fromArray(quaternion)
+        this.scale = scale == undefined ? new Vector3(1, 1, 1) : new Vector3().fromArray(scale)
 
         this.needsUpdate = false
+    }
+
+    serialize(): ComponentData {
+        
+        return {
+            position: this.position.toArray(),
+            rotation: this.rotation.toArray(),
+            quaternion: this.quaternion.toArray(),
+            scale: this.scale.toArray(),
+        }
     }
 }

@@ -3,6 +3,7 @@ import { Effect, EffectOptions } from "tone/build/esm/effect/Effect";
 import { Component } from "./component";
 
 export class AudioEffectComponent implements Component {
+    __componentBrand: true
 
     effect: Effect<EffectOptions>
 
@@ -14,4 +15,5 @@ export class AudioEffectComponent implements Component {
 
         this.output = this.effect
     }
+    
 }

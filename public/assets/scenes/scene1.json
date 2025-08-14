@@ -1,0 +1,102 @@
+{
+    "entities": [
+        {
+            "components": {
+                "TagComponent": { "tagName": "ControllablePlayer" },
+                "TransformationComponent": {
+                    "position": [0, 0.3, 0],
+                    "rotation": [0, 0, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [0, 0, 0]
+                },
+                "GraphicsComponent": null,
+                "VelocityComponent": null,
+                "AudioListenerComponent": {
+                    "TransformationComponent": {
+                        "position": [0, 0.3, 0],
+                        "rotation": [0, 0, 0, "XYZ"],
+                        "quaternion": [0, 0, 0, 1],
+                        "scale": [0, 0, 0]
+                    }
+                },
+                "ScriptComponent": null,
+                "ThirdPersonControllerComponent": null
+            }
+        },
+        {
+            "components": {
+                "TagComponent": { "tagName": "Stone" },
+                "TransformationComponent": {
+                    "position": [0.046170374413833315, 0, 20.63443850987607],
+                    "rotation": [0, 3.6934707042573796, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [0, 1.2628441660101353, 0]
+                },
+                "GraphicsComponent": null,
+                "ScriptComponent": null,
+                "AnimationComponent": null,
+                "AudioComponent": null
+            }
+        },
+        {
+            "components": {
+                "TagComponent": { "tagName": "Stone" },
+                "TransformationComponent": {
+                    "position": [16.91728343256988, 0, -21.3898246680514],
+                    "rotation": [0, 0.7064294949046418, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [0, 1.2628441660101353, 0]
+                },
+                "GraphicsComponent": null,
+                "ScriptComponent": null,
+                "AnimationComponent": null,
+                "AudioComponent": null
+            }
+        },
+        {
+            "components": {
+                "TagComponent": { "tagName": "Stone" },
+                "TransformationComponent": {
+                    "position": [4.314822627136984, 0, -4.448235423347235],
+                    "rotation": [0, 4.819814996939304, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [0, 1.2628441660101353, 0]
+                },
+                "GraphicsComponent": null,
+                "ScriptComponent": null,
+                "AnimationComponent": null,
+                "AudioComponent": null
+            }
+        },
+        {
+            "components": {
+                "TagComponent": { "tagName": "Stone" },
+                "TransformationComponent": {
+                    "position": [-14.77470000916909, 0, -14.21024409696588],
+                    "rotation": [0, 1.263766617561269, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [0, 1.2628441660101353, 0]
+                },
+                "GraphicsComponent": null,
+                "ScriptComponent": null,
+                "AnimationComponent": null,
+                "AudioComponent": null
+            }
+        },
+        {
+            "components": {
+                "TagComponent": { "tagName": "Stone" },
+                "TransformationComponent": {
+                    "position": [-23.703098525217715, 0, -8.116152134150255],
+                    "rotation": [0, 3.2294623577676127, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [0, 1.2628441660101353, 0]
+                },
+                "GraphicsComponent": null,
+                "ScriptComponent": null,
+                "AnimationComponent": null,
+                "AudioComponent": null
+            }
+        }
+    ]
+}

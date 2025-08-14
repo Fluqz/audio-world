@@ -4,6 +4,7 @@ exports.ECS = void 0;
 const component_1 = require("./components/component");
 const script_component_1 = require("./components/script-component");
 const tag_component_1 = require("./components/tag-component");
+const name_component_1 = require("./components/name-component");
 class ECS {
     constructor() {
         this.nextEntityId = 0;
@@ -50,6 +51,15 @@ class ECS {
         var _a;
         return (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.get(entity);
     }
+    getAllComponents(entity) {
+        const components = [];
+        for (let [componentClass, store] of this.componentStores.entries()) {
+            const comp = store.get(entity);
+            if (comp)
+                components.push(comp);
+        }
+        return components;
+    }
     removeComponent(entity, componentClass) {
         var _a;
         (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.remove(entity);
@@ -88,6 +98,9 @@ class ECS {
                 yield [entity, components];
             }
         }
+    }
+    addName(entity, name) {
+        this.addComponent(entity, new name_component_1.NameComponent(name));
     }
     addTag(entity, tagName) {
         this.addComponent(entity, new tag_component_1.TagComponent(tagName));

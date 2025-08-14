@@ -4,41 +4,42 @@ import { Entity } from "../entity";
 import { Component } from "./component";
 
 export class AnimationComponent implements Component {
+    __componentBrand: true
     
-        animation: (entity: Entity, transform: TransformationComponent) => void
-    
-        constructor(animation: (entity: Entity, transform: TransformationComponent) => void | AnimationClip[]) {
-    
-            this.animation = animation
+    animation: (entity: Entity, transform: TransformationComponent) => void
 
-            // Animation
-            // o.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-            // o.scale.y = Math.cos(Tone.context.currentTime) + 2
-            // o.scale.z = Math.sin(Tone.context.currentTime) + 1.5
-            // o.updateMatrix()
+    constructor(animation: (entity: Entity, transform: TransformationComponent) => void | AnimationClip[]) {
 
+        this.animation = animation
 
-            // getScale(
-            //     getNote('F' + Math.round((Math.random() * 3) + 1)),
-            //     AEOLIAN_SCALE
-            // )[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
+        // Animation
+        // o.scale.x = Math.sin(Tone.context.currentTime) + 1.5
+        // o.scale.y = Math.cos(Tone.context.currentTime) + 2
+        // o.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+        // o.updateMatrix()
 
 
-            // this.oscillator.type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
+        // getScale(
+        //     getNote('F' + Math.round((Math.random() * 3) + 1)),
+        //     AEOLIAN_SCALE
+        // )[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
 
 
-            // const d = this.position.distanceTo(position)
+        // this.oscillator.type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
 
-            // if(d > this.range) {
-            
-            //     if(this.gain.gain.value == 0) return
-            //     this.gain.gain.setValueAtTime(0, delta)
-            // }
-            // else {
 
-            //     let gain = M.map(d, 0, this.range, .7, 0)
-            //     if(this.gain.gain.value == gain) return
-            //     this.gain.gain.setValueAtTime(gain, delta)
-            // }
-        }
+        // const d = this.position.distanceTo(position)
+
+        // if(d > this.range) {
+        
+        //     if(this.gain.gain.value == 0) return
+        //     this.gain.gain.setValueAtTime(0, delta)
+        // }
+        // else {
+
+        //     let gain = M.map(d, 0, this.range, .7, 0)
+        //     if(this.gain.gain.value == gain) return
+        //     this.gain.gain.setValueAtTime(gain, delta)
+        // }
     }
+}

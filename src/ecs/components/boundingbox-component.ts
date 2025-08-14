@@ -3,6 +3,7 @@ import { Component } from "./component";
 
 
 export class BoundingboxComponent implements Component {
+    __componentBrand: true
 
     center: Vector3
 

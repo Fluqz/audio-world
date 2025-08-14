@@ -49,12 +49,79 @@ export const faceDisplacementShader = (amplitude: number, color: number) => {
         `,
         uniforms: {
 
-            time: { value: 1.0 },
             resolution: { value: new Vector2() },
             ...options
         } 
     })
 }
+
+
+
+// export const faceDisplacementShader = (amplitude: number, color: number) => {
+
+//     let options = {
+
+//         'amplitude': { value: amplitude },
+//         'color': { value: new Color( color ) },
+//     }
+//     const uniforms = {
+
+//         resolution: { value: new Vector2() },
+//         ...options
+//     } 
+
+//     const m = new MeshStandardMaterial({
+
+//         color: 0xffffff,
+//         roughness: 0.5,
+//         metalness: 0.5,
+//     })
+
+//     m.userData.customUniforms = uniforms
+
+//     m.onBeforeCompile = (shader) => {
+
+//         console.log(shader)
+
+//     //     shader.vertexShader = `
+
+//     //         uniform float amplitude;
+
+//     //         varying vec3 vNormal;
+//     //         varying vec2 vUv;
+
+//     //         void main() {
+
+//     //             vNormal = normal;
+//     //             vUv = ( 0.5 + amplitude ) * uv + vec2( amplitude );
+
+//     //             vec3 newPosition = position + amplitude * normal * vec3( 0.02 );
+//     //             gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+//     //         }
+//     //     `
+
+//     //     shader.fragmentShader = `
+
+//     //         varying vec3 vNormal;
+//     //         varying vec2 vUv;
+
+//     //         uniform vec3 color;
+
+//     //         void main() {
+
+//     //             vec3 light = vec3( 0.5, 0.2, 1.0 );
+//     //             light = normalize( light );
+
+//     //             float dProd = dot( vNormal, light ) * 0.5 + 0.5;
+
+//     //             gl_FragColor = vec4( vec3( dProd ) * vec3( color ), 1.0 );
+
+//     //         }
+//     //     `
+//     }
+
+//     return m
+// }
 
 export const fluidSimulationMaterial = (w, h,) => {
         

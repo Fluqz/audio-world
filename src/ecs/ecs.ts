@@ -3,14 +3,15 @@ import { Entity } from "./entity";
 import { System } from "./systems/system";
 import { ScriptComponent } from "./components/script-component";
 import { TagComponent } from "./components/tag-component";
+import { NameComponent } from "./components/name-component";
 
 
 export class ECS {
 
     private nextEntityId: Entity = 0
-    private entities: Set<Entity> = new Set()
-    private componentStores: Map<Function, ComponentStore<any>> = new Map()
-    private systems: System[] = []
+    public entities: Set<Entity> = new Set()
+    public componentStores: Map<Function, ComponentStore<any>> = new Map()
+    public systems: System[] = []
 
     createEntity(): Entity {
         const id = this.nextEntityId++
@@ -55,6 +56,19 @@ export class ECS {
 
     getComponent<T extends Component>(entity: Entity, componentClass: ComponentClass<T>): T | undefined {
         return this.componentStores.get(componentClass)?.get(entity);
+    }
+
+    getAllComponents(entity: Entity) : Component[] {
+
+        const components: Component[] = []
+        for(let [componentClass, store] of this.componentStores.entries()) {
+
+            const comp: Component = store.get(entity)
+
+            if(comp) components.push(comp)
+        }
+
+        return components
     }
 
     removeComponent<T extends Component>(entity: Entity, componentClass: ComponentClass<T>): void {
@@ -103,6 +117,11 @@ export class ECS {
                 yield [entity, components];
             }
         }
+    }
+
+    addName(entity: Entity, name: string): void {
+
+        this.addComponent(entity, new NameComponent(name))
     }
 
     addTag(entity: Entity, tagName: string): void {

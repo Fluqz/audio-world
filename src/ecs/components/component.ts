@@ -1,9 +1,14 @@
 import { ECS } from "../ecs";
 import { Entity } from "../entity";
 
+export type ComponentData = {}
 
 export interface Component {
+    __componentBrand: true; // Marker field - Typescritp structural overlap compromise
+    
     // onDestroy?(entity: Entity, ecs: ECS): void;
+
+    serialize?() : ComponentData
 }
 
 export type ComponentClass<T extends Component> = new (...args: any[]) => T;

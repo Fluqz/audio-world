@@ -4,6 +4,7 @@ import { ThirdPersonControl } from "../third-person-controls";
 
 
 export class ThirdPersonControllerComponent implements Component {
+    __componentBrand: true
 
     /** vector 3 storing the force */
     force = new Vector3()

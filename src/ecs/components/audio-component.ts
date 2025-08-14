@@ -4,6 +4,7 @@ import { AudioSourceComponent } from "./audio-source-component";
 import { Component } from "./component";
 
 export class AudioComponent implements Component {
+    __componentBrand: true
 
     source: AudioSourceComponent
 

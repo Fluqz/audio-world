@@ -5,5 +5,10 @@ class TagComponent {
     constructor(tagName) {
         this.tagName = tagName;
     }
+    serialize() {
+        return {
+            tagName: this.tagName
+        };
+    }
 }
 exports.TagComponent = TagComponent;

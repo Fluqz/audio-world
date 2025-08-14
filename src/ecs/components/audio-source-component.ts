@@ -6,6 +6,7 @@ import { Instrument, InstrumentOptions } from "tone/build/esm/instrument/Instrum
 export type AudioSource = Source<SourceOptions> | Instrument<InstrumentOptions>
 
 export class AudioSourceComponent implements Component {
+    __componentBrand: true
 
     source: AudioSource
     envelope: Tone.AmplitudeEnvelope

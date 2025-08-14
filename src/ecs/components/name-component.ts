@@ -1,19 +1,19 @@
 import { Component, ComponentData } from "./component";
 
-export class TagComponent implements Component {
+export class NameComponent implements Component {
     __componentBrand: true
 
-    tagName: string
+    name: string
 
-    constructor(tagName: string) {
+    constructor(name: string) {
 
-        this.tagName = tagName
+        this.name = name
     }
 
     serialize(): ComponentData {
         
         return {
-            tagName: this.tagName
+            name: this.name
         }
     }
 }

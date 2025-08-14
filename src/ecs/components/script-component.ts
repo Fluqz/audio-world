@@ -10,6 +10,7 @@ export interface Script {
 }
 
 export class ScriptComponent implements Component {
+    __componentBrand: true
 
     scripts: Script[]
 

@@ -176,6 +176,7 @@ export class Game {
                     (Math.random() * 2 * Math.PI),
                     0
                 )
+                
                 transform.needsUpdate = true
             }
         }
