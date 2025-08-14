@@ -1,7 +1,7 @@
 import { Object3D, Mesh, Box3, Vector3 } from "three"
 import { MeshBVH } from "three-mesh-bvh"
 import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass"
-import { Game } from "../../src/game/game"
+import { Game } from "../../client/game"
 import { Component } from "./component"
 import { rtMaterial as RT_MATERIAL } from "../../shared/data/material";
 

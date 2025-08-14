@@ -1,6 +1,6 @@
-import { Entity } from "../../core/entity";
-import { ECS } from "../../core/ecs";
-import { TransformationComponent } from "../../core/components/transformation-component";
+import { Entity } from "../ecs/entity";
+import { ECS } from "../ecs/ecs";
+import { TransformationComponent } from "../ecs/components/transformation-component";
 
 // ecs-world.js (server)
 export class World {

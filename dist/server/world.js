@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
-const transformation_component_1 = require("../../core/components/transformation-component");
+const transformation_component_1 = require("../../ecs/components/transformation-component");
 // ecs-world.js (server)
 class World {
     constructor() {

@@ -1,1 +1,1 @@
-{"version":3,"file":"system.js","sourceRoot":"","sources":["../../../../src/core/systems/system.ts"],"names":[],"mappings":";;;AAEA,MAAsB,MAAM;CAE3B;AAFD,wBAEC"}
+{"version":3,"file":"system.js","sourceRoot":"","sources":["../../../../src/ecs/systems/system.ts"],"names":[],"mappings":";;;AAEA,MAAsB,MAAM;CAE3B;AAFD,wBAEC"}

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GraphicsComponent = void 0;
 const three_1 = require("three");
-const game_1 = require("../../game/game");
+const game_1 = require("../../client/game");
 class GraphicsComponent {
     constructor(object) {
         this.object = object;

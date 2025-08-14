@@ -1,6 +1,6 @@
 import { Object3D, PerspectiveCamera, Vector3 } from "three";
 import { Component } from "./component";
-import { ThirdPersonControl } from "../third-person-controls";
+import { ThirdPersonControl } from "../../shared/third-person-controls";
 
 
 export class ThirdPersonControllerComponent implements Component {

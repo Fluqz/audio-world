@@ -27,7 +27,7 @@ exports.AudioSystem = void 0;
 const system_1 = require("./system");
 const audio_component_1 = require("../components/audio-component");
 const transformation_component_1 = require("../components/transformation-component");
-const game_1 = require("../../game/game");
+const game_1 = require("../../client/game");
 const Tone = __importStar(require("tone"));
 class AudioSystem extends system_1.System {
     // Master should not be in game should it?

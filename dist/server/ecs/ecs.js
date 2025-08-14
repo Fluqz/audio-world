@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ECS = void 0;
-const component_1 = require("../core/components/component");
+const component_1 = require("./components/component");
 const script_component_1 = require("./components/script-component");
 const tag_component_1 = require("./components/tag-component");
 class ECS {

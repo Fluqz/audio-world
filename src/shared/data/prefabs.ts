@@ -1,23 +1,23 @@
 import * as THREE from "three";
 import * as Tone from "tone";
 import { getScale, getNote, AEOLIAN_SCALE, DORIAN_SCALE, CUSTOM_SCALE } from "./note-frequencies";
-import { Game } from "../../src/game/game";
+import { Game } from "../../client/game";
 import { AffectionScript } from "./scripts/affection.script";
 import { Utils } from "../util/utils";
 import { TraceScript } from "./scripts/trace.script";
 
 import { drum_fills_samples, factory_samples } from './sample-db'
 import { AssetManager } from "../asset-manager";
-import { AnimationComponent } from "../../core/components/animation-component";
-import { AudioComponent } from "../../core/components/audio-component";
-import { AudioListenerComponent } from "../../core/components/audio-listener-component";
-import { AudioSourceComponent } from "../../core/components/audio-source-component";
-import { GraphicsComponent } from "../../core/components/graphics-component";
-import { ScriptComponent } from "../../core/components/script-component";
-import { TagComponent } from "../../core/components/tag-component";
-import { ThirdPersonControllerComponent } from "../../core/components/third-person-controller-component";
-import { TransformationComponent } from "../../core/components/transformation-component";
-import { Entity } from "../../core/entity";
+import { AnimationComponent } from "../../ecs/components/animation-component";
+import { AudioComponent } from "../../ecs/components/audio-component";
+import { AudioListenerComponent } from "../../ecs/components/audio-listener-component";
+import { AudioSourceComponent } from "../../ecs/components/audio-source-component";
+import { GraphicsComponent } from "../../ecs/components/graphics-component";
+import { ScriptComponent } from "../../ecs/components/script-component";
+import { TagComponent } from "../../ecs/components/tag-component";
+import { ThirdPersonControllerComponent } from "../../ecs/components/third-person-controller-component";
+import { TransformationComponent } from "../../ecs/components/transformation-component";
+import { Entity } from "../../ecs/entity";
 
 import { faceDisplacementShader } from "../data/material";
 

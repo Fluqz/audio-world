@@ -1,1 +1,1 @@
-{"version":3,"file":"audio-listener-component.js","sourceRoot":"","sources":["../../../../src/core/components/audio-listener-component.ts"],"names":[],"mappings":";;;AAGA,MAAa,sBAAsB;IAI/B,YAAY,SAAkC;QAE1C,IAAI,CAAC,SAAS,GAAG,SAAS,CAAA;IAC9B,CAAC;CACJ;AARD,wDAQC"}
+{"version":3,"file":"audio-listener-component.js","sourceRoot":"","sources":["../../../../src/ecs/components/audio-listener-component.ts"],"names":[],"mappings":";;;AAGA,MAAa,sBAAsB;IAI/B,YAAY,SAAkC;QAE1C,IAAI,CAAC,SAAS,GAAG,SAAS,CAAA;IAC9B,CAAC;CACJ;AARD,wDAQC"}

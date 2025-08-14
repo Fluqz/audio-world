@@ -32,15 +32,15 @@ const asset_manager_1 = require("../shared/asset-manager");
 const input_1 = require("../shared/input");
 const prefabs_1 = require("../shared/data/prefabs");
 const utils_1 = require("../shared/util/utils");
-const third_person_controller_system_1 = require("../../core/systems/third-person-controller-system");
-const animation_system_1 = require("../../core/systems/animation-system");
-const audio_system_1 = require("../../core/systems/audio-system");
-const render_system_1 = require("../../core/systems/render-system");
-const script_system_1 = require("../../core/systems/script-system");
-const ecs_1 = require("../../core/ecs");
+const third_person_controller_system_1 = require("../../ecs/systems/third-person-controller-system");
+const animation_system_1 = require("../../ecs/systems/animation-system");
+const audio_system_1 = require("../../ecs/systems/audio-system");
+const render_system_1 = require("../../ecs/systems/render-system");
+const script_system_1 = require("../../ecs/systems/script-system");
+const ecs_1 = require("../../ecs/ecs");
 const render_manager_1 = require("../client/render-manager");
-const transformation_component_1 = require("../../core/components/transformation-component");
-const audio_listener_component_1 = require("../../core/components/audio-listener-component");
+const transformation_component_1 = require("../../ecs/components/transformation-component");
+const audio_listener_component_1 = require("../../ecs/components/audio-listener-component");
 class Game {
     constructor(dom) {
         this.backgroundColor = 0xffFF00; // ffe5b9 0xf4eedb 0xffe800

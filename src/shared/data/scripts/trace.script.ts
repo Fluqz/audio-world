@@ -1,11 +1,11 @@
 import { BufferGeometry, Line, LineBasicMaterial, Vector2, Vector3 } from "three";
 
-import { Script } from "../../../core/components/script-component";
-import { TransformationComponent } from "../../../core/components/transformation-component";
-import { Game } from "../../../src/game/game";
+import { Script } from "../../../ecs/components/script-component";
+import { TransformationComponent } from "../../../ecs/components/transformation-component";
+import { Game } from "../../../client/game";
 import { Utils } from "../../util/utils";
-import { ECS } from "../../../core/ecs";
-import { Entity } from "../../../core/entity";
+import { ECS } from "../../../ecs/ecs";
+import { Entity } from "../../../ecs/entity";
 
 
 /** Script class that draws a path which shows the way the entity was moving. */
