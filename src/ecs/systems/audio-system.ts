@@ -3,7 +3,7 @@ import { AudioComponent } from "../components/audio-component";
 import { TransformationComponent } from "../components/transformation-component";
 import { AudioListenerComponent } from "../components/audio-listener-component";
 import { ECS } from '../ecs';
-import { Game } from "../../src/game/game";
+import { Game } from "../../game/game";
 import { Entity } from "../entity";
 import * as Tone  from "tone";
 

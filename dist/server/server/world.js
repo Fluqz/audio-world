@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
-const transformation_component_1 = require("../core/components/transformation-component");
+const transformation_component_1 = require("../ecs/components/transformation-component");
 // ecs-world.js (server)
 class World {
     constructor() {
@@ -23,11 +23,10 @@ class World {
         // Game-specific input handling that modifies ECS components
     }
     serializeState() {
-        return this.players.map(p => ({
+        return this.players.forEach(p => ({
             id: p,
             position: this.ecs.getComponent(p, transformation_component_1.TransformationComponent),
         }));
     }
 }
 exports.World = World;
-//# sourceMappingURL=world.js.map

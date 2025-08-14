@@ -4,10 +4,9 @@
     "module": "CommonJS",        // keep or adjust based on your environment
     "lib": ["ES2015"],
     "outDir": "./dist/server",
-    "rootDir": "./src/server",
+    "rootDir": "./src",
     "strict": false,
     "noImplicitAny": false,
-    "suppressImplicitAnyIndexErrors": true,
     "strictNullChecks": false,
     "downlevelIteration": true,
     "skipLibCheck": true,

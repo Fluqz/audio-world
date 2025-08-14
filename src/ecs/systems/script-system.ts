@@ -1,6 +1,6 @@
 import { ECS } from "../ecs";
 import { Entity } from "../entity";
-import { System } from "../systems/system";
+import { System } from "./system";
 import { ScriptComponent } from "../components/script-component";
 
 export class ScriptSystem extends System {

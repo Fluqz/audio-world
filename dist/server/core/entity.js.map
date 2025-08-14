@@ -1,1 +1,1 @@
-{"version":3,"file":"entity.js","sourceRoot":"","sources":["../../../src/core/entity.ts"],"names":[],"mappings":""}
+{"version":3,"file":"entity.js","sourceRoot":"","sources":["../../../src/ecs/entity.ts"],"names":[],"mappings":""}

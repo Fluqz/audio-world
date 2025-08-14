@@ -1,6 +1,6 @@
-import { Component, ComponentClass, ComponentStore} from "../core/components/component";
-import { Entity } from "../core/entity";
-import { System } from "../core/systems/system";
+import { Component, ComponentClass, ComponentStore} from "./components/component";
+import { Entity } from "./entity";
+import { System } from "./systems/system";
 import { ScriptComponent } from "./components/script-component";
 import { TagComponent } from "./components/tag-component";
 

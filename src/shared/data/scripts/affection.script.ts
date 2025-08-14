@@ -1,12 +1,12 @@
 import { BufferGeometry, Line, LineDashedMaterial, Mesh, ShaderMaterial, Vector2, Vector3 } from "three";
-import { Game } from "../../../src/game/game";
-import { AudioComponent } from "../../../core/components/audio-component";
+import { Game } from "../../../game/game";
+import { AudioComponent } from "../../../ecs/components/audio-component";
 import { Utils } from "../../util/utils";
-import { ECS } from "../../../core/ecs";
-import { TransformationComponent } from "../../../core/components/transformation-component";
-import { GraphicsComponent } from "../../../core/components/graphics-component";
-import { Entity } from "../../../core/entity";
-import { Script } from "../../../core/components/script-component";
+import { ECS } from "../../../ecs/ecs";
+import { TransformationComponent } from "../../../ecs/components/transformation-component";
+import { GraphicsComponent } from "../../../ecs/components/graphics-component";
+import { Entity } from "../../../ecs/entity";
+import { Script } from "../../../ecs/components/script-component";
 
 const lineMaterial = new LineDashedMaterial()
 

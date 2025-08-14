@@ -1,6 +1,6 @@
 import { Box3, Object3D, Vector3 } from "three";
 import { Component } from "./component";
-import { Game } from "../../src/game/game";
+import { Game } from "../../game/game";
 
 
 export class GraphicsComponent implements Component {

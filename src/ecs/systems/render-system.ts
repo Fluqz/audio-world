@@ -1,4 +1,4 @@
-import { RenderManager } from "../../src/client/render-manager";
+import { RenderManager } from "../../client/render-manager";
 import { GraphicsComponent } from "../components/graphics-component"
 import { TransformationComponent } from "../components/transformation-component";
 import { ECS } from "../ecs";
