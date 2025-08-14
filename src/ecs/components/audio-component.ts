@@ -13,7 +13,9 @@ export class AudioComponent implements Component {
 
     output: Tone.ToneAudioNode
 
-    connected: boolean
+    isConnected: boolean
+
+    isMuted: boolean
 
     constructor(source: AudioSourceComponent, effects?: AudioEffectComponent[], range?:number) {
 
@@ -27,14 +29,14 @@ export class AudioComponent implements Component {
         this.output = source.output
         // else this.output = effects[effects.length-1].output
 
-        this.connected = false
+        this.isConnected = false
     }
 
     connect(node: Tone.ToneAudioNode) {
 
         this.output.connect(node)
 
-        this.connected = true
+        this.isConnected = true
     }
 
     disconnect(node?: Tone.ToneAudioNode) {
@@ -42,6 +44,6 @@ export class AudioComponent implements Component {
         if(node) this.output.disconnect(node)
         else this.output.disconnect()
 
-        this.connected = false
+        this.isConnected = false
     }
 }

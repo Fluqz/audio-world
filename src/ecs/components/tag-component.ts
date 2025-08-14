@@ -6,6 +6,6 @@ export class TagComponent implements Component {
 
     constructor(tagName: string) {
 
-        tagName = tagName
+        this.tagName = tagName
     }
 }

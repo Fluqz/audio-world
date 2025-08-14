@@ -20,6 +20,7 @@ import { TransformationComponent } from "../../ecs/components/transformation-com
 import { Entity } from "../../ecs/entity";
 
 import { faceDisplacementShader } from "../data/material";
+import { VelocityComponent } from "../../ecs/components/velocity-component";
 
 
 
@@ -47,6 +48,7 @@ export const Prefabs = {
         
         ecs.addComponent(e, new TagComponent('Player'))
         ecs.addComponent(e, t)
+        ecs.addComponent(e, new VelocityComponent())
         ecs.addComponent(e, new GraphicsComponent(m))
         ecs.addComponent(e, new AudioListenerComponent(t))
 
@@ -73,6 +75,7 @@ export const Prefabs = {
         m.receiveShadow = true
         ecs.addComponent(e, new GraphicsComponent(m))
 
+        ecs.addComponent(e, new VelocityComponent())
         ecs.addComponent(e, new AudioListenerComponent(t))
         ecs.addComponent(e, new ScriptComponent(new TraceScript()))
         ecs.addComponent(e, new ThirdPersonControllerComponent(Game.i.manager.camera, Game.i.dom))
@@ -120,7 +123,7 @@ export const Prefabs = {
         const o = new Tone.Oscillator(sourceOptions)
         o.start()
         ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(o, .5, 0), undefined, 100))
-        // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
         return e
     },
@@ -168,7 +171,7 @@ export const Prefabs = {
         }
 
         ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
-        // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
 
         return e
@@ -207,7 +210,7 @@ export const Prefabs = {
         player.loop = true
 
         ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 100))
-        // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
         return e
     },
@@ -246,7 +249,7 @@ export const Prefabs = {
         player.loop = true
 
         ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 100))
-        // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
         return e
     },
@@ -283,7 +286,7 @@ export const Prefabs = {
         }
 
         ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
-        // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
         return e
     }

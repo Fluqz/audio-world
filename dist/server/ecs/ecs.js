@@ -36,6 +36,9 @@ class ECS {
         }
         this.entities.delete(entity);
     }
+    entityExists(entity) {
+        return this.entities.has(entity);
+    }
     addComponent(entity, component) {
         const type = component.constructor;
         if (!this.componentStores.has(type)) {
@@ -97,11 +100,10 @@ class ECS {
         const tagStore = this.componentStores.get(tag_component_1.TagComponent);
         if (!tagStore)
             return;
-        console.log('tagStores', tagStore);
         const [entities] = tagStore.getAll();
         for (const entity of entities) {
             const tag = tagStore.get(entity);
-            if (!tag || tag.tag !== tagName)
+            if (!tag || tag.tagName !== tagName)
                 continue;
             // If no components requested, just return the entity
             if (componentClasses.length === 0) {

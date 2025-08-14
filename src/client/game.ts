@@ -19,6 +19,9 @@ import { Input } from '../shared/input'
 import { Prefabs } from '../shared/data/prefabs'
 import { AssetManager } from '../shared/asset-manager'
 import { Utils } from '../shared/util/utils'
+import { Octree } from '../ecs/octree'
+import { MovementSystem } from '../ecs/systems/movement-system'
+import { SpatialSystem } from '../ecs/systems/spatial-system'
 
 
 export class Game {
@@ -28,6 +31,9 @@ export class Game {
     public dom: HTMLElement
 
     public ecs: ECS
+    public octree: Octree
+
+    public player: Entity
 
     public manager: RenderManager
 
@@ -35,7 +41,6 @@ export class Game {
 
     private updateClock: THREE.Clock
     private fixedUpdateClock: THREE.Clock
-
     private backgroundColor = 0xffFF00 // ffe5b9 0xf4eedb 0xffe800
     
     private AFID: number
@@ -55,6 +60,8 @@ export class Game {
 
         // Init ECS
         this.ecs = new ECS()
+
+        this.octree = new Octree(new THREE.Vector3(-500, -500, -500), new THREE.Vector3(500, 500, 500))
 
         // Init RenderManager
         this.manager = new RenderManager()
@@ -115,7 +122,7 @@ export class Game {
         console.log('INIT')
 
         // Create Player
-        let player = Prefabs.ControllablePlayer()
+        this.player = Prefabs.ControllablePlayer()
 
         this.fixedUpdateClock = new THREE.Clock()
         this.updateClock = new THREE.Clock()
@@ -124,14 +131,7 @@ export class Game {
 
             return new Promise((resolve) => {
                 
-                this.ecs.registerSystem(new FirstPersonControllerSystem())
-                this.ecs.registerSystem(new AnimationSystem())
-                this.ecs.registerSystem(new RenderSystem(this.ecs, this.manager))
-
-                const audioListener = this.ecs.getComponent<AudioListenerComponent>(player, AudioListenerComponent) as AudioListenerComponent
-                this.ecs.registerSystem(new AudioSystem(audioListener))
-
-                this.ecs.registerSystem(new ScriptSystem())
+                this.registerSystems()
 
                 this.loop()
 
@@ -139,6 +139,21 @@ export class Game {
                 resolve(null)
             })
         })
+    }
+
+    registerSystems() {
+
+        this.ecs.registerSystem(new SpatialSystem(this.octree))
+        this.ecs.registerSystem(new MovementSystem())
+        this.ecs.registerSystem(new FirstPersonControllerSystem())
+        this.ecs.registerSystem(new AnimationSystem())
+        this.ecs.registerSystem(new RenderSystem(this.ecs, this.manager))
+
+        const audioListener = this.ecs.getComponent<AudioListenerComponent>(this.player, AudioListenerComponent) as AudioListenerComponent
+        this.ecs.registerSystem(new AudioSystem(this.octree, audioListener))
+
+        this.ecs.registerSystem(new ScriptSystem())
+
     }
 
     private instanciateRandomly(instaciateFunc: () => Entity, amount: number, range: number) {
@@ -290,11 +305,11 @@ export class Game {
 
 
             // this.instanciateRandomly(Prefabs.Tree, 50, 80)
-            // this.instanciateRandomly(Prefabs.Stone, 1, 20)
+            this.instanciateRandomly(Prefabs.Stone, 5, 50)
 
-            this.instanciateRandomly(Prefabs.Tree, 200, 500)
+            // this.instanciateRandomly(Prefabs.Tree, 200, 500)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
-            this.instanciateRandomly(Prefabs.Stone, 200, 500)
+            // this.instanciateRandomly(Prefabs.Stone, 200, 500)
             // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
 
 

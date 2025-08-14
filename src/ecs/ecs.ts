@@ -7,15 +7,15 @@ import { TagComponent } from "./components/tag-component";
 
 export class ECS {
 
-    private nextEntityId: Entity = 0;
-    private entities: Set<Entity> = new Set();
-    private componentStores: Map<Function, ComponentStore<any>> = new Map();
-    private systems: System[] = [];
+    private nextEntityId: Entity = 0
+    private entities: Set<Entity> = new Set()
+    private componentStores: Map<Function, ComponentStore<any>> = new Map()
+    private systems: System[] = []
 
     createEntity(): Entity {
-        const id = this.nextEntityId++;
-        this.entities.add(id);
-        return id;
+        const id = this.nextEntityId++
+        this.entities.add(id)
+        return id
     }
 
     destroyEntity(entity: Entity): void {
@@ -39,6 +39,10 @@ export class ECS {
         }
 
         this.entities.delete(entity);
+    }
+
+    entityExists(entity: Entity): boolean {
+        return this.entities.has(entity);
     }
 
     addComponent<T extends Component>(entity: Entity, component: T): void {
@@ -118,10 +122,8 @@ export class ECS {
                         ): Iterable<[Entity, T]> {
 
                             
-        const tagStore = this.componentStores.get(TagComponent);
+        const tagStore: ComponentStore<TagComponent> = this.componentStores.get(TagComponent);
         if (!tagStore) return;
-
-        console.log('tagStores', tagStore)
 
         const [entities] = tagStore.getAll();
 
@@ -129,7 +131,7 @@ export class ECS {
 
             const tag = tagStore.get(entity);
 
-            if (!tag || tag.tag !== tagName) continue;
+            if (!tag || tag.tagName !== tagName) continue;
 
             // If no components requested, just return the entity
             if (componentClasses.length === 0) {

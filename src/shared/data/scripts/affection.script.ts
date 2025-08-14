@@ -47,12 +47,10 @@ export class AffectionScript implements Script {
 
     public start(entity: Entity, ecs: ECS) {
             
-        console.log('YOOOOOOOOOO', ecs.getTaggedEntity('ControllablePlayer'))
-        const [p] = ecs.getTaggedEntity('ControllablePlayer')
+        const [p, [pTransform]] = ecs.getTaggedEntity<[TransformationComponent]>('ControllablePlayer', TransformationComponent)
         this.player = p
 
-        
-        this.playerTransform = ecs.getComponent(this.player, TransformationComponent)
+        this.playerTransform = pTransform
         this.transform = ecs.getComponent(entity, TransformationComponent)
         this.audio = ecs.getComponent(entity, AudioComponent)
         this.graphics = ecs.getComponent(entity, GraphicsComponent)
@@ -76,16 +74,13 @@ export class AffectionScript implements Script {
 
     update(entity: Entity, ecs: ECS) {
 
-        console.log('YOOO')
-
-        const [p] = ecs.getTaggedEntity('ControllablePlayer')
+        const [p, [pTransform]] = ecs.getTaggedEntity<[TransformationComponent]>('ControllablePlayer', TransformationComponent)
         this.player = p
-        this.playerTransform = ecs.getComponent(this.player, TransformationComponent)
+
+        this.playerTransform = pTransform
         this.transform = ecs.getComponent(entity, TransformationComponent)
         this.audio = ecs.getComponent(entity, AudioComponent)
         this.graphics = ecs.getComponent(entity, GraphicsComponent)
-
-        console.log(this.transform.position)
 
         // return
         distance = this.playerTransform.position.distanceTo(this.transform.position)
@@ -115,11 +110,11 @@ export class AffectionScript implements Script {
         }
         else { // In range
 
-            p1.copy(this.transform.position).setY(this.entitySize.y * .25)
+            p1.copy(this.transform.position).setY(this.entitySize.y)
             p2.copy(this.transform.position).add(randomNormal())
             p3.copy(p2).add(randomNormal())
             p4.copy(p3).add(randomNormal())
-            p5.copy(this.playerTransform.position).setY(.5)
+            p5.copy(this.playerTransform.position).setY(.3)
         
             this.geometry.setFromPoints(this.points)
 
