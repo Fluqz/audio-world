@@ -1,5 +1,5 @@
 import { BufferGeometry, Line, LineDashedMaterial, Mesh, ShaderMaterial, Vector2, Vector3 } from "three";
-import { Game } from "../../../game/game";
+import { Game } from "../../../client/game";
 import { AudioComponent } from "../../../ecs/components/audio-component";
 import { Utils } from "../../util/utils";
 import { ECS } from "../../../ecs/ecs";

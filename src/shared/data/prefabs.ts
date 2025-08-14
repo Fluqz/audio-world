@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import * as Tone from "tone";
 import { getScale, getNote, AEOLIAN_SCALE, DORIAN_SCALE, CUSTOM_SCALE } from "./note-frequencies";
-import { Game } from "../../game/game";
+import { Game } from "../../client/game";
 import { AffectionScript } from "./scripts/affection.script";
 import { Utils } from "../util/utils";
 import { TraceScript } from "./scripts/trace.script";

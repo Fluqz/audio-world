@@ -2,7 +2,7 @@ import { BufferGeometry, Line, LineBasicMaterial, Vector2, Vector3 } from "three
 
 import { Script } from "../../../ecs/components/script-component";
 import { TransformationComponent } from "../../../ecs/components/transformation-component";
-import { Game } from "../../../game/game";
+import { Game } from "../../../client/game";
 import { Utils } from "../../util/utils";
 import { ECS } from "../../../ecs/ecs";
 import { Entity } from "../../../ecs/entity";
