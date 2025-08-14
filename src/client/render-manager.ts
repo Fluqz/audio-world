@@ -7,7 +7,7 @@ export class RenderManager {
     camera: THREE.PerspectiveCamera
     renderer: THREE.WebGLRenderer
 
-    private backgroundColor = 0xffFF00 // ffe5b9 0xf4eedb 0xffe800
+    private backgroundColor = 0xffe800 // ffe5b9 0xf4eedb 0xffe800
 
     constructor() {
         
