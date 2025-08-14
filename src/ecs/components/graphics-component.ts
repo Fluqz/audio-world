@@ -3,7 +3,7 @@ import { FullScreenQuad } from "three/examples/jsm/postprocessing/Pass"
 import { Game } from "../../client/game"
 import { Component } from "./component"
 import { rtMaterial as RT_MATERIAL } from "../../shared/data/material";
-import { Box3, Object3D, Vector3 } from "three";
+import { Box3, Mesh, Object3D, Vector3 } from "three";
 
 
 export class GraphicsComponent implements Component {
