@@ -1,0 +1,16 @@
+{
+  "name": "DeadTree",
+  "components": {
+    "TagComponent": { "tagName": "DeadTree" },
+    "TransformationComponent": {
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0, "XYZ"],
+      "quaternion": [0, 0, 0, 1],
+      "scale": [1, 1.2511888514467526, 1]
+    },
+    "GraphicsComponent": null,
+    "ScriptComponent": null,
+    "AnimationComponent": null,
+    "AudioComponent": null
+  }
+}

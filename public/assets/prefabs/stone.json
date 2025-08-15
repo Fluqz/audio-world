@@ -1,0 +1,16 @@
+{
+    "name": "Stone",
+    "components": {
+        "TagComponent": { "tagName": "Stone" },
+        "TransformationComponent": {
+            "position": [0, 0, 0],
+            "rotation": [0, 0, 0, "XYZ"],
+            "quaternion": [0, 0, 0, 1],
+            "scale": [0, 1.2628441660101353, 0]
+        },
+        "GraphicsComponent": null,
+        "ScriptComponent": null,
+        "AnimationComponent": null,
+        "AudioComponent": null
+    }
+}

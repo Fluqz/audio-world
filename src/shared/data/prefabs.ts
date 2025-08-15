@@ -9,18 +9,19 @@ import { TraceScript } from "./scripts/trace.script";
 import { drum_fills_samples, factory_samples } from './sample-db'
 import { AssetManager } from "../asset-manager";
 import { AnimationComponent } from "../../ecs/components/animation-component";
-import { AudioComponent } from "../../ecs/components/audio-component";
-import { AudioListenerComponent } from "../../ecs/components/audio-listener-component";
-import { AudioSourceComponent } from "../../ecs/components/audio-source-component";
+import { AudioListenerComponent } from "../../ecs/components/audio/audio-listener-component";
 import { GraphicsComponent } from "../../ecs/components/graphics-component";
 import { ScriptComponent } from "../../ecs/components/script-component";
 import { TagComponent } from "../../ecs/components/tag-component";
 import { ThirdPersonControllerComponent } from "../../ecs/components/third-person-controller-component";
 import { TransformationComponent } from "../../ecs/components/transformation-component";
+import { AudibleRadiusComponent } from "../../ecs/components/audio/audible-radius-component";
 import { Entity } from "../../ecs/entity";
 
 import { faceDisplacementShader } from "../data/material";
 import { VelocityComponent } from "../../ecs/components/velocity-component";
+import { OscillatorComponent } from "../../ecs/components/audio/oscillator-component";
+import { PlayerComponent } from "../../ecs/components/audio/player-component";
 
 
 
@@ -36,6 +37,10 @@ export const Prefabs = {
 
         const ecs = Game.i.ecs
 
+        const e = ecs.createEntity()
+
+        ecs.addTag(e, 'Player')
+
         let c = Utils.getRndColor()
 
         let t = new TransformationComponent()
@@ -44,13 +49,12 @@ export const Prefabs = {
         m.castShadow = true
         m.receiveShadow = true
 
-        const e = ecs.createEntity()
-        
         ecs.addComponent(e, new TagComponent('Player'))
         ecs.addComponent(e, t)
         ecs.addComponent(e, new VelocityComponent())
         ecs.addComponent(e, new GraphicsComponent(m))
-        ecs.addComponent(e, new AudioListenerComponent(t))
+        ecs.addComponent(e, new AudioListenerComponent('Player'))
+        ecs.addComponent(e, new AudibleRadiusComponent(100))
 
         return e
     },
@@ -76,9 +80,10 @@ export const Prefabs = {
         ecs.addComponent(e, new GraphicsComponent(m))
 
         ecs.addComponent(e, new VelocityComponent())
-        ecs.addComponent(e, new AudioListenerComponent(t))
+        ecs.addComponent(e, new AudioListenerComponent('ControllablePlayer'))
         ecs.addComponent(e, new ScriptComponent(new TraceScript()))
         ecs.addComponent(e, new ThirdPersonControllerComponent(Game.i.manager.camera, Game.i.dom))
+        ecs.addComponent(e, new AudibleRadiusComponent(100))
 
         return e
     },
@@ -115,15 +120,11 @@ export const Prefabs = {
         }))
 
         const type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
+        const frequency = getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), CUSTOM_SCALE)[Math.round(Math.random() * CUSTOM_SCALE.length)].frequency
 
-        let sourceOptions: OscillatorOptions = {
-            frequency: getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), CUSTOM_SCALE)[Math.round(Math.random() * CUSTOM_SCALE.length)].frequency,
-            type: type //'sine'
-        }
-        const o = new Tone.Oscillator(sourceOptions)
-        o.start()
-        ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(o, .5, 0), undefined, 100))
+        ecs.addComponent(e, new OscillatorComponent(type, frequency, 0))
         ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new AudibleRadiusComponent(100))
 
         return e
     },
@@ -170,8 +171,9 @@ export const Prefabs = {
             type: type //'sine'
         }
 
-        ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
-        ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        // ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
+        // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new AudibleRadiusComponent(100))
 
 
         return e
@@ -195,6 +197,7 @@ export const Prefabs = {
 
         ecs.addComponent(e, new GraphicsComponent(m))
         ecs.addComponent(e, new TransformationComponent())
+        ecs.addComponent(e, new AudibleRadiusComponent(100))
         ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
             // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
@@ -205,22 +208,19 @@ export const Prefabs = {
 
 
         const sample = drum_fills_samples[Math.round(Math.random() * drum_fills_samples.length - 1)]
-        const player = new Tone.Player(sample)
-        player.autostart = true
-        player.loop = true
 
-        ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 100))
+        ecs.addComponent(e, new PlayerComponent(sample, true))
         ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
         return e
     },
 
 
-    smallStone: () => {
+    crystal: () => {
 
         const ecs = Game.i.ecs
         const e = ecs.createEntity()
-        ecs.addComponent(e, new TagComponent('SmallStone'))
+        ecs.addComponent(e, new TagComponent('Crystal'))
 
         const max = 1
         // let m = new THREE.Mesh(new THREE.SphereGeometry(Math.random() * max, 64, 64), defShaderMaterial(1, 0x000000).clone())
@@ -244,12 +244,10 @@ export const Prefabs = {
 
 
         const sample = factory_samples[Math.round(Math.random() * factory_samples.length - 1)]
-        const player = new Tone.Player(sample)
-        player.autostart = true
-        player.loop = true
 
-        ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(player, .1, -10), undefined, 100))
+        ecs.addComponent(e, new PlayerComponent(sample, true))
         ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
+        ecs.addComponent(e, new AudibleRadiusComponent(100))
 
         return e
     },
@@ -285,7 +283,6 @@ export const Prefabs = {
             type: 'sine'
         }
 
-        ecs.addComponent(e, new AudioComponent(new AudioSourceComponent(new Tone.Oscillator(sourceOptions), .5, -10), undefined, 100))
         ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 
         return e

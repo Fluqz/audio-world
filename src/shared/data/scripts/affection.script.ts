@@ -1,12 +1,12 @@
 import { BufferGeometry, Line, LineDashedMaterial, Mesh, ShaderMaterial, Vector2, Vector3 } from "three";
 import { Game } from "../../../client/game";
-import { AudioComponent } from "../../../ecs/components/audio-component";
 import { Utils } from "../../util/utils";
 import { ECS } from "../../../ecs/ecs";
 import { TransformationComponent } from "../../../ecs/components/transformation-component";
 import { GraphicsComponent } from "../../../ecs/components/graphics-component";
 import { Entity } from "../../../ecs/entity";
 import { Script } from "../../../ecs/components/script-component";
+import { AudibleRadiusComponent } from "../../../ecs/components/audio/audible-radius-component";
 
 const lineMaterial = new LineDashedMaterial()
 
@@ -34,7 +34,7 @@ export class AffectionScript implements Script {
     private player: Entity
     private playerTransform: TransformationComponent
     private transform: TransformationComponent
-    private audio: AudioComponent
+    private audibleRange: AudibleRadiusComponent
     private graphics: GraphicsComponent
 
     private points: Vector3[]
@@ -52,7 +52,7 @@ export class AffectionScript implements Script {
 
         this.playerTransform = pTransform
         this.transform = ecs.getComponent(entity, TransformationComponent)
-        this.audio = ecs.getComponent(entity, AudioComponent)
+        this.audibleRange = ecs.getComponent(entity, AudibleRadiusComponent)
         this.graphics = ecs.getComponent(entity, GraphicsComponent)
 
         this.color = Utils.getRndColor()
@@ -74,19 +74,19 @@ export class AffectionScript implements Script {
 
     update(entity: Entity, ecs: ECS) {
 
-        const [p, [pTransform]] = ecs.getTaggedEntity<[TransformationComponent]>('ControllablePlayer', TransformationComponent)
+        const [p, [pTransform]] = ecs.getTaggedEntity('ControllablePlayer', TransformationComponent)
         this.player = p
 
         this.playerTransform = pTransform
         this.transform = ecs.getComponent(entity, TransformationComponent)
-        this.audio = ecs.getComponent(entity, AudioComponent)
+        this.audibleRange = ecs.getComponent(entity, AudibleRadiusComponent)
         this.graphics = ecs.getComponent(entity, GraphicsComponent)
 
         // return
         distance = this.playerTransform.position.distanceTo(this.transform.position)
 
         // Out of range
-        if(distance > this.audio.range) {
+        if(distance > this.audibleRange.radius) {
 
             // Game.world.scene.remove(line)
 

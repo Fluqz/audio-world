@@ -14,7 +14,7 @@ import { ECS } from '../ecs/ecs'
 import { RenderManager } from './render-manager'
 import { TransformationComponent } from '../ecs/components/transformation-component'
 import { Entity } from '../ecs/entity'
-import { AudioListenerComponent } from '../ecs/components/audio-listener-component'
+import { AudioListenerComponent } from '../ecs/components/audio/audio-listener-component'
 import { Input } from '../shared/input'
 import { Prefabs } from '../shared/data/prefabs'
 import { AssetManager } from '../shared/asset-manager'
@@ -22,6 +22,7 @@ import { Utils } from '../shared/util/utils'
 import { Octree } from '../ecs/octree'
 import { MovementSystem } from '../ecs/systems/movement-system'
 import { SpatialSystem } from '../ecs/systems/spatial-system'
+import { Prefab } from '../ecs/prefab'
 
 
 export class Game {
@@ -150,9 +151,13 @@ export class Game {
         this.ecs.registerSystem(new RenderSystem(this.ecs, this.manager))
 
         const audioListener = this.ecs.getComponent<AudioListenerComponent>(this.player, AudioListenerComponent) as AudioListenerComponent
-        this.ecs.registerSystem(new AudioSystem(this.octree, audioListener))
+        this.ecs.registerSystem(new AudioSystem(this.octree))
 
         this.ecs.registerSystem(new ScriptSystem())
+
+    }
+
+    setActiveScene() {
 
     }
 
@@ -281,104 +286,22 @@ export class Game {
                 resolve(null)
             }
 
-
-            // socket.on('connecting', (id: string, clients) => {
-
-            //     player.id = id
-
-            //     console.log('clients', clients)
-
-            //     // Array.from(clients).forEach(c => {
-
-            //     //     console.log(c)
-
-            //     //     let p = Prefabs.Player()
-            //     //     p.id = id
-            //     // })
-            // })
-
-            // socket.on('add-client', (id) => {
-
-            //     console.log('Add another player')
-            //     let p = Prefabs.Player()
-            //     p.id = id
-            // })
-
-
             // this.instanciateRandomly(Prefabs.Tree, 50, 80)
-            this.instanciateRandomly(Prefabs.Stone, 5, 50)
+            this.instanciateRandomly(Prefabs.Tree, 1, 50)
+            this.instanciateRandomly(Prefabs.Stone, 1, 50)
+            this.instanciateRandomly(Prefabs.crystal, 1, 50)
+            // this.instanciateRandomly(Prefabs.DeadTree, 1, 50)
+
+            // const treeJSON = this.ecs.loadPrefabFile(Globals.path + '/assets/prefabs/tree.json')
+
+            // const treePrefab: Prefab = JSON.parse(treeJSON)
+
+            // this.ecs.createFromPrefab(treePrefab)
 
             // this.instanciateRandomly(Prefabs.Tree, 200, 500)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
             // this.instanciateRandomly(Prefabs.Stone, 200, 500)
-            // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
-
-
-            // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
-            // AssetManager.load('https://hitpuzzle.b-cdn.net/06627.glb')
-            // AssetManager.load('https://hitpuzzle.b-cdn.net/LOWPOLY1%20(1).glb')
-
-        //     const trees: { entity: Entity, tree: Tree, state: 'DRAWN' | 'NEW' | 'DELETED' }[] = []
-        //     const forestGenerator = new ForestGenerator(range, range, 10)
-
-        //     forestGenerator.generateBaseForest()
-        //     forestGenerator.iterate()
-
-
-        //     const addTree = (tree: Tree) => {
-
-        //         let prefab = Prefabs.Tree()
-
-        //         trees.push({
-        //             entity: prefab,
-        //             tree: tree,
-        //             state: 'DRAWN'
-        //         })
-
-        //         let transform = prefab.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
-                
-        //         if (transform) {
-                    
-        //             transform.position.set(tree.position.x, 0, tree.position.y)
-        //             transform.needsUpdate = true
-        //         }
-                
-        //         let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
-                
-        //         const m = graphics.object as THREE.Mesh
-                
-        //         m.geometry.dispose()
-        //         m.geometry = new THREE.BoxGeometry(tree.diameter, tree.height, tree.diameter)
-        //     }
-
-        //     for (let t of forestGenerator.getTrees()) {
-                
-        //         addTree(t)
-        //     }
-
-
-        //     const appylNextGeneration = () => {
-
-        //         for (let tree of trees) {
-
-        //             Game.world.removeEntity(tree.entity)
-        //         }
-
-        //         for (let t of forestGenerator.getTrees()) {
-                    
-        //             addTree(t)
-        //         }
-
-        //         for(let s of Game.world.systems) s.initialize()
-        //     }
-
-        //     setInterval(() => {
-
-        //         forestGenerator.iterate()
-
-        //         appylNextGeneration()
-
-        //     }, 4000)
+            // this.instanciateRandomly(Prefabs.crystal, 100, 500)
 
             resolve(null)
 

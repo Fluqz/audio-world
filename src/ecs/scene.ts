@@ -1,12 +1,12 @@
 import { ECS } from "./ecs";
 import { Entity } from "./entity";
-import { Component, ComponentClass } from "./components/component";
+import { Component, ComponentClass, ComponentData } from "./components/component";
 import { componentRegistry } from "./components/registry"; // We'll make this below
 import { NameComponent } from "./components/name-component";
 
 export type SceneEntityData = {
     name?: string;
-    components: Record<string, any>;
+    components: ComponentData;
 };
 
 export type SceneData = {
@@ -67,20 +67,26 @@ export function loadScene(scene: SceneData, ecs: ECS): void {
     }
 }
 
-function* getAllEntitiesWithComponents(
-    ecs: ECS
-): Iterable<[Entity, Map<ComponentClass<Component>, Component>]> {
+function* getAllEntitiesWithComponents(ecs: ECS): Iterable<[Entity, Map<ComponentClass<Component>, Component>]> {
+
     const seen = new Set<Entity>();
 
     for (const [ComponentType, store] of (ecs as any).componentStores.entries()) {
+
         const [entities] = store.getAll();
+
         for (const entity of entities) {
+
             if (!seen.has(entity)) {
+
                 seen.add(entity);
 
                 const components = new Map<ComponentClass<Component>, Component>();
+
                 for (const [T, s] of (ecs as any).componentStores.entries()) {
+
                     if (s.has(entity)) {
+
                         components.set(T, s.get(entity));
                     }
                 }

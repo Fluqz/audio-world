@@ -49,11 +49,12 @@ const startGame = () => {
     }
     else {
 
-        game.ecs.entities.forEach((e: Entity) => {
+        // game.ecs.entities.forEach((e: Entity) => {
 
-            console.log(e, game.ecs.getAllComponents(e))
-        })
-        // console.log('Save', JSON.stringify(saveScene(game.ecs)))
+        //     console.log(e, game.ecs.getAllComponents(e))
+        // })
+
+        console.log('Save', JSON.stringify(saveScene(game.ecs)))
     }
 }
 document.addEventListener('pointerdown', startGame)

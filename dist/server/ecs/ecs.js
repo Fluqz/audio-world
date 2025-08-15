@@ -17,6 +17,20 @@ class ECS {
         this.entities.add(id);
         return id;
     }
+    loadPrefabFile(path) {
+        const jsonString = null;
+        return jsonString;
+    }
+    createFromPrefab(prefab) {
+        const entity = this.createEntity();
+        if (prefab.name)
+            this.addName(entity, prefab.name);
+        if (prefab.components) {
+            for (let comp of prefab.components) {
+                console.log('comp', comp);
+            }
+        }
+    }
     destroyEntity(entity) {
         var _a;
         if (!this.entities.has(entity))
@@ -44,6 +58,8 @@ class ECS {
         const type = component.constructor;
         if (!this.componentStores.has(type)) {
             this.componentStores.set(type, new component_1.ComponentStore());
+            if (component.resolveReferences)
+                component.resolveReferences(this);
         }
         this.componentStores.get(type).add(entity, component);
     }

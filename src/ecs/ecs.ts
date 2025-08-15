@@ -4,6 +4,7 @@ import { System } from "./systems/system";
 import { ScriptComponent } from "./components/script-component";
 import { TagComponent } from "./components/tag-component";
 import { NameComponent } from "./components/name-component";
+import { Prefab } from "./prefab";
 
 
 export class ECS {
@@ -17,6 +18,28 @@ export class ECS {
         const id = this.nextEntityId++
         this.entities.add(id)
         return id
+    }
+
+    loadPrefabFile(path:string) {
+        
+        const jsonString = null
+
+        return jsonString
+    }
+
+    createFromPrefab(prefab: Prefab) {
+
+        const entity = this.createEntity()
+
+        if(prefab.name) this.addName(entity, prefab.name)
+
+        if(prefab.components) {
+
+            for(let comp of prefab.components) {
+
+                console.log('comp', comp)
+            }
+        }
     }
 
     destroyEntity(entity: Entity): void {
@@ -50,6 +73,8 @@ export class ECS {
         const type = component.constructor as ComponentClass<T>;
         if (!this.componentStores.has(type)) {
             this.componentStores.set(type, new ComponentStore<T>());
+
+            if(component.resolveReferences) component.resolveReferences(this)
         }
         this.componentStores.get(type)!.add(entity, component);
     }
