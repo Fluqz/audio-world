@@ -4,25 +4,27 @@ import * as Tone from 'tone'
 
 import { Globals } from '../globals'
 
-import { FirstPersonControllerSystem } from '../ecs/systems/third-person-controller-system'
 import { AnimationSystem } from '../ecs/systems/animation-system'
 import { AudioSystem } from '../ecs/systems/audio-system'
-import { RenderSystem } from '../ecs/systems/render-system'
+import { RenderSyncSystem } from '../ecs/systems/render-sync-system'
 import { ScriptSystem } from '../ecs/systems/script-system'
 
 import { ECS } from '../ecs/ecs'
 import { RenderManager } from './render-manager'
 import { TransformationComponent } from '../ecs/components/transformation-component'
 import { Entity } from '../ecs/entity'
-import { AudioListenerComponent } from '../ecs/components/audio/audio-listener-component'
 import { Input } from '../shared/input'
 import { Prefabs } from '../shared/data/prefabs'
 import { AssetManager } from '../shared/asset-manager'
 import { Utils } from '../shared/util/utils'
 import { Octree } from '../ecs/octree'
-import { MovementSystem } from '../ecs/systems/movement-system'
+import { PhysicsSystem } from '../ecs/systems/physics-system'
 import { SpatialSystem } from '../ecs/systems/spatial-system'
-import { Prefab } from '../ecs/prefab'
+import { Scene } from '../ecs/scene'
+import { SceneManager } from './scene-manager'
+import { defaultActionMap, InputSystem } from '../ecs/systems/input-system'
+import { ThirdPersonMovementSystem } from '../ecs/systems/third-person-movement-system'
+import { CameraFollowSystem } from '../ecs/systems/camera-follow-system'
 
 
 export class Game {
@@ -36,7 +38,9 @@ export class Game {
 
     public player: Entity
 
-    public manager: RenderManager
+    public sceneManager: SceneManager
+
+    public renderManager: RenderManager
 
     public static master: Tone.Volume
 
@@ -59,15 +63,14 @@ export class Game {
         Globals.h = window.innerHeight
         Globals.ratio = window.devicePixelRatio
 
-        // Init ECS
-        this.ecs = new ECS()
-
         this.octree = new Octree(new THREE.Vector3(-500, -500, -500), new THREE.Vector3(500, 500, 500))
+        
+        this.sceneManager = new SceneManager()
 
         // Init RenderManager
-        this.manager = new RenderManager()
-        this.dom.append(this.manager.renderer.domElement)
-        this.manager.scene.fog = new THREE.Fog(this.backgroundColor, 1, 500)
+        this.renderManager = new RenderManager()
+        this.dom.append(this.renderManager.renderer.domElement)
+        this.renderManager.scene.fog = new THREE.Fog(this.backgroundColor, 1, 500)
 
         new Input(this.dom)
 
@@ -102,14 +105,14 @@ export class Game {
         dLight.shadow.camera.right = 200
         dLight.shadow.mapSize.width = 4096
         dLight.shadow.mapSize.height = 4096
-        this.manager.scene.add(dLight)
-        this.manager.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
+        this.renderManager.scene.add(dLight)
+        this.renderManager.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
 
         let ground = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000), new THREE.MeshStandardMaterial({ color: 0xff0000 }))
         ground.geometry.rotateX(-Math.PI / 2)
         ground.position.setY(-.01)
         ground.receiveShadow = true
-        this.manager.scene.add(ground)
+        this.renderManager.scene.add(ground)
 
         if (Globals.debug) {
 
@@ -120,52 +123,75 @@ export class Game {
     }
 
     init() {
-        console.log('INIT')
-
-        // Create Player
-        this.player = Prefabs.ControllablePlayer()
 
         this.fixedUpdateClock = new THREE.Clock()
         this.updateClock = new THREE.Clock()
 
-        this.loadAssets().then(() => {
+        if(this.activeScene) this.activeScene.unload()
+        
+        const scene = new Scene('scene1.json')
+        this.ecs = scene.ecs
 
-            return new Promise((resolve) => {
+        // Create Player
+        this.player = Prefabs.Player(scene.ecs)
+        // this.sceneManager.loadScene(Globals.path + '/assets/scenes/scene1.json')
+
+        this.instanciateRandomly(Prefabs.Stone, 5, 20)
+
+        for(let e of this.ecs.entities.keys()) {
+
+            for(let comp of this.ecs.getAllComponents(e)) {
                 
-                this.registerSystems()
+                if(comp.resolveReferences) comp.resolveReferences(this.ecs)
+            }
+        }
+        
+        
+        this.registerSystems()
+        
+        this.loop()
+    }
 
-                this.loop()
+    instanciatePrefab() {
 
-                console.log('LOADED')
-                resolve(null)
-            })
-        })
     }
 
     registerSystems() {
 
+        if(!this.ecs) return 
+
+        // Inputs
+        this.ecs.registerSystem(new InputSystem(defaultActionMap))
+        // Player Controller
+        this.ecs.registerSystem(new ThirdPersonMovementSystem(this.renderManager.camera))
+        // Physics
+        this.ecs.registerSystem(new PhysicsSystem())
+        // Octree
         this.ecs.registerSystem(new SpatialSystem(this.octree))
-        this.ecs.registerSystem(new MovementSystem())
-        this.ecs.registerSystem(new FirstPersonControllerSystem())
+        // Camera Follow
+        this.ecs.registerSystem(new CameraFollowSystem(this.renderManager.orbit))
         this.ecs.registerSystem(new AnimationSystem())
-        this.ecs.registerSystem(new RenderSystem(this.ecs, this.manager))
 
-        const audioListener = this.ecs.getComponent<AudioListenerComponent>(this.player, AudioListenerComponent) as AudioListenerComponent
-        this.ecs.registerSystem(new AudioSystem(this.octree))
-
+        
+        this.ecs.registerSystem(new RenderSyncSystem(this.ecs))
+        
         this.ecs.registerSystem(new ScriptSystem())
-
+        this.ecs.registerSystem(new AudioSystem(this.octree))
     }
 
-    setActiveScene() {
+    public activeScene: Scene
+    setActiveScene(scene: Scene) {
 
+        this.activeScene = scene
     }
 
-    private instanciateRandomly(instaciateFunc: () => Entity, amount: number, range: number) {
+    private instanciateRandomly(instaciateFunc: (...args) => Entity, amount: number, range: number) {
 
         for (let i = 0; i < amount; i++) {
 
-            let prefab = instaciateFunc()
+            let prefab = instaciateFunc(this.ecs)
+
+
             let transform = this.ecs.getComponent<TransformationComponent>(prefab, TransformationComponent)
 
             if (transform) {
@@ -181,15 +207,11 @@ export class Game {
                     (Math.random() * 2 * Math.PI),
                     0
                 )
-                
-                transform.needsUpdate = true
             }
         }
     }
 
     start() {
-
-        Tone.Transport.start()
 
         Tone.Destination.volume.exponentialRampTo(0, .5)
     }
@@ -242,7 +264,7 @@ export class Game {
 
         this.ecs.update(this.updateClock.getDelta())
 
-        this.manager.render()
+        this.renderManager.render()
     }
 
     private fixedUpdateTiming: number = 20;
@@ -281,15 +303,21 @@ export class Game {
 
         return new Promise(resolve => {
 
-            AssetManager.onload = () => {
-                console.log('Load fin')
-                resolve(null)
-            }
+
+
+
+
+
+
+            // AssetManager.onload = () => {
+            //     console.log('Load fin')
+            //     resolve(null)
+            // }
 
             // this.instanciateRandomly(Prefabs.Tree, 50, 80)
-            this.instanciateRandomly(Prefabs.Tree, 1, 50)
-            this.instanciateRandomly(Prefabs.Stone, 1, 50)
-            this.instanciateRandomly(Prefabs.crystal, 1, 50)
+            // this.instanciateRandomly(Prefabs.Tree, 1, 50)
+            // this.instanciateRandomly(Prefabs.Stone, 1, 50)
+            // this.instanciateRandomly(Prefabs.crystal, 1, 50)
             // this.instanciateRandomly(Prefabs.DeadTree, 1, 50)
 
             // const treeJSON = this.ecs.loadPrefabFile(Globals.path + '/assets/prefabs/tree.json')
@@ -315,7 +343,7 @@ export class Game {
             Utils.dispose(a.scene)
         }
 
-        Utils.dispose(this.manager.scene)
+        Utils.dispose(this.renderManager.scene)
     }
 
     resize() {
@@ -324,11 +352,7 @@ export class Game {
         Globals.h = window.innerHeight
         Globals.ratio = window.devicePixelRatio
 
-        this.manager.renderer.setSize(Globals.w, Globals.h)
-        this.manager.renderer.setPixelRatio(Globals.ratio)
-
-        this.manager.camera.aspect = Globals.w / Globals.h
-        this.manager.camera.updateProjectionMatrix()
+        this.renderManager.resize(Globals.w, Globals.h, Globals.ratio)
     }
 
     destroy() {

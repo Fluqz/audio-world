@@ -6,6 +6,7 @@
     "jsx": "preserve",                    // If you use React; otherwise can remove
     "strict": false,                      // Enable strict type checking
     "moduleResolution": "node",          // Resolve modules like Node.js
+    "strictNullChecks": false,
     "esModuleInterop": true,              // For compatibility with commonjs modules
     "skipLibCheck": true,                 // Skip type checking of declaration files
     "sourceMap": true,                    // Generate source maps for debugging

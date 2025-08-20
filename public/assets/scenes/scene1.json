@@ -2,7 +2,7 @@
     "entities": [
         {
             "components": {
-                "TagComponent": { "tagName": "ControllablePlayer" },
+                "TagComponent": { "tagName": "Player" },
                 "TransformationComponent": {
                     "position": [0, 0.3, 0],
                     "rotation": [0, 0, 0, "XYZ"],

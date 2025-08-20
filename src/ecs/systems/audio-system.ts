@@ -8,6 +8,8 @@ import { Octree } from "../octree";
 import { OscillatorComponent } from "../components/audio/oscillator-component";
 import { AudibleRadiusComponent } from "../components/audio/audible-radius-component";
 import { Entity } from "../entity";
+import { PlayerComponent } from "../components/audio/player-component";
+import { AudioSourceComponent } from "../components/audio/audio-source-component";
 
 export class AudioSystem extends System {
 
@@ -29,27 +31,38 @@ export class AudioSystem extends System {
 
         if(this.listener == undefined) {
 
-            const player = ecs.getTaggedEntity('ControllablePlayer')?.[0]
+            const player = ecs.getTaggedEntity('player')?.[0]
+
             this.listener = ecs.getComponent(player as Entity, AudioListenerComponent)
+            // console.log('listner player', player, ecs.getComponent(player as Entity, AudioListenerComponent), ecs.getAllComponents(player as Entity))
+
+            if(!this.listener) return
         }
 
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
-        for(let [e, [source, transform, audible]] of ecs.queryEntities(OscillatorComponent, TransformationComponent, AudibleRadiusComponent)) {
+        for(let [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
 
-            if(!source.oscillator) source.initOscillator(Game.master)
+            let source: AudioSourceComponent = ecs.getComponent(e, OscillatorComponent) as OscillatorComponent
+            if(source == undefined) source = ecs.getComponent(e, PlayerComponent) as PlayerComponent
+            if(source == undefined) continue
+
+            if(source.outputNode) source.outputNode.connect(this.master)
 
             const listenerTransform = ecs.getComponent(this.listener.transformRefEntity, TransformationComponent)
+
+            if(!listenerTransform) return
 
             // Instead of distance to center point,
             // use distance to min max of boundingbox 
             const distance = transform.position.distanceTo(listenerTransform.position)
 
+            // console.log('audio ',distance)
             this.updatePositionalAudio(source, distance, audible.radius)
         }
     }
 
-    updatePositionalAudio(audio: OscillatorComponent, distance: number, radius: number) : void {
+    updatePositionalAudio(audio: AudioSourceComponent, distance: number, radius: number) : void {
 
         // MUTE
         if(distance > radius) {

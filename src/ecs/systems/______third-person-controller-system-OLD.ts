@@ -1,4 +1,4 @@
-import { ThirdPersonControllerComponent } from "../components/third-person-controller-component"
+import { ThirdPersonControllerComponent } from "../components/third-person-controller-component-OLD"
 import { TransformationComponent } from "../components/transformation-component"
 import { EInput, Input } from "../../shared/input"
 import { System } from "./system"

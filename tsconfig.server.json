@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "noEmitOnError": false,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": false
+    "forceConsistentCasingInFileNames": false,
   },
   "include": ["src/server/**/*"]
 }

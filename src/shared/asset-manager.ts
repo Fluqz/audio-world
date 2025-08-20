@@ -17,7 +17,6 @@ export class AssetManager {
     }
 
     static load(path: string) {
-        console.log('load')
 
         return new Promise<GLTF>((resolve, reject) => {
 

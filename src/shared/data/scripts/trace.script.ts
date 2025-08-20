@@ -1,4 +1,4 @@
-import { BufferGeometry, Line, LineBasicMaterial, Vector2, Vector3 } from "three";
+import { BufferAttribute, BufferGeometry, Line, LineBasicMaterial, Vector2, Vector3 } from "three";
 
 import { Script } from "../../../ecs/components/script-component";
 import { TransformationComponent } from "../../../ecs/components/transformation-component";
@@ -28,7 +28,7 @@ export class TraceScript implements Script {
 
         this.transform = ecs.getComponent(entity, TransformationComponent) as TransformationComponent
 
-        Game.i.manager.scene.add(this.trace)
+        Game.i.renderManager.scene.add(this.trace)
 
         this.lastPosition = new Vector3().copy(this.transform.position)
     }
@@ -46,7 +46,34 @@ export class TraceScript implements Script {
 
         this.points.push(this.v)
 
-        this.geometry.setFromPoints(this.points)
+        // // Flatten the points into a regular array
+        // const positionArray: number[] = []
+
+        // for (let i = 0; i < this.points.length; i++) {
+        //     positionArray.push(this.points[i].x, this.points[i].y, this.points[i].z);
+        // }
+
+        // // Create Float32Array from the regular array
+        // const positions = new Float32Array(positionArray);
+
+        // const positionAttribute = this.geometry.getAttribute('position') as THREE.BufferAttribute;
+
+        // if (positionAttribute && positionAttribute.array.length >= positions.length) {
+        // // Reuse existing buffer (if large enough)
+
+        //     positionAttribute.copyArray(newArray)
+        //     positionAttribute.needsUpdate = true;
+        // } else {
+        // // Replace attribute with larger buffer
+        //     this.geometry.setAttribute('position', new BufferAttribute(positions, 3));
+        // }
+
+        // this.trace.geometry = this.geometry
+        // this.geometry.computeBoundingSphere()
+
+
+        this.geometry.dispose()
+        this.geometry = new BufferGeometry().setFromPoints(this.points)
         this.geometry.computeBoundingSphere()
     }
 

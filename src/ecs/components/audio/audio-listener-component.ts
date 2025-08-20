@@ -17,6 +17,8 @@ export class AudioListenerComponent implements Component {
     resolveReferences(ecs: ECS): void {
         
         this.transformRefEntity = ecs.getTaggedEntity(this.transformRefTag)?.[0]
+
+        console.log('resolve', this.transformRefEntity, this.transformRefTag)
     }
 
     serialize(): ComponentData {

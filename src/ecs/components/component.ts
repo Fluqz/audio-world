@@ -6,10 +6,11 @@ export type ComponentData = Record<string, any>
 export interface Component {
     __componentBrand: true; // Marker field - Typescritp structural overlap compromise
     
-    // onDestroy?(entity: Entity, ecs: ECS): void;
-
+    /** Resolve the component. Initializes the data and creates runtime only objects. */
     resolveReferences?(ecs: ECS) : void
     serialize?() : ComponentData
+
+    destroy?(): void;
 }
 
 export type ComponentClass<T extends Component> = new (...args: any[]) => T;

@@ -42,10 +42,10 @@ class ECS {
                 (_a = script.destroy) === null || _a === void 0 ? void 0 : _a.call(script, entity, this);
             }
         }
-        for (const [type, store] of this.componentStores.entries()) {
+        for (const [ComponentClass, store] of this.componentStores.entries()) {
             const comp = store.get(entity);
-            if (comp && typeof comp.onDestroy === "function") {
-                comp.destroy(entity, this);
+            if (comp && comp.destroy != undefined) {
+                comp.destroy();
             }
             store.remove(entity);
         }
@@ -58,8 +58,6 @@ class ECS {
         const type = component.constructor;
         if (!this.componentStores.has(type)) {
             this.componentStores.set(type, new component_1.ComponentStore());
-            if (component.resolveReferences)
-                component.resolveReferences(this);
         }
         this.componentStores.get(type).add(entity, component);
     }
@@ -76,6 +74,9 @@ class ECS {
         }
         return components;
     }
+    getAllEntities() {
+        return this.entities;
+    }
     removeComponent(entity, componentClass) {
         var _a;
         (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.remove(entity);
@@ -91,6 +92,7 @@ class ECS {
             system.update(this, dt);
         }
     }
+    /** Queries all entities with the past in components. Will not go down the child parent hierarchy. */
     *queryEntities(...componentClasses) {
         if (componentClasses.length === 0)
             return;
@@ -112,6 +114,58 @@ class ECS {
             }
             if (include) {
                 yield [entity, components];
+            }
+        }
+    }
+    /** Queries all entities with the past in components.
+     * This function will also include child components when quering a parent component!
+     * */
+    *queryEntitiesExtended(...componentClasses) {
+        var _a, _b;
+        if (componentClasses.length === 0)
+            return;
+        // Step 1: Build the list of component classes, including the parent classes.
+        const allComponentClasses = new Set();
+        for (const componentClass of componentClasses) {
+            let currentClass = componentClass;
+            // Traverse the prototype chain to include parent classes
+            while (currentClass) {
+                allComponentClasses.add(currentClass);
+                currentClass = (_b = (_a = Object.getPrototypeOf(currentClass.prototype)) === null || _a === void 0 ? void 0 : _a.constructor) !== null && _b !== void 0 ? _b : null;
+            }
+        }
+        // Step 2: Find the primary store for the first component class
+        const primaryStore = this.componentStores.get(componentClasses[0]);
+        if (!primaryStore)
+            return;
+        const [entities] = primaryStore.getAll();
+        // Step 3: Query the entities and their components
+        for (const entity of entities) {
+            const components = [];
+            let include = true;
+            // Check for each class in the query (including parent classes)
+            for (let i = 0; i < componentClasses.length; i++) {
+                const cls = componentClasses[i];
+                const store = this.componentStores.get(cls);
+                // If the entity doesn't have the component, skip it
+                if (!store || !store.has(entity)) {
+                    include = false;
+                    break;
+                }
+                components[i] = store.get(entity);
+            }
+            // If the entity has all requested components, yield it
+            if (include) {
+                // Step 4: Collect child components for the entity
+                const childComponents = [];
+                allComponentClasses.forEach(cls => {
+                    const store = this.componentStores.get(cls);
+                    if (store === null || store === void 0 ? void 0 : store.has(entity)) {
+                        childComponents.push(store.get(entity));
+                    }
+                });
+                // Combine the original components with child components
+                yield [entity, [...components, ...childComponents]];
             }
         }
     }

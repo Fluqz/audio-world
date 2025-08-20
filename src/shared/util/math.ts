@@ -4,8 +4,9 @@ import { Vector3 } from "three"
 
 export class M {
 
+    static RIGHT = new Vector3(1, 0, 0)
     static UP = new Vector3(0, 1, 0)
-    static FORWARD = new Vector3(0, 0, 1)
+    static FORWARD = new Vector3(0, 0, -1)
 
 
     /** Map a value from one range (min, max) to another. 
