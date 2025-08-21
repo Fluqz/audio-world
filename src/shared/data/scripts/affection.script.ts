@@ -1,12 +1,12 @@
 import { BufferGeometry, Line, LineDashedMaterial, Mesh, ShaderMaterial, Vector2, Vector3 } from "three";
 import { Game } from "../../../client/game";
-import { AudioComponent } from "../../../ecs/components/audio-component";
 import { Utils } from "../../util/utils";
 import { ECS } from "../../../ecs/ecs";
 import { TransformationComponent } from "../../../ecs/components/transformation-component";
-import { GraphicsComponent } from "../../../ecs/components/graphics-component";
 import { Entity } from "../../../ecs/entity";
 import { Script } from "../../../ecs/components/script-component";
+import { AudibleRadiusComponent } from "../../../ecs/components/audio/audible-radius-component";
+import { MeshComponent } from "../../../ecs/components/mesh-component";
 
 const lineMaterial = new LineDashedMaterial()
 
@@ -34,8 +34,8 @@ export class AffectionScript implements Script {
     private player: Entity
     private playerTransform: TransformationComponent
     private transform: TransformationComponent
-    private audio: AudioComponent
-    private graphics: GraphicsComponent
+    private audibleRange: AudibleRadiusComponent
+    private graphics: MeshComponent
 
     private points: Vector3[]
     private geometry: BufferGeometry
@@ -47,13 +47,13 @@ export class AffectionScript implements Script {
 
     public start(entity: Entity, ecs: ECS) {
             
-        const [p, [pTransform]] = ecs.getTaggedEntity<[TransformationComponent]>('ControllablePlayer', TransformationComponent)
+        const [p, [pTransform]] = ecs.getTaggedEntity<[TransformationComponent]>('player', TransformationComponent)
         this.player = p
 
         this.playerTransform = pTransform
         this.transform = ecs.getComponent(entity, TransformationComponent)
-        this.audio = ecs.getComponent(entity, AudioComponent)
-        this.graphics = ecs.getComponent(entity, GraphicsComponent)
+        this.audibleRange = ecs.getComponent(entity, AudibleRadiusComponent)
+        this.graphics = ecs.getComponent(entity, MeshComponent)
 
         this.color = Utils.getRndColor()
         this.color = 0xFFFFFF // Show color white when far away and colorfull when close
@@ -66,7 +66,7 @@ export class AffectionScript implements Script {
         m.color.setHex(this.color)
         this.line = new Line(this.geometry, m)
 
-        const g = ecs.getComponent(entity, GraphicsComponent)
+        const g = ecs.getComponent(entity, MeshComponent)
         this.entitySize = g.getSize()
 
         distance = this.playerTransform.position.distanceTo(this.transform.position)
@@ -74,19 +74,19 @@ export class AffectionScript implements Script {
 
     update(entity: Entity, ecs: ECS) {
 
-        const [p, [pTransform]] = ecs.getTaggedEntity<[TransformationComponent]>('ControllablePlayer', TransformationComponent)
+        const [p, [pTransform]] = ecs.getTaggedEntity('player', TransformationComponent)
         this.player = p
 
         this.playerTransform = pTransform
         this.transform = ecs.getComponent(entity, TransformationComponent)
-        this.audio = ecs.getComponent(entity, AudioComponent)
-        this.graphics = ecs.getComponent(entity, GraphicsComponent)
+        this.audibleRange = ecs.getComponent(entity, AudibleRadiusComponent)
+        this.graphics = ecs.getComponent(entity, MeshComponent)
 
         // return
         distance = this.playerTransform.position.distanceTo(this.transform.position)
 
         // Out of range
-        if(distance > this.audio.range) {
+        if(distance > this.audibleRange.radius) {
 
             // Game.world.scene.remove(line)
 
@@ -94,7 +94,7 @@ export class AffectionScript implements Script {
 
                 this.graphics.object.userData.affection_script_inRange = false
                 this.graphics.object.userData.affection_script_updateColor = true
-                Game.i.manager.scene.remove(this.line)
+                Game.i.renderManager.scene.remove(this.line)
             }
 
             if(!this.graphics.object.userData.affection_script_inRange && this.graphics.object.userData.affection_script_updateColor) {
@@ -124,7 +124,7 @@ export class AffectionScript implements Script {
 
                 this.graphics.object.userData.affection_script_inRange = true
                 this.graphics.object.userData.affection_script_updateColor = true
-                Game.i.manager.scene.add(this.line)
+                Game.i.renderManager.scene.add(this.line)
             }
 
             if(this.graphics.object.userData.affection_script_inRange && this.graphics.object.userData.affection_script_updateColor) {

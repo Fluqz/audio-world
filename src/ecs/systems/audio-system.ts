@@ -1,11 +1,15 @@
 import { System } from "./system";
-import { AudioComponent } from "../components/audio-component";
 import { TransformationComponent } from "../components/transformation-component";
-import { AudioListenerComponent } from "../components/audio-listener-component";
+import { AudioListenerComponent } from "../components/audio/audio-listener-component";
 import { ECS } from '../ecs';
 import { Game } from "../../client/game";
 import * as Tone  from "tone";
 import { Octree } from "../octree";
+import { OscillatorComponent } from "../components/audio/oscillator-component";
+import { AudibleRadiusComponent } from "../components/audio/audible-radius-component";
+import { Entity } from "../entity";
+import { AudioSourceComponent } from "../components/audio/audio-source-component";
+import { PlayerComponent } from "../components/audio/player-component";
 
 export class AudioSystem extends System {
 
@@ -18,62 +22,75 @@ export class AudioSystem extends System {
     // Master should not be in game should it?
     private get master() { return Game.master }
 
-    get volumeRange() { return Math.abs(AudioSystem.maxdB - AudioSystem.mindB) }
 
-
-    constructor(octree: Octree, listener: AudioListenerComponent) {
+    constructor(octree: Octree) {
         super()
-
-        this.listener = listener
     }
 
     update(ecs: ECS, delta: number): void {
 
+        if(this.listener == undefined) {
+
+            const player = ecs.getTaggedEntity('player')?.[0]
+
+            this.listener = ecs.getComponent(player as Entity, AudioListenerComponent)
+            // console.log('listner player', player, ecs.getComponent(player as Entity, AudioListenerComponent), ecs.getAllComponents(player as Entity))
+
+            if(!this.listener) return
+        }
+
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
-        for(let [e, [audio, transform]] of ecs.queryEntities(AudioComponent, TransformationComponent)) {
+        for(let [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
+
+
+            let source: AudioSourceComponent = ecs.getComponent(e, OscillatorComponent) as OscillatorComponent
+            if(source == undefined) source = ecs.getComponent(e, PlayerComponent) as PlayerComponent
+            if(source == undefined) continue
+
+            if(source.outputNode) source.outputNode.connect(this.master)
+
+            const listenerTransform = ecs.getComponent(this.listener.transformRefEntity, TransformationComponent)
+
+            if(!listenerTransform) return
 
             // Instead of distance to center point,
             // use distance to min max of boundingbox 
-            const distance = transform.position.distanceTo(this.listener.transform.position)
+            const distance = transform.position.distanceTo(listenerTransform.position)
 
-            this.updatePositionalAudio(distance, audio)
+            // console.log('audio ',distance)
+            this.updatePositionalAudio(source, distance, audible.radius)
         }
     }
 
-    updatePositionalAudio(distance: number, audio: AudioComponent) : void {
+    updatePositionalAudio(audio: AudioSourceComponent, distance: number, radius: number) : void {
 
         // MUTE
-        if(distance > audio.range) {
+        if(distance > radius) {
             
-            if(audio.isConnected) {
-
-                audio.source.volume.volume.value = AudioSystem.mindB
-            }   
-
             audio.isMuted = true
 
-            if(audio.source.volume.volume.value == AudioSystem.mindB) return
+            if(audio.volumeNode.volume.value == AudioSystem.mindB) return
 
-            audio.source.volume.volume.value = AudioSystem.mindB
+            audio.volumeNode.volume.value = AudioSystem.mindB
 
         }
         else { // UNMUTE
 
-            if(audio.isConnected == false) audio.connect(this.master)
             // // Reverse Cool!
             // let volume = M.map(d, 0, this.audio.range, this.mindB, this.maxdB) 
 
-            let volume = this.distanceTodB(distance, .01, audio.range, -50, AudioSystem.maxdB)
+            let volume = this.distanceTodB(distance, .01, radius, -50, AudioSystem.maxdB)
 
             audio.isMuted = false
 
-            if(audio.source.volume.volume.value == volume) return
+            if(audio.volumeNode.volume.value == volume) return
 
-            audio.source.volume.volume.setValueAtTime(volume, Tone.now())
+            audio.volumeNode.volume.setValueAtTime(volume, Tone.now())
         }
     }
 
+    /** Sound pressure level */
     public distanceTodB(distance: number, minDistance: number = .1, maxDistance: number = 50.0, mindB: number = -80.0, maxdB: number = 0.0): number {
 
         if (distance <= minDistance) return maxdB  // Full volume

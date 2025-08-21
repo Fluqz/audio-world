@@ -4,24 +4,27 @@ import * as Tone from 'tone'
 
 import { Globals } from '../globals'
 
-import { FirstPersonControllerSystem } from '../ecs/systems/third-person-controller-system'
 import { AnimationSystem } from '../ecs/systems/animation-system'
 import { AudioSystem } from '../ecs/systems/audio-system'
-import { RenderSystem } from '../ecs/systems/render-system'
+import { RenderSyncSystem } from '../ecs/systems/render-sync-system'
 import { ScriptSystem } from '../ecs/systems/script-system'
 
 import { ECS } from '../ecs/ecs'
 import { RenderManager } from './render-manager'
 import { TransformationComponent } from '../ecs/components/transformation-component'
 import { Entity } from '../ecs/entity'
-import { AudioListenerComponent } from '../ecs/components/audio-listener-component'
 import { Input } from '../shared/input'
 import { Prefabs } from '../shared/data/prefabs'
 import { AssetManager } from '../shared/asset-manager'
 import { Utils } from '../shared/util/utils'
 import { Octree } from '../ecs/octree'
-import { MovementSystem } from '../ecs/systems/movement-system'
+import { PhysicsSystem } from '../ecs/systems/physics-system'
 import { SpatialSystem } from '../ecs/systems/spatial-system'
+import { Scene } from '../ecs/scene'
+import { SceneManager } from './scene-manager'
+import { defaultActionMap, InputSystem } from '../ecs/systems/input-system'
+import { ThirdPersonMovementSystem } from '../ecs/systems/third-person-movement-system'
+import { CameraFollowSystem } from '../ecs/systems/camera-follow-system'
 
 
 export class Game {
@@ -35,7 +38,9 @@ export class Game {
 
     public player: Entity
 
-    public manager: RenderManager
+    public sceneManager: SceneManager
+
+    public renderManager: RenderManager
 
     public static master: Tone.Volume
 
@@ -58,15 +63,14 @@ export class Game {
         Globals.h = window.innerHeight
         Globals.ratio = window.devicePixelRatio
 
-        // Init ECS
-        this.ecs = new ECS()
-
         this.octree = new Octree(new THREE.Vector3(-500, -500, -500), new THREE.Vector3(500, 500, 500))
+        
+        this.sceneManager = new SceneManager()
 
         // Init RenderManager
-        this.manager = new RenderManager()
-        this.dom.append(this.manager.renderer.domElement)
-        this.manager.scene.fog = new THREE.Fog(this.backgroundColor, 1, 500)
+        this.renderManager = new RenderManager()
+        this.dom.append(this.renderManager.renderer.domElement)
+        this.renderManager.scene.fog = new THREE.Fog(this.backgroundColor, 1, 500)
 
         new Input(this.dom)
 
@@ -101,14 +105,14 @@ export class Game {
         dLight.shadow.camera.right = 200
         dLight.shadow.mapSize.width = 4096
         dLight.shadow.mapSize.height = 4096
-        this.manager.scene.add(dLight)
-        this.manager.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
+        this.renderManager.scene.add(dLight)
+        this.renderManager.scene.add(new THREE.HemisphereLight(0xf4eedb, 0xf4eedb, .7))
 
         let ground = new THREE.Mesh(new THREE.PlaneGeometry(10000, 10000), new THREE.MeshStandardMaterial({ color: 0xff0000 }))
         ground.geometry.rotateX(-Math.PI / 2)
         ground.position.setY(-.01)
         ground.receiveShadow = true
-        this.manager.scene.add(ground)
+        this.renderManager.scene.add(ground)
 
         if (Globals.debug) {
 
@@ -119,48 +123,76 @@ export class Game {
     }
 
     init() {
-        console.log('INIT')
-
-        // Create Player
-        this.player = Prefabs.ControllablePlayer()
 
         this.fixedUpdateClock = new THREE.Clock()
         this.updateClock = new THREE.Clock()
 
-        this.loadAssets().then(() => {
+        if(this.sceneManager.activeScene) this.sceneManager.activeScene.unload()
+        
+        this.registerSystems()
+        
 
-            return new Promise((resolve) => {
+        this.sceneManager.loadScene(Globals.path + '/assets/scenes/scene1.json').then((scene: Scene) => {
+
+            this.sceneManager.activeScene = scene
+            this.ecs = scene.ecs
                 
-                this.registerSystems()
+            this.registerSystems()
 
-                this.loop()
+            this.player = Prefabs.Player(this.ecs)
 
-                console.log('LOADED')
-                resolve(null)
-            })
+            this.loop()
         })
+    }
+
+    instanciatePrefab() {
+
+        const prefab = Prefabs.Stone(this.ecs)
+
+        for(let e of this.ecs.entities.keys()) {
+
+            for(let comp of this.ecs.getAllComponents(e)) {
+                
+                if(comp.resolveReferences) comp.resolveReferences(this.ecs)
+            }
+        }
     }
 
     registerSystems() {
 
+        if(!this.ecs) return 
+
+        // Inputs
+        this.ecs.registerSystem(new InputSystem(defaultActionMap))
+        // Player Controller
+        this.ecs.registerSystem(new ThirdPersonMovementSystem(this.renderManager.camera))
+        // Physics
+        this.ecs.registerSystem(new PhysicsSystem())
+        // Octree
         this.ecs.registerSystem(new SpatialSystem(this.octree))
-        this.ecs.registerSystem(new MovementSystem())
-        this.ecs.registerSystem(new FirstPersonControllerSystem())
+        // Camera Follow
+        this.ecs.registerSystem(new CameraFollowSystem(this.renderManager.orbit))
         this.ecs.registerSystem(new AnimationSystem())
-        this.ecs.registerSystem(new RenderSystem(this.ecs, this.manager))
 
-        const audioListener = this.ecs.getComponent<AudioListenerComponent>(this.player, AudioListenerComponent) as AudioListenerComponent
-        this.ecs.registerSystem(new AudioSystem(this.octree, audioListener))
-
+        
+        this.ecs.registerSystem(new RenderSyncSystem(this.ecs))
+        
         this.ecs.registerSystem(new ScriptSystem())
-
+        this.ecs.registerSystem(new AudioSystem(this.octree))
     }
 
-    private instanciateRandomly(instaciateFunc: () => Entity, amount: number, range: number) {
+    setActiveScene(scene: Scene) {
+
+        this.sceneManager.activeScene = scene
+    }
+
+    private instanciateRandomly(instaciateFunc: (...args) => Entity, amount: number, range: number) {
 
         for (let i = 0; i < amount; i++) {
 
-            let prefab = instaciateFunc()
+            let prefab = instaciateFunc(this.ecs)
+
+
             let transform = this.ecs.getComponent<TransformationComponent>(prefab, TransformationComponent)
 
             if (transform) {
@@ -176,15 +208,11 @@ export class Game {
                     (Math.random() * 2 * Math.PI),
                     0
                 )
-                
-                transform.needsUpdate = true
             }
         }
     }
 
     start() {
-
-        Tone.Transport.start()
 
         Tone.Destination.volume.exponentialRampTo(0, .5)
     }
@@ -237,7 +265,7 @@ export class Game {
 
         this.ecs.update(this.updateClock.getDelta())
 
-        this.manager.render()
+        this.renderManager.render()
     }
 
     private fixedUpdateTiming: number = 20;
@@ -276,109 +304,33 @@ export class Game {
 
         return new Promise(resolve => {
 
-            AssetManager.onload = () => {
-                console.log('Load fin')
-                resolve(null)
-            }
 
 
-            // socket.on('connecting', (id: string, clients) => {
 
-            //     player.id = id
 
-            //     console.log('clients', clients)
 
-            //     // Array.from(clients).forEach(c => {
 
-            //     //     console.log(c)
-
-            //     //     let p = Prefabs.Player()
-            //     //     p.id = id
-            //     // })
-            // })
-
-            // socket.on('add-client', (id) => {
-
-            //     console.log('Add another player')
-            //     let p = Prefabs.Player()
-            //     p.id = id
-            // })
-
+            // AssetManager.onload = () => {
+            //     console.log('Load fin')
+            //     resolve(null)
+            // }
 
             // this.instanciateRandomly(Prefabs.Tree, 50, 80)
-            this.instanciateRandomly(Prefabs.Stone, 5, 50)
+            // this.instanciateRandomly(Prefabs.Tree, 1, 50)
+            // this.instanciateRandomly(Prefabs.Stone, 1, 50)
+            // this.instanciateRandomly(Prefabs.crystal, 1, 50)
+            // this.instanciateRandomly(Prefabs.DeadTree, 1, 50)
+
+            // const treeJSON = this.ecs.loadPrefabFile(Globals.path + '/assets/prefabs/tree.json')
+
+            // const treePrefab: Prefab = JSON.parse(treeJSON)
+
+            // this.ecs.createFromPrefab(treePrefab)
 
             // this.instanciateRandomly(Prefabs.Tree, 200, 500)
             // this.instanciateRandomly(Prefabs.DeadTree, 20, 500)
             // this.instanciateRandomly(Prefabs.Stone, 200, 500)
-            // this.instanciateRandomly(Prefabs.smallStone, 100, 500)
-
-
-            // AssetManager.load('https://hitpuzzle.b-cdn.net/SolSeat_VR_00075_joined2.glb')
-            // AssetManager.load('https://hitpuzzle.b-cdn.net/06627.glb')
-            // AssetManager.load('https://hitpuzzle.b-cdn.net/LOWPOLY1%20(1).glb')
-
-        //     const trees: { entity: Entity, tree: Tree, state: 'DRAWN' | 'NEW' | 'DELETED' }[] = []
-        //     const forestGenerator = new ForestGenerator(range, range, 10)
-
-        //     forestGenerator.generateBaseForest()
-        //     forestGenerator.iterate()
-
-
-        //     const addTree = (tree: Tree) => {
-
-        //         let prefab = Prefabs.Tree()
-
-        //         trees.push({
-        //             entity: prefab,
-        //             tree: tree,
-        //             state: 'DRAWN'
-        //         })
-
-        //         let transform = prefab.getComponent<TransformationComponent>(EComponent.TRANSFORMATION)
-                
-        //         if (transform) {
-                    
-        //             transform.position.set(tree.position.x, 0, tree.position.y)
-        //             transform.needsUpdate = true
-        //         }
-                
-        //         let graphics = prefab.getComponent<GraphicsComponent>(EComponent.GRAPHICS)
-                
-        //         const m = graphics.object as THREE.Mesh
-                
-        //         m.geometry.dispose()
-        //         m.geometry = new THREE.BoxGeometry(tree.diameter, tree.height, tree.diameter)
-        //     }
-
-        //     for (let t of forestGenerator.getTrees()) {
-                
-        //         addTree(t)
-        //     }
-
-
-        //     const appylNextGeneration = () => {
-
-        //         for (let tree of trees) {
-
-        //             Game.world.removeEntity(tree.entity)
-        //         }
-
-        //         for (let t of forestGenerator.getTrees()) {
-                    
-        //             addTree(t)
-        //         }
-
-        //         for(let s of Game.world.systems) s.initialize()
-        //     }
-
-        //     setInterval(() => {
-
-        //         forestGenerator.iterate()
-
-        //         appylNextGeneration()
-
-        //     }, 4000)
+            // this.instanciateRandomly(Prefabs.crystal, 100, 500)
 
             resolve(null)
 
@@ -392,7 +344,7 @@ export class Game {
             Utils.dispose(a.scene)
         }
 
-        Utils.dispose(this.manager.scene)
+        Utils.dispose(this.renderManager.scene)
     }
 
     resize() {
@@ -401,11 +353,7 @@ export class Game {
         Globals.h = window.innerHeight
         Globals.ratio = window.devicePixelRatio
 
-        this.manager.renderer.setSize(Globals.w, Globals.h)
-        this.manager.renderer.setPixelRatio(Globals.ratio)
-
-        this.manager.camera.aspect = Globals.w / Globals.h
-        this.manager.camera.updateProjectionMatrix()
+        this.renderManager.resize(Globals.w, Globals.h, Globals.ratio)
     }
 
     destroy() {

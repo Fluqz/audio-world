@@ -1,101 +1,1053 @@
 {
     "entities": [
         {
+            "name": "Stone",
             "components": {
-                "TagComponent": { "tagName": "ControllablePlayer" },
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
                 "TransformationComponent": {
-                    "position": [0, 0.3, 0],
-                    "rotation": [0, 0, 0, "XYZ"],
+                    "position": [14.844192205660562, 0, 42.024413339637064],
+                    "rotation": [0, 5.865095126998046, 0, "XYZ"],
                     "quaternion": [0, 0, 0, 1],
-                    "scale": [0, 0, 0]
+                    "scale": [1, 1, 1]
                 },
-                "GraphicsComponent": null,
-                "VelocityComponent": null,
-                "AudioListenerComponent": {
-                    "TransformationComponent": {
-                        "position": [0, 0.3, 0],
-                        "rotation": [0, 0, 0, "XYZ"],
-                        "quaternion": [0, 0, 0, 1],
-                        "scale": [0, 0, 0]
-                    }
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
                 },
-                "ScriptComponent": null,
-                "ThirdPersonControllerComponent": null
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 174.61, "volume": -10 }
             }
         },
         {
+            "name": "Stone",
             "components": {
-                "TagComponent": { "tagName": "Stone" },
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
                 "TransformationComponent": {
-                    "position": [0.046170374413833315, 0, 20.63443850987607],
-                    "rotation": [0, 3.6934707042573796, 0, "XYZ"],
+                    "position": [36.293275788634816, 0, -44.90568163156704],
+                    "rotation": [0, 5.6139443997558205, 0, "XYZ"],
                     "quaternion": [0, 0, 0, 1],
-                    "scale": [0, 1.2628441660101353, 0]
+                    "scale": [1, 1, 1]
                 },
-                "GraphicsComponent": null,
-                "ScriptComponent": null,
-                "AnimationComponent": null,
-                "AudioComponent": null
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 277.18, "volume": -10 }
             }
         },
         {
+            "name": "Stone",
             "components": {
-                "TagComponent": { "tagName": "Stone" },
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
                 "TransformationComponent": {
-                    "position": [16.91728343256988, 0, -21.3898246680514],
-                    "rotation": [0, 0.7064294949046418, 0, "XYZ"],
+                    "position": [-16.840073024093705, 0, 31.76824820722149],
+                    "rotation": [0, 4.941911080813661, 0, "XYZ"],
                     "quaternion": [0, 0, 0, 1],
-                    "scale": [0, 1.2628441660101353, 0]
+                    "scale": [1, 1, 1]
                 },
-                "GraphicsComponent": null,
-                "ScriptComponent": null,
-                "AnimationComponent": null,
-                "AudioComponent": null
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 103.83, "volume": -10 }
             }
         },
         {
+            "name": "Stone",
             "components": {
-                "TagComponent": { "tagName": "Stone" },
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
                 "TransformationComponent": {
-                    "position": [4.314822627136984, 0, -4.448235423347235],
-                    "rotation": [0, 4.819814996939304, 0, "XYZ"],
+                    "position": [-22.35439832965982, 0, -26.69865258936325],
+                    "rotation": [0, 3.146470974297521, 0, "XYZ"],
                     "quaternion": [0, 0, 0, 1],
-                    "scale": [0, 1.2628441660101353, 0]
+                    "scale": [1, 1, 1]
                 },
-                "GraphicsComponent": null,
-                "ScriptComponent": null,
-                "AnimationComponent": null,
-                "AudioComponent": null
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 311.13, "volume": -10 }
             }
         },
         {
+            "name": "Stone",
             "components": {
-                "TagComponent": { "tagName": "Stone" },
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
                 "TransformationComponent": {
-                    "position": [-14.77470000916909, 0, -14.21024409696588],
-                    "rotation": [0, 1.263766617561269, 0, "XYZ"],
+                    "position": [-26.810404726821712, 0, 19.946791620310762],
+                    "rotation": [0, 2.4257478728663395, 0, "XYZ"],
                     "quaternion": [0, 0, 0, 1],
-                    "scale": [0, 1.2628441660101353, 0]
+                    "scale": [1, 1, 1]
                 },
-                "GraphicsComponent": null,
-                "ScriptComponent": null,
-                "AnimationComponent": null,
-                "AudioComponent": null
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 261.63, "volume": -10 }
             }
         },
         {
+            "name": "Stone",
             "components": {
-                "TagComponent": { "tagName": "Stone" },
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
                 "TransformationComponent": {
-                    "position": [-23.703098525217715, 0, -8.116152134150255],
-                    "rotation": [0, 3.2294623577676127, 0, "XYZ"],
+                    "position": [46.18460405060978, 0, -5.22983545042225],
+                    "rotation": [0, 6.176094645056302, 0, "XYZ"],
                     "quaternion": [0, 0, 0, 1],
-                    "scale": [0, 1.2628441660101353, 0]
+                    "scale": [1, 1, 1]
                 },
-                "GraphicsComponent": null,
-                "ScriptComponent": null,
-                "AnimationComponent": null,
-                "AudioComponent": null
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 196, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [41.59351437909953, 0, -8.710210156618423],
+                    "rotation": [0, 4.406401150160279, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 98, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [28.213230645980218, 0, -39.413421541275355],
+                    "rotation": [0, 1.022154749542968, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 415.3, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [49.056844730602606, 0, -19.97461069998011],
+                    "rotation": [0, 3.7196653375892126, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 65.41, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [20.309919328605503, 0, 42.514569675147754],
+                    "rotation": [0, 0.589671261492382, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 554.37, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [32.635982321937234, 0, 12.4998133141506],
+                    "rotation": [0, 3.290050079127465, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 98, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-26.467262559376316, 0, 19.419041541920407],
+                    "rotation": [0, 0.9568786921783955, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 554.37, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-45.34230288647023, 0, 11.685240903432756],
+                    "rotation": [0, 1.0137326621906415, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 130.81, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [19.82211181632492, 0, -42.8404971928593],
+                    "rotation": [0, 2.3106027500929356, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 349.23, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-25.30145973076754, 0, 18.221266946094175],
+                    "rotation": [0, 0.30347773786850185, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 207.65, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-14.023996871688958, 0, -8.374867186748034],
+                    "rotation": [0, 5.114350296655928, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 174.61, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [16.85140404627745, 0, 12.908626443875029],
+                    "rotation": [0, 5.278783571070026, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 196, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [19.4185551338053, 0, 10.272944797663342],
+                    "rotation": [0, 2.1201333405837373, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 415.3, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-18.627374309111467, 0, 46.034373693718436],
+                    "rotation": [0, 3.8609346844339947, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 130.81, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-36.42636122884859, 0, -32.536187495362],
+                    "rotation": [0, 5.70890866543665, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 311.13, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-10.94009275864768, 0, 9.302986729649412],
+                    "rotation": [0, 2.085496786643417, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 77.78, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [45.198248386358614, 0, 24.194420416105984],
+                    "rotation": [0, 1.5713027019959822, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 103.83, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-13.981241931832677, 0, 30.417993947908002],
+                    "rotation": [0, 3.008806632613729, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 622.25, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [3.1717567598143788, 0, -18.319404701135156],
+                    "rotation": [0, 5.111953552028855, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 196, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-20.099009715594786, 0, 22.345778135421142],
+                    "rotation": [0, 6.271254038394801, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 196, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [47.10433492380052, 0, -22.705294913839747],
+                    "rotation": [0, 3.685181493048266, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 233.08, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [27.912670306875242, 0, -31.234691775908374],
+                    "rotation": [0, 3.9806766491189642, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 155.56, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [28.544222889581675, 0, -10.353825033111278],
+                    "rotation": [0, 0.07105722717055693, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 261.63, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-3.827720147837546, 0, -48.59749823488645],
+                    "rotation": [0, 4.547581770046723, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 392, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [33.50826420500168, 0, 6.998427869283887],
+                    "rotation": [0, 2.550537527059412, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 622.25, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [44.68800269684941, 0, 19.205383747107746],
+                    "rotation": [0, 5.73801367796782, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 196, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [1.6060806247775048, 0, 11.168173146882133],
+                    "rotation": [0, 1.392227724842707, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 58.27, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [6.701324200750513, 0, 43.54761336753157],
+                    "rotation": [0, 0.1832196789626188, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 311.13, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [34.66433468247794, 0, 24.912997007826235],
+                    "rotation": [0, 0.78594140777415, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 155.56, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-29.955980417537354, 0, 4.678506367055377],
+                    "rotation": [0, 5.5760196827295125, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 103.83, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [19.275909367790675, 0, 19.986456156099123],
+                    "rotation": [0, 4.1147429106745035, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 233.08, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-41.61879676008379, 0, 34.18958161184945],
+                    "rotation": [0, 2.4574377102895295, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 103.83, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [32.50556792198003, 0, -40.401225112285246],
+                    "rotation": [0, 3.0763975073662864, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 51.91, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-44.05263270703548, 0, 1.464868357078963],
+                    "rotation": [0, 0.3475533911990495, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 261.63, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [12.574699820785405, 0, -26.48103937900277],
+                    "rotation": [0, 2.411147399281123, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 87.31, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [44.84473892731867, 0, 27.866064421049145],
+                    "rotation": [0, 1.888222847235263, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 155.56, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-35.04048406768848, 0, -13.084319971482884],
+                    "rotation": [0, 6.006221292502572, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 277.18, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [34.40451526926755, 0, -17.626551800242616],
+                    "rotation": [0, 2.87465827486808, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 49, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [30.050347662109985, 0, 14.671909700515542],
+                    "rotation": [0, 3.4848687116712522, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 261.63, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [15.754769372391252, 0, 1.0998606139849727],
+                    "rotation": [0, 3.580295977790068, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 311.13, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [5.859003080217626, 0, 38.592956871010315],
+                    "rotation": [0, 1.7272430169187665, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sine", "frequency": 554.37, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [7.212501476627942, 0, 11.718636015054628],
+                    "rotation": [0, 5.275050473790354, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 233.08, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-28.673643555728155, 0, -13.339165946219055],
+                    "rotation": [0, 0.01808900544409558, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "sawtooth", "frequency": 277.18, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [-12.523833749878655, 0, -5.161413158684255],
+                    "rotation": [0, 3.009397172125757, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "square", "frequency": 233.08, "volume": -10 }
+            }
+        },
+        {
+            "name": "Stone",
+            "components": {
+                "NameComponent": { "name": "Stone" },
+                "TagComponent": { "tagName": "organism" },
+                "RigidbodyComponent": { "isKinematic": true },
+                "TransformationComponent": {
+                    "position": [18.558737775502365, 0, 0.13329989225572092],
+                    "rotation": [0, 1.6892052760872291, 0, "XYZ"],
+                    "quaternion": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "PrimitiveMeshComponent": {
+                    "primitive": "CUBOID",
+                    "options": { "name": "Cuboid", "w": 3, "h": 100, "d": 3 },
+                    "materialTag": "FACE_DISPLACEMENT"
+                },
+                "AudibleRadiusComponent": { "radius": 100 },
+                "OscillatorComponent": { "type": "triangle", "frequency": 98, "volume": -10 }
             }
         }
     ]

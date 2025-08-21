@@ -9,22 +9,22 @@ export class TransformationComponent implements Component {
     quaternion: Quaternion
     scale: Vector3
 
-    // NEED MATRIX TOO!
-    // matrix: Matrix4
+    useQuaternion: boolean = false
 
-    // Graphics or Transform Component ???
-    needsUpdate: boolean 
+    constructor(data?: { position: [number, number, number], rotation: [number, number, number], quaternion: [number, number, number, number], scale: [number, number, number] }) {
 
-    eulerOverQuaternions: boolean = false
+        this.position = new Vector3()
+        this.rotation = new Euler()
+        this.quaternion = new Quaternion()
+        this.scale = new Vector3(1, 1, 1)
 
-    constructor(position?: [number, number, number], rotation?: [number, number, number], quaternion?: [number, number, number, number], scale?: [number, number, number]) {
+        if(data) {
 
-        this.position = position == undefined ? new Vector3() : new Vector3().fromArray(position)
-        this.rotation = rotation == undefined ? new Euler() : new Euler().fromArray(rotation)
-        this.quaternion = quaternion == undefined ? new Quaternion() : new Quaternion().fromArray(quaternion)
-        this.scale = scale == undefined ? new Vector3(1, 1, 1) : new Vector3().fromArray(scale)
-
-        this.needsUpdate = false
+            this.position.fromArray(data.position)
+            this.rotation.fromArray(data.rotation)
+            this.quaternion.fromArray(data.quaternion)
+            this.scale.fromArray(data.scale)
+        }
     }
 
     serialize(): ComponentData {

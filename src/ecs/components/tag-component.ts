@@ -5,9 +5,9 @@ export class TagComponent implements Component {
 
     tagName: string
 
-    constructor(tagName: string) {
+    constructor(data: { tagName: string }) {
 
-        this.tagName = tagName
+        this.tagName = data.tagName
     }
 
     serialize(): ComponentData {

@@ -5,9 +5,9 @@ export class NameComponent implements Component {
 
     name: string
 
-    constructor(name: string) {
+    constructor(data: { name: string }) {
 
-        this.name = name
+        this.name = data.name
     }
 
     serialize(): ComponentData {
