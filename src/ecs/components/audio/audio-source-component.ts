@@ -7,9 +7,37 @@ export abstract class AudioSourceComponent implements Component {
 
     source: Tone.ToneAudioNode
 
-    volumeNode: Tone.PanVol
+    volumeNode: Tone.Volume
+
+    panner: Tone.Panner3D
 
     outputNode: Tone.ToneAudioNode
 
     isMuted:boolean = false
+
+    isConnected: boolean = false
+
+    connect(node: Tone.ToneAudioNode) {
+
+        if(this.outputNode == undefined) return false
+
+        if(this.isConnected) {
+
+            this.outputNode.disconnect()
+            this.isConnected = false
+        }
+
+        this.outputNode.connect(node)
+
+        this.isConnected = true
+    }
+
+    disconnect(node?: Tone.ToneAudioNode) {
+
+        if(this.outputNode == undefined) return false
+
+        this.outputNode.disconnect(node)
+
+        this.isConnected = false
+    }
 }

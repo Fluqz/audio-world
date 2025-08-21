@@ -18,7 +18,7 @@ export type SceneData = {
 
 export class SceneManager {
 
-    activeScene: Scene
+    scene: Scene
       
     saveScene(scene: Scene): SceneData {
 

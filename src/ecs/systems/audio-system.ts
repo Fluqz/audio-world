@@ -1,6 +1,5 @@
 import { System } from "./system";
 import { TransformationComponent } from "../components/transformation-component";
-import { AudioListenerComponent } from "../components/audio/audio-listener-component";
 import { ECS } from '../ecs';
 import { Game } from "../../client/game";
 import * as Tone  from "tone";
@@ -14,7 +13,6 @@ import { PlayerComponent } from "../components/audio/player-component";
 export class AudioSystem extends System {
 
     public octree: Octree
-    public listener: AudioListenerComponent
 
     public static mindB: number = -80
     public static maxdB: number = 0
@@ -27,41 +25,56 @@ export class AudioSystem extends System {
         super()
     }
 
-    update(ecs: ECS, delta: number): void {
+    update(ecs: ECS, dt: number): void {
 
-        if(this.listener == undefined) {
-
-            const player = ecs.getTaggedEntity('player')?.[0]
-
-            this.listener = ecs.getComponent(player as Entity, AudioListenerComponent)
-            // console.log('listner player', player, ecs.getComponent(player as Entity, AudioListenerComponent), ecs.getAllComponents(player as Entity))
-
-            if(!this.listener) return
-        }
-
-        // entities = Entity.filterByComponents(entities, this.requiredComponents)
-
-        for(let [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
-
+        for (const [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
 
             let source: AudioSourceComponent = ecs.getComponent(e, OscillatorComponent) as OscillatorComponent
             if(source == undefined) source = ecs.getComponent(e, PlayerComponent) as PlayerComponent
             if(source == undefined) continue
 
-            if(source.outputNode) source.outputNode.connect(this.master)
+            if(source.isConnected == false) source.connect(this.master)
 
-            const listenerTransform = ecs.getComponent(this.listener.transformRefEntity, TransformationComponent)
+            source.panner.maxDistance = audible.radius
 
-            if(!listenerTransform) return
-
-            // Instead of distance to center point,
-            // use distance to min max of boundingbox 
-            const distance = transform.position.distanceTo(listenerTransform.position)
-
-            // console.log('audio ',distance)
-            this.updatePositionalAudio(source, distance, audible.radius)
+            // Update the audio source position
+            source.panner.setPosition(transform.position.x, 1, transform.position.z)
         }
     }
+
+    // update(ecs: ECS, delta: number): void {
+
+    //     const player = ecs.getTaggedEntity('player')?.[0]
+
+    //     if(!player) return
+
+    //     const playerTransform = ecs.getComponent(player, TransformationComponent)
+
+    //     if(playerTransform == undefined) {
+
+    //         console.error('AudioSystem - playerTransform is undefined', player, playerTransform)
+
+    //         return
+    //     }
+
+    //     // entities = Entity.filterByComponents(entities, this.requiredComponents)
+
+    //     for(let [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
+
+    //         let source: AudioSourceComponent = ecs.getComponent(e, OscillatorComponent) as OscillatorComponent
+    //         if(source == undefined) source = ecs.getComponent(e, PlayerComponent) as PlayerComponent
+    //         if(source == undefined) continue
+
+    //         if(source.outputNode) source.outputNode.connect(this.master)
+
+    //         // Instead of distance to center point,
+    //         // use distance to min max of boundingbox 
+    //         const distance = transform.position.distanceTo(playerTransform.position)
+
+    //         // console.log('audio ',distance)
+    //         this.updatePositionalAudio(source, distance, audible.radius)
+    //     }
+    // }
 
     updatePositionalAudio(audio: AudioSourceComponent, distance: number, radius: number) : void {
 

@@ -23,7 +23,7 @@ export class OscillatorComponent extends AudioSourceComponent {
 
     serialize() {
         return {
-            type: this.waveform,
+            waveform: this.waveform,
             frequency: this.frequency,
             volume: this.volume,
         };
@@ -36,12 +36,21 @@ export class OscillatorComponent extends AudioSourceComponent {
         this.oscillator.start()
 
         // this.envelope = new Tone.AmplitudeEnvelope(0, 1, 1, 1)
-        this.volumeNode = new Tone.PanVol(0, this.volume)
-        // this.gain.connect(this.volume)
+        // this.volumeNode = new Tone.Volume(this.volume)
 
-        this.oscillator.connect(this.volumeNode)
+        // Create a 3D panner
+        this.panner = new Tone.Panner3D({
+            panningModel: "HRTF",   // more realistic
+            distanceModel: "inverse", // controls volume falloff
+            maxDistance: 50,
+            rolloffFactor: 1,
+            
+        })
 
-        this.outputNode = this.volumeNode
+        this.oscillator.connect(this.panner)
+        // this.panner.connect(this.volumeNode)
+
+        this.outputNode = this.panner
     }
 
     destroy() {

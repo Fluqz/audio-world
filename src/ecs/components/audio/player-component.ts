@@ -35,7 +35,7 @@ export class PlayerComponent extends AudioSourceComponent {
         this.player.loop = this.loop
         this.player.start()
 
-        this.volumeNode = new Tone.PanVol(0, this.volume)
+        this.volumeNode = new Tone.Volume(this.volume)
 
         this.player.connect(this.volumeNode)
         

@@ -119,7 +119,7 @@ export class ECS {
             system.update(this, dt);
         }
     }
-    /** Queries all entities with the past in components. Will not go down the child parent hierarchy. */
+    /** Queries all entities with the passed in components. Will not go down the child parent hierarchy. */
     *queryEntities<T extends Component[]>(...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }): Iterable<[Entity, T]> {
         
         if (componentClasses.length === 0) return;

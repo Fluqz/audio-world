@@ -3,6 +3,8 @@ import { AABB } from "./aabb";
 import { Entity } from "./entity";
 import { OctreeNode } from "./quadtree-node";
 
+
+// USE THIS INSIDE ECS???? TO QUERY ENTITIES WITH OCTREE TO IMPROVE PERFORMANCE? DOES THAT MAKE ANY SENCE?
 export class Octree {
     
     private root: OctreeNode;

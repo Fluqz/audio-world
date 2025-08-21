@@ -25,6 +25,8 @@ import { SceneManager } from './scene-manager'
 import { defaultActionMap, InputSystem } from '../ecs/systems/input-system'
 import { ThirdPersonMovementSystem } from '../ecs/systems/third-person-movement-system'
 import { CameraFollowSystem } from '../ecs/systems/camera-follow-system'
+import { CollisionSystem } from '../ecs/systems/collision-system'
+import { AudioListenerSystem } from '../ecs/systems/audio-listener-system'
 
 
 export class Game {
@@ -127,23 +129,51 @@ export class Game {
         this.fixedUpdateClock = new THREE.Clock()
         this.updateClock = new THREE.Clock()
 
-        if(this.sceneManager.activeScene) this.sceneManager.activeScene.unload()
+        if(this.sceneManager.scene) this.sceneManager.scene.unload()
         
-        this.registerSystems()
-        
+        this.loadScene(Globals.path + '/assets/scenes/scene2.json').then(scene => {
 
-        this.sceneManager.loadScene(Globals.path + '/assets/scenes/scene1.json').then((scene: Scene) => {
-
-            this.sceneManager.activeScene = scene
-            this.ecs = scene.ecs
-                
-            this.registerSystems()
-
-            this.player = Prefabs.Player(this.ecs)
-
+            console.log('LOOP')
             this.loop()
         })
     }
+    
+    setScene(scene: Scene, addEntities?: (ecs: ECS) => void) {
+
+        this.sceneManager.scene = scene
+        this.ecs = scene.ecs
+
+        // this.player = Prefabs.Player(scene.ecs)
+
+        if(addEntities) addEntities(scene.ecs)
+
+        this.registerSystems()
+
+        this.sceneManager.scene.resolveAllReferences()
+    }
+
+    async loadScene(path: string) {
+
+        return this.sceneManager.loadScene(path).then((scene: Scene) => {
+            
+            this.setScene(scene)
+        })
+    }
+
+    loadDraftScene() {
+        
+        const scene = new Scene('test')
+
+        this.setScene(scene, (ecs: ECS) => {
+
+            this.player = Prefabs.Player(scene.ecs)
+
+            this.instanciateRandomly(Prefabs.Stone, 5, 50)
+        })
+
+        this.loop()
+    }
+
 
     instanciatePrefab() {
 
@@ -168,6 +198,10 @@ export class Game {
         this.ecs.registerSystem(new ThirdPersonMovementSystem(this.renderManager.camera))
         // Physics
         this.ecs.registerSystem(new PhysicsSystem())
+
+        // this.ecs.registerSystem(new CollisionSystem())
+
+        
         // Octree
         this.ecs.registerSystem(new SpatialSystem(this.octree))
         // Camera Follow
@@ -178,12 +212,9 @@ export class Game {
         this.ecs.registerSystem(new RenderSyncSystem(this.ecs))
         
         this.ecs.registerSystem(new ScriptSystem())
+
         this.ecs.registerSystem(new AudioSystem(this.octree))
-    }
-
-    setActiveScene(scene: Scene) {
-
-        this.sceneManager.activeScene = scene
+        this.ecs.registerSystem(new AudioListenerSystem())
     }
 
     private instanciateRandomly(instaciateFunc: (...args) => Entity, amount: number, range: number) {
@@ -303,12 +334,6 @@ export class Game {
     loadAssets() {
 
         return new Promise(resolve => {
-
-
-
-
-
-
 
             // AssetManager.onload = () => {
             //     console.log('Load fin')

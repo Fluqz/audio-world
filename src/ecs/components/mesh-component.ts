@@ -12,6 +12,8 @@ export class MeshComponent implements Component {
     // Runtime
     object: Object3D
 
+    originOffset?: Vector3
+
 
     getSize() {
 

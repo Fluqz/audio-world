@@ -26,13 +26,13 @@ export class ThirdPersonMovementSystem extends System {
     for (const [entity, [input, velocity, transform, movement]] of ecs.queryTagged("player", InputComponent, VelocityComponent, TransformationComponent, MovementComponent)) {
 
 
-      if (input.velocity.lengthSq() === 0) {
+      if (input.direction.lengthSq() === 0) {
 
         velocity.velocity.set(0, velocity.velocity.y, 0) // Retain Y (jumping/gravity) if needed
         continue
       }
 
-      const a = Math.atan2((input.velocity.x - M.FORWARD.x), input.velocity.z - M.FORWARD.z)
+      const a = Math.atan2((input.direction.x - M.FORWARD.x), input.direction.z - M.FORWARD.z)
       this.quaternionOffset.setFromAxisAngle(M.UP, a)
       
       // Step 1: Get camera-relative directions
@@ -45,13 +45,13 @@ export class ThirdPersonMovementSystem extends System {
       // Step 2: Translate input into world movement direction
       this.moveDir
         .copy(this.forward)
-        .multiplyScalar(input.velocity.z)
-        .addScaledVector(this.right, input.velocity.x)
+        .multiplyScalar(input.direction.z)
+        .addScaledVector(this.right, input.direction.x)
         .normalize()
 
       // Step 3: Apply to velocity
-      velocity.velocity.x = this.moveDir.x * movement.speed
-      velocity.velocity.z = this.moveDir.z * movement.speed
+      velocity.velocity.x = this.moveDir.x * (input.isRunning ? movement.runSpeed : movement.speed)
+      velocity.velocity.z = this.moveDir.z * (input.isRunning ? movement.runSpeed : movement.speed)
 
       // Step 4: Smooth rotation
       const lookAt = new Vector3().copy(transform.position).add(this.moveDir)

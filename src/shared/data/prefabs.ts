@@ -7,7 +7,6 @@ import { Utils } from "../util/utils";
 import { TraceScript } from "./scripts/trace.script";
 
 import { drum_fills_samples, factory_samples } from './sample-db'
-import { AudioListenerComponent } from "../../ecs/components/audio/audio-listener-component";
 import { TransformationComponent } from "../../ecs/components/transformation-component";
 import { AudibleRadiusComponent } from "../../ecs/components/audio/audible-radius-component";
 
@@ -60,6 +59,7 @@ export const Prefabs = {
     Player: (ecs: ECS) => {
 
         const e = ecs.createEntity()
+                
         
         ecs.addName(e, 'player')
         ecs.addTag(e, 'player')
@@ -74,9 +74,9 @@ export const Prefabs = {
 
         ecs.addComponent(e, new InputComponent())
         ecs.addComponent(e, new MovementComponent())
-        ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }))
+        // ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }))
+        ecs.addComponent(e, new PrimitiveMeshComponent<CuboidPrimitive, CuboidOptions>({ primitive: 'CUBOID', options: { name: 'Cuboid', w: .1, h: 1, d: 1 }, materialTag: Materials.PLAYER }))
 
-        ecs.addComponent(e, new AudioListenerComponent({ transformRefTag: 'player' }))
         ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
         // ecs.addComponent(e, new ScriptComponent(new TraceScript()))
 
