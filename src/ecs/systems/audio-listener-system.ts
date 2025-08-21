@@ -5,6 +5,7 @@ import { ECS } from "../ecs";
 import { System } from "./system";
 import { TransformationComponent } from "../components/transformation-component";
 import { Vector3 } from "three";
+import { M } from "../../shared/util/math";
 
 export class AudioListenerSystem extends System {
 
@@ -23,7 +24,7 @@ export class AudioListenerSystem extends System {
     Tone.Listener.positionY.value = transform.position.y
     Tone.Listener.positionZ.value = transform.position.z
 
-    this.forward.set(1, 0, 0).applyQuaternion(transform.quaternion)
+    this.forward.copy(M.FORWARD).applyQuaternion(transform.quaternion)
 
     // Update listener orientation
     Tone.Listener.forwardX.value = this.forward.x
@@ -33,5 +34,7 @@ export class AudioListenerSystem extends System {
     Tone.Listener.upX.value = 0
     Tone.Listener.upY.value = 1
     Tone.Listener.upZ.value = 0
+
+    console.log('listener',transform.position, this.forward)
   }
 }
