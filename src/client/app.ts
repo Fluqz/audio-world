@@ -88,12 +88,7 @@ export class App {
         }
         else {
 
-            // game.ecs.entities.forEach((e: Entity) => {
-
-            //     console.log(e, game.ecs.getAllComponents(e))
-            // })
-
-            // console.log('Save', JSON.stringify(saveScene(game.ecs)))
+            // console.log('Save', JSON.stringify(this.game.sceneManager.saveScene(this.game.sceneManager.activeScene)))
         }
     }
 }

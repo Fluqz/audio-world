@@ -14,6 +14,7 @@ import { MovementComponent } from "./movement-component";
 import { InputComponent } from "./input-component";
 import { AssetMeshComponent } from "./asset-mesh-component";
 import { PrimitiveMeshComponent } from "./primitive-mesh-component";
+import { RigidbodyComponent } from "./rigidbody-component";
 
 export const componentRegistry: Record<string, new (...args: any) => any> = {
     
@@ -29,6 +30,7 @@ export const componentRegistry: Record<string, new (...args: any) => any> = {
     OscillatorComponent,
     PrimitiveMeshComponent,
     PlayerComponent,
+    RigidbodyComponent,
     ScriptComponent,
     TagComponent,
     TransformationComponent,

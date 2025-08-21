@@ -170,10 +170,10 @@ class ECS {
         }
     }
     addName(entity, name) {
-        this.addComponent(entity, new name_component_1.NameComponent(name));
+        this.addComponent(entity, new name_component_1.NameComponent({ name }));
     }
     addTag(entity, tagName) {
-        this.addComponent(entity, new tag_component_1.TagComponent(tagName));
+        this.addComponent(entity, new tag_component_1.TagComponent({ tagName }));
     }
     hasTag(entity, tagName) {
         const tag = this.getComponent(entity, tag_component_1.TagComponent);

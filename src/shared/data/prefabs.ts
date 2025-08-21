@@ -7,29 +7,19 @@ import { Utils } from "../util/utils";
 import { TraceScript } from "./scripts/trace.script";
 
 import { drum_fills_samples, factory_samples } from './sample-db'
-import { AssetManager } from "../asset-manager";
-import { AnimationComponent } from "../../ecs/components/animation-component";
 import { AudioListenerComponent } from "../../ecs/components/audio/audio-listener-component";
-import { ScriptComponent } from "../../ecs/components/script-component";
-import { TagComponent } from "../../ecs/components/tag-component";
-import { ThirdPersonControllerComponent } from "../../ecs/components/______third-person-controller-component-OLD";
 import { TransformationComponent } from "../../ecs/components/transformation-component";
 import { AudibleRadiusComponent } from "../../ecs/components/audio/audible-radius-component";
-import { Entity } from "../../ecs/entity";
 
 import { Materials } from "./material-factory";
 import { VelocityComponent } from "../../ecs/components/velocity-component";
 import { OscillatorComponent } from "../../ecs/components/audio/oscillator-component";
-import { PlayerComponent } from "../../ecs/components/audio/player-component";
 import { ECS } from "../../ecs/ecs";
-import { MeshComponent } from "../../ecs/components/mesh-component";
-import { Globals } from "../../globals";
 import { InputComponent } from "../../ecs/components/input-component";
 import { MovementComponent } from "../../ecs/components/movement-component";
 import { PrimitiveMeshComponent } from "../../ecs/components/primitive-mesh-component";
-import { MeshStandardMaterial } from "three";
-import { SpherePrimitive, SphereOptions, LathePrimitive, LatheOptions } from "../../ecs/primitive-factory";
-import { AssetMeshComponent } from "../../ecs/components/asset-mesh-component";
+import { SpherePrimitive, SphereOptions, LathePrimitive, LatheOptions, CuboidPrimitive, CuboidOptions } from "../../ecs/primitive-factory";
+import { RigidbodyComponent } from "../../ecs/components/rigidbody-component";
 
 
 
@@ -41,32 +31,31 @@ texture.wrapT = THREE.RepeatWrapping
 
 export const Prefabs = {
 
-    // Guest: () => {
+    Guest: (ecs: ECS) => {
 
-    //     const ecs = Game.i.ecs
+        const e = ecs.createEntity()
+        
+        ecs.addName(e, 'guest')
+        ecs.addTag(e, 'guest')
 
-    //     const e = ecs.createEntity()
+        ecs.addComponent(e, new RigidbodyComponent())
 
-    //     ecs.addName(e, 'Guest')
-    //     ecs.addTag(e, 'Guest')
+        const t = new TransformationComponent()
+        ecs.addComponent(e, t)
+        ecs.addComponent(e, new VelocityComponent())
+        
+        t.position.y = .3
 
-    //     let c = Utils.getRndColor()
+        ecs.addComponent(e, new MovementComponent())
+        ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }))
 
-    //     let t = new TransformationComponent()
+        ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
 
-    //     let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshStandardMaterial({ color: c }))
-    //     m.geometry.translate(0, m.geometry.parameters.radius / 2, 0)
-    //     m.castShadow = true
-    //     m.receiveShadow = true
+        
+        // ecs.addComponent(e, new ScriptComponent(new TraceScript()))
 
-    //     ecs.addComponent(e, t)
-    //     ecs.addComponent(e, new VelocityComponent())
-    //     ecs.addComponent(e, new GraphicsComponent(m))
-    //     ecs.addComponent(e, new AudioListenerComponent('player'))
-    //     ecs.addComponent(e, new AudibleRadiusComponent(100))
-
-    //     return e
-    // },
+        return e
+    },
 
     Player: (ecs: ECS) => {
 
@@ -74,6 +63,8 @@ export const Prefabs = {
         
         ecs.addName(e, 'player')
         ecs.addTag(e, 'player')
+
+        ecs.addComponent(e, new RigidbodyComponent())
 
         const t = new TransformationComponent()
         ecs.addComponent(e, t)
@@ -83,21 +74,11 @@ export const Prefabs = {
 
         ecs.addComponent(e, new InputComponent())
         ecs.addComponent(e, new MovementComponent())
-        // ecs.addComponent(e, new ThirdPersonMovementComponent(Game.i.renderManager.camera.uuid, [0, 1, -1]))
+        ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }))
 
-        // ecs.addComponent(e, new MeshComponent(Globals.path + '/assets/models/gltf/Flower_3_Single.gltf'))
-        ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>('SPHERE', { name: 'Sphere', radius: .3 }, Materials.PLAYER))
-
-        // let m = new THREE.Mesh(new THREE.SphereGeometry(.3, 32, 32), new THREE.MeshToonMaterial())
-        // m.geometry.translate(0, 0, 0)
-        // m.castShadow = true
-        // m.receiveShadow = true
-        // ecs.addComponent(e, new MeshComponent(Globals.path + '/assets/models/gltf/Mushroom_Laetiporus.gltf'))
-
-        ecs.addComponent(e, new AudioListenerComponent('player'))
-        ecs.addComponent(e, new AudibleRadiusComponent(100))
+        ecs.addComponent(e, new AudioListenerComponent({ transformRefTag: 'player' }))
+        ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
         // ecs.addComponent(e, new ScriptComponent(new TraceScript()))
-        // ecs.addComponent(e, new ThirdPersonControllerComponent(Game.i.renderManager.camera, Game.i.dom))
 
         return e
     },
@@ -212,8 +193,8 @@ export const Prefabs = {
 
         ecs.addComponent(e, new TransformationComponent())
         // ecs.addComponent(e, new AssetMeshComponent(Globals.path + '/assets/models/gltf/Flower_3_Single.gltf'))
-        ecs.addComponent(e, new PrimitiveMeshComponent<LathePrimitive, LatheOptions>('LATHE', { name: 'Lathe', phiStart: 0, phiLength: Math.PI * 2 }, Materials.FACE_DISPLACEMENT))
-        ecs.addComponent(e, new AudibleRadiusComponent(100))
+        ecs.addComponent(e, new PrimitiveMeshComponent<CuboidPrimitive, CuboidOptions>({ primitive: 'CUBOID', options: { name: 'Cuboid', w: 3, h: 100, d: 3 }, materialTag: Materials.FACE_DISPLACEMENT }))
+        ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
         // ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
         //     // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
@@ -231,7 +212,7 @@ export const Prefabs = {
 
         const frequency = getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
 
-        ecs.addComponent(e, new OscillatorComponent(type, frequency, -10))
+        ecs.addComponent(e, new OscillatorComponent({ waveform: type, frequency, volume: -10 }))
 
         // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 

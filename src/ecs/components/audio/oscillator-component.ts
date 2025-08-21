@@ -13,12 +13,12 @@ export class OscillatorComponent extends AudioSourceComponent {
     oscillator?: Tone.Oscillator;
     envelope: Tone.AmplitudeEnvelope
 
-    constructor(waveform: OscillatorType, frequency: Tone.Unit.Frequency, volume: Tone.Unit.Degrees) {
+    constructor(data: { waveform: OscillatorType, frequency: Tone.Unit.Frequency, volume: Tone.Unit.Degrees }) {
         super()
 
-        this.waveform = waveform
-        this.frequency = frequency
-        this.volume = volume
+        this.waveform = data.waveform
+        this.frequency = data.frequency
+        this.volume = data.volume
     }
 
     serialize() {

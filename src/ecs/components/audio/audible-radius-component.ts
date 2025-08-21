@@ -7,9 +7,9 @@ export class AudibleRadiusComponent implements Component {
 
     radius: number
 
-    constructor(radius: number) {
+    constructor(data: { radius: number }) {
 
-        this.radius = radius
+        this.radius = data.radius
     }
 
     serialize(): ComponentData {

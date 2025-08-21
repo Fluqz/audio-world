@@ -8,8 +8,8 @@ import { Octree } from "../octree";
 import { OscillatorComponent } from "../components/audio/oscillator-component";
 import { AudibleRadiusComponent } from "../components/audio/audible-radius-component";
 import { Entity } from "../entity";
-import { PlayerComponent } from "../components/audio/player-component";
 import { AudioSourceComponent } from "../components/audio/audio-source-component";
+import { PlayerComponent } from "../components/audio/player-component";
 
 export class AudioSystem extends System {
 
@@ -42,6 +42,7 @@ export class AudioSystem extends System {
         // entities = Entity.filterByComponents(entities, this.requiredComponents)
 
         for(let [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
+
 
             let source: AudioSourceComponent = ecs.getComponent(e, OscillatorComponent) as OscillatorComponent
             if(source == undefined) source = ecs.getComponent(e, PlayerComponent) as PlayerComponent
@@ -89,6 +90,7 @@ export class AudioSystem extends System {
         }
     }
 
+    /** Sound pressure level */
     public distanceTodB(distance: number, minDistance: number = .1, maxDistance: number = 50.0, mindB: number = -80.0, maxdB: number = 0.0): number {
 
         if (distance <= minDistance) return maxdB  // Full volume

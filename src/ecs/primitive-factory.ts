@@ -1,4 +1,4 @@
-import { BoxGeometry, LatheGeometry, Mesh, OctahedronGeometry, SphereGeometry, Vec2, Vector2 } from "three";
+import { BoxGeometry, LatheGeometry, Mesh, OctahedronGeometry, SphereGeometry, TubeGeometry, Vec2, Vector2 } from "three";
 
 
 
@@ -53,7 +53,7 @@ export class PrimitiveFactory {
 
     static createSphere(options: SphereOptions) {
 
-        const m = new Mesh()
+        const m = this.createMesh()
         m.name = options.name
         m.geometry = new SphereGeometry(options.radius, 32, 32)
 
@@ -62,7 +62,7 @@ export class PrimitiveFactory {
 
     static createCuboid(options: CuboidOptions) {
 
-        const m = new Mesh()
+        const m = this.createMesh()
         m.name = options.name
         m.geometry = new BoxGeometry(options.w, options.h, options.d)
 
@@ -71,7 +71,7 @@ export class PrimitiveFactory {
 
     static createLathe(options: LatheOptions) {
 
-        const m = new Mesh()
+        const m = this.createMesh()
         m.name = options.name
 
         const peakRadius = 0
@@ -93,10 +93,21 @@ export class PrimitiveFactory {
 
     static createOctahedron(options: OctahedronOptions) {
 
-        const m = new Mesh()
+        const m = this.createMesh()
         m.name = options.name
         m.geometry = new OctahedronGeometry(options.radius, options.detail)
 
         return m
+    }
+
+    static createMesh() {
+
+        const mesh = new Mesh()
+
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+        mesh.matrixAutoUpdate = false
+
+        return mesh
     }
 }

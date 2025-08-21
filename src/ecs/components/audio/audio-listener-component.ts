@@ -9,16 +9,14 @@ export class AudioListenerComponent implements Component {
 
     public transformRefEntity: Entity
 
-    constructor(transformRefTag: string) {
+    constructor(data: { transformRefTag: string }) {
 
-        this.transformRefTag = transformRefTag
+        this.transformRefTag = data.transformRefTag
     }
 
     resolveReferences(ecs: ECS): void {
         
         this.transformRefEntity = ecs.getTaggedEntity(this.transformRefTag)?.[0]
-
-        console.log('resolve', this.transformRefEntity, this.transformRefTag)
     }
 
     serialize(): ComponentData {

@@ -1,6 +1,5 @@
-import { ComponentClass, Component, ComponentData } from "../ecs/components/component";
+import { ComponentData } from "../ecs/components/component";
 import { componentRegistry } from "../ecs/components/registry";
-import { ECS } from "../ecs/ecs";
 import { Scene } from "../ecs/scene";
 
 /** Entity data format */
@@ -18,6 +17,8 @@ export type SceneData = {
 
 
 export class SceneManager {
+
+    activeScene: Scene
       
     saveScene(scene: Scene): SceneData {
 

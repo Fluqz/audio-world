@@ -22,7 +22,7 @@ export class RenderManager {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
         this.camera = new THREE.PerspectiveCamera(45, Globals.w / Globals.h, .1, 1000)
-        this.camera.position.set(0, 0, -5)
+        this.camera.position.set(0, 0, -15)
         this.camera.lookAt(0, 0, 0)
 
         this.orbit = new OrbitControls(this.camera, Globals.dom)

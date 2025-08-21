@@ -214,12 +214,12 @@ export class ECS {
 
     addName(entity: Entity, name: string): void {
 
-        this.addComponent(entity, new NameComponent(name))
+        this.addComponent(entity, new NameComponent({ name }))
     }
 
     addTag(entity: Entity, tagName: string): void {
 
-        this.addComponent(entity, new TagComponent(tagName))
+        this.addComponent(entity, new TagComponent({ tagName }))
     }
 
     hasTag(entity: Entity, tagName: string): boolean {

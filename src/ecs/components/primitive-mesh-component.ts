@@ -8,29 +8,34 @@ import { MeshComponent } from "./mesh-component";
 
 
 export class PrimitiveMeshComponent<TPrimitive extends Primitive, TOptions extends PrimitiveOptions> extends MeshComponent {
+
     primitive: TPrimitive
 
-    options: TOptions
-    
-    // Runtime
     object: Mesh
+
+    options: TOptions
+
+    materialTag: Materials
 
     gltf: GLTF
 
-    constructor(primitive: TPrimitive, options: TOptions, materialTag: Materials) {
+    constructor(data: { primitive: TPrimitive, options: TOptions, materialTag: Materials }) {
         super()
 
-        this.primitive = primitive
+        this.primitive = data.primitive
+        this.materialTag = data.materialTag
+        this.options = data.options
 
-        this.object = this.loadPrimitive(primitive, options, materialTag)
+        this.object = this.loadPrimitive(this.primitive, this.options, this.materialTag)
 
-        Game.i.renderManager.scene.add(this.object) // WHERE TO PUT THIS? ECS? SYSTEM?
+        if(this.object) Game.i.renderManager.scene.add(this.object) // WHERE TO PUT THIS? ECS? SYSTEM?
     }
 
     loadPrimitive(primitive: TPrimitive, options: TOptions, materialTag: Materials) {
 
         const mesh = PrimitiveFactory.create(primitive, options)
 
+        console.log('materialtag', materialTag)
         mesh.material = MaterialFactory.create(materialTag)
 
         return mesh
@@ -40,7 +45,9 @@ export class PrimitiveMeshComponent<TPrimitive extends Primitive, TOptions exten
 
         return {
             
-            primitive: this.primitive
+            primitive: this.primitive,
+            options: this.options,
+            materialTag: this.materialTag,
         }
     }
 }

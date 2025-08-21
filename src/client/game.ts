@@ -127,16 +127,27 @@ export class Game {
         this.fixedUpdateClock = new THREE.Clock()
         this.updateClock = new THREE.Clock()
 
-        if(this.activeScene) this.activeScene.unload()
+        if(this.sceneManager.activeScene) this.sceneManager.activeScene.unload()
         
-        const scene = new Scene('scene1.json')
-        this.ecs = scene.ecs
+        this.registerSystems()
+        
 
-        // Create Player
-        this.player = Prefabs.Player(scene.ecs)
-        // this.sceneManager.loadScene(Globals.path + '/assets/scenes/scene1.json')
+        this.sceneManager.loadScene(Globals.path + '/assets/scenes/scene1.json').then((scene: Scene) => {
 
-        this.instanciateRandomly(Prefabs.Stone, 5, 20)
+            this.sceneManager.activeScene = scene
+            this.ecs = scene.ecs
+                
+            this.registerSystems()
+
+            this.player = Prefabs.Player(this.ecs)
+
+            this.loop()
+        })
+    }
+
+    instanciatePrefab() {
+
+        const prefab = Prefabs.Stone(this.ecs)
 
         for(let e of this.ecs.entities.keys()) {
 
@@ -145,15 +156,6 @@ export class Game {
                 if(comp.resolveReferences) comp.resolveReferences(this.ecs)
             }
         }
-        
-        
-        this.registerSystems()
-        
-        this.loop()
-    }
-
-    instanciatePrefab() {
-
     }
 
     registerSystems() {
@@ -179,10 +181,9 @@ export class Game {
         this.ecs.registerSystem(new AudioSystem(this.octree))
     }
 
-    public activeScene: Scene
     setActiveScene(scene: Scene) {
 
-        this.activeScene = scene
+        this.sceneManager.activeScene = scene
     }
 
     private instanciateRandomly(instaciateFunc: (...args) => Entity, amount: number, range: number) {

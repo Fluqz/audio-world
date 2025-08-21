@@ -30,7 +30,6 @@ export class RenderSyncSystem extends System {
 
     setTransform(mesh: MeshComponent, transform: TransformationComponent) {
 
-        console.log('res', transform, mesh)
         mesh.object.position.copy(transform.position)
         mesh.object.scale.copy(transform.scale)
 

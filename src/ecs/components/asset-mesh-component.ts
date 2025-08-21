@@ -13,10 +13,10 @@ export class AssetMeshComponent extends MeshComponent {
     
     gltf: GLTF
 
-    constructor(path: string) {
+    constructor(data: { path: string }) {
         super()
 
-        this.path = path
+        this.path = data.path
 
         this.object = new Object3D()
         this.object.matrixAutoUpdate = false
