@@ -1,6 +1,22 @@
 Audio World
 
-three.js-typescript-boilerplate - check npm run build 
+
+TODO 
+
+ChunkSystem
+    - Chunk maps
+    - Load from a file per chunk or chunk after load?
+Heightmap Ground
+Multiplayer
+    - Socketio multiplayer 
+Max4Live / AudioSystem?
+    - Think about a audio system for this game. How can things be wired? Modular Synth like?
+ScriptComponents
+Use octree inside ecs?
+Editor
+    - Editor to build scenes
+Game Idea? Whats the actual fun? Only the experience of walking through it and building scenes?
+
 
 
 

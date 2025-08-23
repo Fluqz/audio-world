@@ -18,6 +18,4 @@ export class ScriptComponent implements Component {
         
         this.scripts = scripts
     }
-
-
 }

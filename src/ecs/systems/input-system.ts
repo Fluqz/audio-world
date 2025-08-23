@@ -13,9 +13,7 @@ export type InputSource =
   | { type: 'gamepad_button'; button: GamepadButton }
   | { type: 'gamepad_axis'; axis: number; direction: 1 | -1; threshold?: number };
 
-export type ActionMap = {
-  [actionName: string]: InputSource[];
-}
+export type ActionMap = Record<string, InputSource[]>
 
 export const defaultActionMap: ActionMap = {
   move_forward: [
@@ -46,13 +44,13 @@ export class InputSystem extends System {
   private gamepadIndex = 0;
   private actionMap: ActionMap;
 
-  constructor(actionMap: ActionMap) {
+  constructor(actionMap: ActionMap, ) {
     super()
 
     this.actionMap = actionMap;
 
     window.addEventListener('keydown', (e: KeyboardEvent) => {console.log('keydown', e.key);this.keys[e.key.toLowerCase()] = true })
-    window.addEventListener('keyup', (e: KeyboardEvent) => {console.log('keydown', e.key);this.keys[e.key.toLowerCase()] = false })
+    window.addEventListener('keyup', (e: KeyboardEvent) => {console.log('keydown', e.key); delete this.keys[e.key.toLowerCase()] })
   }
 
   update(ecs: ECS, dt: number) {
@@ -60,6 +58,9 @@ export class InputSystem extends System {
     const gamepad = navigator.getGamepads?.()[this.gamepadIndex]
 
     for (const [entity, [input]] of ecs.queryEntities(InputComponent)) {
+
+
+      input.keys = this.keys
 
         let moveX
         let moveZ

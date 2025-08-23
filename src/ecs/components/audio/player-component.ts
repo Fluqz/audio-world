@@ -13,13 +13,11 @@ export class PlayerComponent extends AudioSourceComponent {
 
     volume: Tone.Unit.Decibels
 
-    constructor(path: string, loop: boolean, volume: Tone.Unit.Decibels) {
+    constructor(data: {path: string, loop: boolean}) {
         super()
 
-        this.path = path
-        this.loop = loop
-
-        this.volume = volume
+        this.path = data.path
+        this.loop = data.loop
     }
 
     serialize() {
@@ -35,11 +33,18 @@ export class PlayerComponent extends AudioSourceComponent {
         this.player.loop = this.loop
         this.player.start()
 
-        this.volumeNode = new Tone.Volume(this.volume)
+        // Create a 3D panner
+        this.panner = new Tone.Panner3D({
+            panningModel: "HRTF",   // more realistic
+            distanceModel: "exponential", // controls volume falloff
+            maxDistance: 50,
+            rolloffFactor: 1,
+        })
 
-        this.player.connect(this.volumeNode)
-        
-        this.outputNode = this.volumeNode
+        this.player.connect(this.panner)
+        // this.panner.connect(this.volumeNode)
+
+        this.outputNode = this.panner
     }
 
     destroy() {

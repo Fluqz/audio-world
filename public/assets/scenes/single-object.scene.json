@@ -7,7 +7,7 @@
                 "TagComponent": { "tagName": "player" },
                 "RigidbodyComponent": { "isKinematic": false },
                 "TransformationComponent": {
-                    "position": [-21.657227454980887, 0.3, -83.15238837319676],
+                    "position": [-5.657227454980887, 0.3, -20.15238837319676],
                     "rotation": [0, 0, 0, "XYZ"],
                     "quaternion": [0, -0.9935972561904114, 0, 0.11298005350895404],
                     "scale": [1, 1, 1]
@@ -36,7 +36,7 @@
                     "materialTag": "FACE_DISPLACEMENT"
                 },
                 "AudibleRadiusComponent": { "radius": 100 },
-                "OscillatorComponent": { "waveform": "triangle", "frequency": 69.3, "volume": -10 }
+                "OscillatorComponent": { "waveform": "triangle", "frequency": 300, "volume": -10 }
             }
         }
         

@@ -7,24 +7,32 @@ import { ECS } from "../ecs";
 import { System } from "./system";
 import { Matrix4 } from "three/src/math/Matrix4";
 import { M } from "../../shared/util/math";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class ThirdPersonMovementSystem extends System {
 
-  private camera: PerspectiveCamera
+  private orbit: OrbitControls
   private moveDir = new Vector3()
   private forward = new Vector3()
   private right = new Vector3()
   private quaternionOffset = new Quaternion()
 
-  constructor(camera: PerspectiveCamera) {
+  private transform: TransformationComponent
+  private input: InputComponent
+
+  constructor(orbit: OrbitControls) {
     super();
-    this.camera = camera;
+    this.orbit = orbit;
+
+    this.orbit.addEventListener('change', this.onOrbitChangeHandler.bind(this))
   }
 
   update(ecs: ECS, dt: number): void {
 
     for (const [entity, [input, velocity, transform, movement]] of ecs.queryTagged("player", InputComponent, VelocityComponent, TransformationComponent, MovementComponent)) {
 
+      this.transform = transform
+      this.input = input
 
       if (input.direction.lengthSq() === 0) {
 
@@ -33,10 +41,10 @@ export class ThirdPersonMovementSystem extends System {
       }
 
       const a = Math.atan2((input.direction.x - M.FORWARD.x), input.direction.z - M.FORWARD.z)
-      this.quaternionOffset.setFromAxisAngle(M.UP, a)
+      // this.quaternionOffset.setFromAxisAngle(M.UP, a)
       
       // Step 1: Get camera-relative directions
-      this.camera.getWorldDirection(this.forward)
+      this.orbit.object.getWorldDirection(this.forward)
       this.forward.y = 0
       this.forward.normalize()
 
@@ -62,5 +70,15 @@ export class ThirdPersonMovementSystem extends System {
       transform.quaternion.slerp(targetQuat, 0.5) // Smoothly rotate
       transform.useQuaternion = true
     }
+  }
+
+
+  onOrbitChangeHandler(e) {
+
+    if(!this.transform) return
+
+    if(Object.keys(this.input.keys).length > 0) return
+
+    this.orbit.object.getWorldQuaternion(this.transform.quaternion)
   }
 }

@@ -131,7 +131,7 @@ export class Game {
 
         if(this.sceneManager.scene) this.sceneManager.scene.unload()
         
-        this.loadScene(Globals.path + '/assets/scenes/scene2.json').then(scene => {
+        this.loadScene(Globals.path + '/assets/scenes/single-object.scene.json').then(scene => {
 
             console.log('LOOP')
             this.loop()
@@ -195,7 +195,7 @@ export class Game {
         // Inputs
         this.ecs.registerSystem(new InputSystem(defaultActionMap))
         // Player Controller
-        this.ecs.registerSystem(new ThirdPersonMovementSystem(this.renderManager.camera))
+        this.ecs.registerSystem(new ThirdPersonMovementSystem(this.renderManager.orbit))
         // Physics
         this.ecs.registerSystem(new PhysicsSystem())
 
@@ -294,7 +294,7 @@ export class Game {
 
     update() {
 
-        this.ecs.update(this.updateClock.getDelta())
+        if(this.sceneManager.scene) this.sceneManager.scene.update(this.updateClock.getDelta())
 
         this.renderManager.render()
     }

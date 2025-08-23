@@ -41,10 +41,9 @@ export class OscillatorComponent extends AudioSourceComponent {
         // Create a 3D panner
         this.panner = new Tone.Panner3D({
             panningModel: "HRTF",   // more realistic
-            distanceModel: "inverse", // controls volume falloff
-            maxDistance: 50,
-            rolloffFactor: 1,
-            
+            distanceModel: "exponential", // controls volume falloff
+            maxDistance: 100,
+            rolloffFactor: 1, //.8,
         })
 
         this.oscillator.connect(this.panner)

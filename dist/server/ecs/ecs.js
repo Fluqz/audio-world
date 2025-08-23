@@ -17,20 +17,19 @@ class ECS {
         this.entities.add(id);
         return id;
     }
-    loadPrefabFile(path) {
-        const jsonString = null;
-        return jsonString;
-    }
-    createFromPrefab(prefab) {
-        const entity = this.createEntity();
-        if (prefab.name)
-            this.addName(entity, prefab.name);
-        if (prefab.components) {
-            for (let comp of prefab.components) {
-                console.log('comp', comp);
-            }
-        }
-    }
+    // loadPrefabFile(path:string) {
+    //     const jsonString = null
+    //     return jsonString
+    // }
+    // createFromPrefab(prefab: Prefab) {
+    //     const entity = this.createEntity()
+    //     if(prefab.name) this.addName(entity, prefab.name)
+    //     if(prefab.components) {
+    //         for(let comp of prefab.components) {
+    //             console.log('comp', comp)
+    //         }
+    //     }
+    // }
     destroyEntity(entity) {
         var _a;
         if (!this.entities.has(entity))

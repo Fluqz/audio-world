@@ -21,27 +21,27 @@ export class ECS {
         return id
     }
 
-    loadPrefabFile(path:string) {
+    // loadPrefabFile(path:string) {
         
-        const jsonString = null
+    //     const jsonString = null
 
-        return jsonString
-    }
+    //     return jsonString
+    // }
 
-    createFromPrefab(prefab: Prefab) {
+    // createFromPrefab(prefab: Prefab) {
 
-        const entity = this.createEntity()
+    //     const entity = this.createEntity()
 
-        if(prefab.name) this.addName(entity, prefab.name)
+    //     if(prefab.name) this.addName(entity, prefab.name)
 
-        if(prefab.components) {
+    //     if(prefab.components) {
 
-            for(let comp of prefab.components) {
+    //         for(let comp of prefab.components) {
 
-                console.log('comp', comp)
-            }
-        }
-    }
+    //             console.log('comp', comp)
+    //         }
+    //     }
+    // }
 
     destroyEntity(entity: Entity): void {
 
@@ -228,10 +228,7 @@ export class ECS {
         return tag?.tagName === tagName
     }
 
-    *queryTagged<T extends Component[]>(
-                            tagName: string,
-                            ...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }
-                        ): Iterable<[Entity, T]> {
+    *queryTagged<T extends Component[]>(tagName: string,...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }): Iterable<[Entity, T]> {
 
                             
         const tagStore: ComponentStore<TagComponent> = this.componentStores.get(TagComponent);
@@ -269,10 +266,7 @@ export class ECS {
             }
         }
     }
-    getTaggedEntity<T extends Component[]>(
-                        tagName: string,
-                        ...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }
-                    ): [Entity, T] | undefined {
+    getTaggedEntity<T extends Component[]>(tagName: string,...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }): [Entity, T] | undefined {
 
         const iterator = this.queryTagged(tagName, ...componentClasses)[Symbol.iterator]()
         const result = iterator.next()
