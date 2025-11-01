@@ -8,8 +8,12 @@ import { System } from "./system";
 import { Matrix4 } from "three/src/math/Matrix4";
 import { M } from "../../shared/util/math";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { Component, ComponentClass } from "../components/component";
 
 export class ThirdPersonMovementSystem extends System {
+
+  entities: Map<number, [InputComponent, VelocityComponent, TransformationComponent, MovementComponent]> = new Map()
+  components: ComponentClass<any>[] = [InputComponent, VelocityComponent, TransformationComponent, MovementComponent]
 
   private orbit: OrbitControls
   private moveDir = new Vector3()
@@ -27,9 +31,19 @@ export class ThirdPersonMovementSystem extends System {
     this.orbit.addEventListener('change', this.onOrbitChangeHandler.bind(this))
   }
 
+
+  init(ecs: ECS): void {
+
+    const player = ecs.queryTagged("player", InputComponent, VelocityComponent, TransformationComponent, MovementComponent)
+    
+    if(!player) return
+
+    for(let [entity] of player) this.tryTrackEntity(ecs, entity)
+  }
+
   update(ecs: ECS, dt: number): void {
 
-    for (const [entity, [input, velocity, transform, movement]] of ecs.queryTagged("player", InputComponent, VelocityComponent, TransformationComponent, MovementComponent)) {
+    for (const [entity, [input, velocity, transform, movement]] of this.entities.entries()) {
 
       this.transform = transform
       this.input = input

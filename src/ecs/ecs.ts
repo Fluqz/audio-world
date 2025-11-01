@@ -4,21 +4,48 @@ import { System } from "./systems/system";
 import { ScriptComponent } from "./components/script-component";
 import { TagComponent } from "./components/tag-component";
 import { NameComponent } from "./components/name-component";
-import { Prefab } from "./prefab";
-
+import { EventBus } from "./event-bus";
 
 export class ECS {
-
+    
+    /** ID counter that is used to make Entity IDs. */
     private nextEntityId: Entity = 0
+    /** All entities that were created. */
     public entities: Set<Entity> = new Set()
+    /** A map of ComponentStores for each Component Type. */
     public componentStores: Map<Function, ComponentStore<any>> = new Map()
+    /** Array of registered systems */
     public systems: System[] = []
 
+    /** The event bus for the ECS. */
+    private eventBus = new EventBus();
+
+    // Optional: expose it to systems
+    public get events() {
+        return this.eventBus;
+    }
     
-    createEntity(): Entity {
-        const id = this.nextEntityId++
-        this.entities.add(id)
-        return id
+    /** Creates a entity. No event bus! */
+    private createEntity(): Entity {
+
+        const entity = this.nextEntityId++
+        this.entities.add(entity)
+
+        return entity
+    }
+
+    createEntityWithComponents(components: Component[]): Entity {
+
+        const entity = this.createEntity()
+
+        for (const comp of components) {
+
+            this.addComponent(entity, comp)
+        }
+
+        this.events.emit('entity-added', entity)
+
+        return entity
     }
 
     // loadPrefabFile(path:string) {
@@ -43,6 +70,7 @@ export class ECS {
     //     }
     // }
 
+    /** Destroys the entity and all its components. */
     destroyEntity(entity: Entity): void {
 
         if (!this.entities.has(entity)) return;
@@ -64,24 +92,32 @@ export class ECS {
         }
 
         this.entities.delete(entity);
+
+        this.eventBus.emit('entity-removed', { entity })
     }
 
+    /** Check if entity is part of the ECS. */
     entityExists(entity: Entity): boolean {
         return this.entities.has(entity);
     }
 
+    /** Add a component to an entity. Makes a new ComponentStore if not existant. */
     addComponent<T extends Component>(entity: Entity, component: T): void {
         const type = component.constructor as ComponentClass<T>;
         if (!this.componentStores.has(type)) {
             this.componentStores.set(type, new ComponentStore<T>());
         }
         this.componentStores.get(type)!.add(entity, component);
+
+        this.eventBus.emit('component-added', { entity, component })
     }
 
+    /** Returns the component of an entity by component class name. */
     getComponent<T extends Component>(entity: Entity, componentClass: ComponentClass<T>): T | undefined {
         return this.componentStores.get(componentClass)?.get(entity);
     }
 
+    /** Returns all components of an entity */
     getAllComponents(entity: Entity) : Component[] {
 
         const components: Component[] = []
@@ -95,21 +131,40 @@ export class ECS {
         return components
     }
 
+    /** Returns all entities. */
     getAllEntities() {
 
         return this.entities
     }
 
+    /** Removes a component */
     removeComponent<T extends Component>(entity: Entity, componentClass: ComponentClass<T>): void {
-        this.componentStores.get(componentClass)?.remove(entity);
+
+        const store = this.componentStores.get(componentClass)
+
+        if(!store) return
+
+        const component = store.get(entity)
+
+        if(component && component.destroy) component.destroy()
+
+        this.eventBus.emit('component-removed', { entity, component })
     }
 
     registerSystem(system: System): void {
+
         this.systems.push(system)
+
+        system.init(this)
+
+        this.eventBus.emit('system-registered', { system })
     }
 
     unregisterSystem(system: System): void {
+
         this.systems.splice(this.systems.indexOf(system), 1)
+
+        this.eventBus.emit('system-unregistered', { system })
     }
 
     update(dt: number): void {
@@ -209,19 +264,6 @@ export class ECS {
         }
     }
 
-
-
-
-    addName(entity: Entity, name: string): void {
-
-        this.addComponent(entity, new NameComponent({ name }))
-    }
-
-    addTag(entity: Entity, tagName: string): void {
-
-        this.addComponent(entity, new TagComponent({ tagName }))
-    }
-
     hasTag(entity: Entity, tagName: string): boolean {
         
         const tag = this.getComponent(entity, TagComponent)
@@ -266,7 +308,8 @@ export class ECS {
             }
         }
     }
-    getTaggedEntity<T extends Component[]>(tagName: string,...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }): [Entity, T] | undefined {
+
+    getTaggedEntity<T extends Component[]>(tagName: string, ...componentClasses: { [K in keyof T]: ComponentClass<T[K]> }): [Entity, T] | undefined {
 
         const iterator = this.queryTagged(tagName, ...componentClasses)[Symbol.iterator]()
         const result = iterator.next()

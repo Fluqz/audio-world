@@ -2,6 +2,8 @@ import { ECS } from "../ecs"
 import { System } from "./system"
 
 import { InputComponent } from '../components/input-component';
+import { Component, ComponentClass } from "../components/component";
+import { Entity } from "../entity";
 
 export type GamepadButton = number;
 export type KeyboardKey = string;
@@ -40,6 +42,9 @@ export const defaultActionMap: ActionMap = {
 
 export class InputSystem extends System {
 
+  entities: Map<number, [InputComponent]> = new Map()
+  components: ComponentClass<any>[] = [InputComponent]
+
   private keys: Record<string, boolean> = {};
   private gamepadIndex = 0;
   private actionMap: ActionMap;
@@ -53,11 +58,21 @@ export class InputSystem extends System {
     window.addEventListener('keyup', (e: KeyboardEvent) => {console.log('keydown', e.key); delete this.keys[e.key.toLowerCase()] })
   }
 
+  init(ecs: ECS): void {
+
+    const queried = ecs.queryEntities(InputComponent)
+
+    for(let [e, [c]] of queried) {
+
+        this.tryTrackEntity(ecs, e)
+    }
+  }
+
   update(ecs: ECS, dt: number) {
 
     const gamepad = navigator.getGamepads?.()[this.gamepadIndex]
 
-    for (const [entity, [input]] of ecs.queryEntities(InputComponent)) {
+    for (const [entity, [input]] of this.entities.entries()) {
 
 
       input.keys = this.keys

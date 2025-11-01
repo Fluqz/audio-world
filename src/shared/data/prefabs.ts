@@ -19,6 +19,9 @@ import { MovementComponent } from "../../ecs/components/movement-component";
 import { PrimitiveMeshComponent } from "../../ecs/components/primitive-mesh-component";
 import { SpherePrimitive, SphereOptions, LathePrimitive, LatheOptions, CuboidPrimitive, CuboidOptions } from "../../ecs/primitive-factory";
 import { RigidbodyComponent } from "../../ecs/components/rigidbody-component";
+import { PlayerComponent } from "../../ecs/components/audio/player-component";
+import { TagComponent } from "../../ecs/components/tag-component";
+import { NameComponent } from "../../ecs/components/name-component";
 
 
 
@@ -32,53 +35,48 @@ export const Prefabs = {
 
     Guest: (ecs: ECS) => {
 
-        const e = ecs.createEntity()
-        
-        ecs.addName(e, 'guest')
-        ecs.addTag(e, 'guest')
+        const e = ecs.createEntityWithComponents([
 
-        ecs.addComponent(e, new RigidbodyComponent())
+            new NameComponent({ name: 'guest' }),
+            new TagComponent({ tagName: 'guest' }),
 
-        const t = new TransformationComponent()
-        ecs.addComponent(e, t)
-        ecs.addComponent(e, new VelocityComponent())
-        
-        t.position.y = .3
+            new RigidbodyComponent(),
 
-        ecs.addComponent(e, new MovementComponent())
-        ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }))
+            new TransformationComponent(),
+            new VelocityComponent(),
+            
+            new MovementComponent(),
+            new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }),
 
-        ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
+            new AudibleRadiusComponent({ radius: 100 }),
 
-        
-        // ecs.addComponent(e, new ScriptComponent(new TraceScript()))
+            // new ScriptComponent(new TraceScript()),
+
+        ])
 
         return e
     },
 
     Player: (ecs: ECS) => {
 
-        const e = ecs.createEntity()
+        const e = ecs.createEntityWithComponents([
                 
-        
-        ecs.addName(e, 'player')
-        ecs.addTag(e, 'player')
+            new NameComponent({ name: 'player'}),
+            new TagComponent({ tagName: 'player'}),
 
-        ecs.addComponent(e, new RigidbodyComponent())
+            new RigidbodyComponent(),
+            new VelocityComponent(),
+            new InputComponent(),
+            new MovementComponent(),
+            // new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }),
+            new PrimitiveMeshComponent<CuboidPrimitive, CuboidOptions>({ primitive: 'CUBOID', options: { name: 'Cuboid', w: .1, h: 1, d: 1 }, materialTag: Materials.PLAYER }),
+            new AudibleRadiusComponent({ radius: 100 }),
+            // ecs.addComponent(e, new ScriptComponent(new TraceScript()))
+        ])
 
-        const t = new TransformationComponent()
-        ecs.addComponent(e, t)
-        ecs.addComponent(e, new VelocityComponent())
-        
+        const t = ecs.getComponent(e, TransformationComponent)
+
         t.position.y = .3
-
-        ecs.addComponent(e, new InputComponent())
-        ecs.addComponent(e, new MovementComponent())
-        // ecs.addComponent(e, new PrimitiveMeshComponent<SpherePrimitive, SphereOptions>({ primitive: 'SPHERE', options: { name: 'Sphere', radius: .3 }, materialTag: Materials.PLAYER }))
-        ecs.addComponent(e, new PrimitiveMeshComponent<CuboidPrimitive, CuboidOptions>({ primitive: 'CUBOID', options: { name: 'Cuboid', w: .1, h: 1, d: 1 }, materialTag: Materials.PLAYER }))
-
-        ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
-        // ecs.addComponent(e, new ScriptComponent(new TraceScript()))
 
         return e
     },
@@ -177,24 +175,22 @@ export const Prefabs = {
 
     Stone: (ecs: ECS) => {
 
-        const e = ecs.createEntity()
+        const sample = drum_fills_samples[Math.round(Math.random() * drum_fills_samples.length - 1)]
 
-        ecs.addName(e, 'Stone')
-        ecs.addTag(e, 'organism')
+        // const type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
+        // const frequency = getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
 
-        // const max = 10
-        // let m = new THREE.Mesh(new THREE.BoxGeometry(Math.random() * max, Math.random() * max, Math.random() * max), faceDisplacementShader(1, 0x000000).clone())
-        // m.castShadow = true
-        // m.receiveShadow = true
-        // m.geometry.translate(0, m.geometry.parameters.height / 2, 0)
-        // let r = (Math.PI / 8)
-        // m.geometry.rotateX((Math.random() * r) - r)
-        // m.geometry.rotateZ((Math.random() * r) - r)
+        const e = ecs.createEntityWithComponents([
 
-        ecs.addComponent(e, new TransformationComponent())
-        // ecs.addComponent(e, new AssetMeshComponent(Globals.path + '/assets/models/gltf/Flower_3_Single.gltf'))
-        ecs.addComponent(e, new PrimitiveMeshComponent<CuboidPrimitive, CuboidOptions>({ primitive: 'CUBOID', options: { name: 'Cuboid', w: 3, h: 100, d: 3 }, materialTag: Materials.FACE_DISPLACEMENT }))
-        ecs.addComponent(e, new AudibleRadiusComponent({ radius: 100 }))
+            new NameComponent({ name: 'Stone'}),
+            new TagComponent({ tagName: 'organism'}),
+            new TransformationComponent(),
+            new PrimitiveMeshComponent<CuboidPrimitive, CuboidOptions>({ primitive: 'CUBOID', options: { name: 'Cuboid', w: 3, h: 100, d: 3 }, materialTag: Materials.FACE_DISPLACEMENT }),
+            new AudibleRadiusComponent({ radius: 50 }),
+            new PlayerComponent({ path:sample, loop:true } ),
+            // new OscillatorComponent({ waveform: type, frequency, volume: -10 }),
+        ])
+
         // ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
         //     // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
@@ -202,17 +198,6 @@ export const Prefabs = {
         //     // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
         //     transform.needsUpdate = true
         // }))
-
-
-        // const sample = drum_fills_samples[Math.round(Math.random() * drum_fills_samples.length - 1)]
-        // ecs.addComponent(e, new PlayerComponent(sample, true))
-
-
-        const type = ['sine', 'triangle', 'square', 'sawtooth'][Math.floor(Math.random() * 4)] as OscillatorType
-
-        const frequency = getScale(getNote('F' + Math.round((Math.random() * 3) + 1)), AEOLIAN_SCALE)[Math.round(Math.random() * AEOLIAN_SCALE.length)].frequency
-
-        ecs.addComponent(e, new OscillatorComponent({ waveform: type, frequency, volume: -10 }))
 
         // ecs.addComponent(e, new ScriptComponent(new AffectionScript()))
 

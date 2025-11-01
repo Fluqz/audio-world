@@ -1,4 +1,4 @@
-import { ComponentData } from "../ecs/components/component";
+import { Component, ComponentData } from "../ecs/components/component";
 import { componentRegistry } from "../ecs/components/registry";
 import { Scene } from "../ecs/scene";
 
@@ -34,9 +34,9 @@ export class SceneManager {
 
       for (const entityData of sceneJson.entities) {
 
-        const entity = scene.ecs.createEntity();
-
         // if (entityData.name) ecs.addName(entity, entityData.name)
+
+        const components: Component[] = []
 
         for (const [componentName, rawData] of Object.entries(entityData.components)) {
 
@@ -49,8 +49,10 @@ export class SceneManager {
             }
 
             const componentInstance = new ComponentClass(rawData);
-            scene.ecs.addComponent(entity, componentInstance);
+            components.push(componentInstance);
         }
+
+        scene.ecs.createEntityWithComponents(components)
       }
 
       return scene;

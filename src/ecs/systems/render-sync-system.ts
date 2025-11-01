@@ -1,4 +1,5 @@
 import { AssetMeshComponent } from "../components/asset-mesh-component";
+import { Component, ComponentClass } from "../components/component";
 import { MeshComponent } from "../components/mesh-component";
 import { PrimitiveMeshComponent } from "../components/primitive-mesh-component";
 import { TransformationComponent } from "../components/transformation-component";
@@ -7,12 +8,26 @@ import { System } from "./system";
 
 export class RenderSyncSystem extends System {
 
-    public ecs: ECS;
+    entities: Map<number, [TransformationComponent, MeshComponent]> = new Map()
 
-    constructor(ecs: ECS) {
+    components: ComponentClass<any>[] = [TransformationComponent]
+
+
+    constructor() {
         super()
+    }
+
+    init(ecs: ECS): void {
+
+        const assetMeshes = ecs.queryEntities(TransformationComponent, AssetMeshComponent)
         
-        this.ecs = ecs;
+        for(let [e] of assetMeshes)
+            this.tryTrackEntity(ecs, e)
+        
+        const primitiveMeshes = ecs.queryEntities(TransformationComponent, PrimitiveMeshComponent)
+
+        for(let [e] of primitiveMeshes)
+            this.tryTrackEntity(ecs, e)
     }
 
     update(ecs: ECS, dt:number): void {

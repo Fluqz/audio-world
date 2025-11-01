@@ -9,6 +9,7 @@ import { AudibleRadiusComponent } from "../components/audio/audible-radius-compo
 import { Entity } from "../entity";
 import { AudioSourceComponent } from "../components/audio/audio-source-component";
 import { PlayerComponent } from "../components/audio/player-component";
+import { Component, ComponentClass } from "../components/component";
 
 export class AudioSystem extends System {
 
@@ -20,14 +21,35 @@ export class AudioSystem extends System {
     // Master should not be in game should it?
     private get master() { return Game.master }
 
+    components: ComponentClass<any>[] = [TransformationComponent, AudibleRadiusComponent]
+
+    entities: Map<Entity, [TransformationComponent, AudibleRadiusComponent]> = new Map()
 
     constructor(octree: Octree) {
         super()
     }
 
+
+    init(ecs: ECS): void {
+
+        console.log('audio init')
+
+        ecs.events.on('component-added', ({ entity }) => this.tryTrackEntity(ecs, entity));
+        ecs.events.on('component-removed', ({ entity }) => this.tryTrackEntity(ecs, entity));
+        ecs.events.on('entity-removed', (entity) => this.entities.delete(entity));
+
+        const queried = ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)
+
+        for(let [e, []] of queried) {
+            this.tryTrackEntity(ecs, e)
+        }
+
+        console.log('init', this.entities)
+    }
+
     update(ecs: ECS, dt: number): void {
 
-        for (const [e, [transform, audible]] of ecs.queryEntities(TransformationComponent, AudibleRadiusComponent)) {
+        for (const [e, [transform, audible]] of this.entities.entries()) {
 
             let source: AudioSourceComponent = ecs.getComponent(e, OscillatorComponent) as OscillatorComponent
             if(source == undefined) source = ecs.getComponent(e, PlayerComponent) as PlayerComponent
@@ -35,10 +57,15 @@ export class AudioSystem extends System {
 
             if(source.isConnected == false) source.connect(this.master)
 
-            source.panner.maxDistance = audible.radius
+            console.log('source', source, source.panner)
 
-            // Update the audio source position
-            source.panner.setPosition(transform.position.x, 1, transform.position.z)
+            if(source.panner) {
+
+                source.panner.maxDistance = audible.radius
+                
+                // Update the audio source position
+                source.panner.setPosition(transform.position.x, 1, transform.position.z)
+            }
         }
     }
 
@@ -76,40 +103,40 @@ export class AudioSystem extends System {
     //     }
     // }
 
-    updatePositionalAudio(audio: AudioSourceComponent, distance: number, radius: number) : void {
+    // updatePositionalAudio(audio: AudioSourceComponent, distance: number, radius: number) : void {
 
-        // MUTE
-        if(distance > radius) {
+    //     // MUTE
+    //     if(distance > radius) {
             
-            audio.isMuted = true
+    //         audio.isMuted = true
 
-            if(audio.volumeNode.volume.value == AudioSystem.mindB) return
+    //         if(audio.volumeNode.volume.value == AudioSystem.mindB) return
 
-            audio.volumeNode.volume.value = AudioSystem.mindB
+    //         audio.volumeNode.volume.value = AudioSystem.mindB
 
-        }
-        else { // UNMUTE
+    //     }
+    //     else { // UNMUTE
 
-            // // Reverse Cool!
-            // let volume = M.map(d, 0, this.audio.range, this.mindB, this.maxdB) 
+    //         // // Reverse Cool!
+    //         // let volume = M.map(d, 0, this.audio.range, this.mindB, this.maxdB) 
 
-            let volume = this.distanceTodB(distance, .01, radius, -50, AudioSystem.maxdB)
+    //         let volume = this.distanceTodB(distance, .01, radius, -50, AudioSystem.maxdB)
 
-            audio.isMuted = false
+    //         audio.isMuted = false
 
-            if(audio.volumeNode.volume.value == volume) return
+    //         if(audio.volumeNode.volume.value == volume) return
 
-            audio.volumeNode.volume.setValueAtTime(volume, Tone.now())
-        }
-    }
+    //         audio.volumeNode.volume.setValueAtTime(volume, Tone.now())
+    //     }
+    // }
 
-    /** Sound pressure level */
-    public distanceTodB(distance: number, minDistance: number = .1, maxDistance: number = 50.0, mindB: number = -80.0, maxdB: number = 0.0): number {
+    // /** Sound pressure level */
+    // public distanceTodB(distance: number, minDistance: number = .1, maxDistance: number = 50.0, mindB: number = -80.0, maxdB: number = 0.0): number {
 
-        if (distance <= minDistance) return maxdB  // Full volume
-        if (distance >= maxDistance) return mindB  // Silent
+    //     if (distance <= minDistance) return maxdB  // Full volume
+    //     if (distance >= maxDistance) return mindB  // Silent
 
-        const t = (distance - minDistance) / (maxDistance - minDistance)  // Normalized [0, 1]
-        return (1 - t) * (maxdB - mindB) + mindB  // Linearly interpolate dB
-    }
+    //     const t = (distance - minDistance) / (maxDistance - minDistance)  // Normalized [0, 1]
+    //     return (1 - t) * (maxdB - mindB) + mindB  // Linearly interpolate dB
+    // }
 }

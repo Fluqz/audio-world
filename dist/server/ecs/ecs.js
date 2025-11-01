@@ -4,18 +4,37 @@ exports.ECS = void 0;
 const component_1 = require("./components/component");
 const script_component_1 = require("./components/script-component");
 const tag_component_1 = require("./components/tag-component");
-const name_component_1 = require("./components/name-component");
+const event_bus_1 = require("./event-bus");
 class ECS {
     constructor() {
+        /** ID counter that is used to make Entity IDs. */
         this.nextEntityId = 0;
+        /** All entities that were created. */
         this.entities = new Set();
+        /** A map of ComponentStores for each Component Type. */
         this.componentStores = new Map();
+        /** Array of registered systems */
         this.systems = [];
+        /** The event bus for the ECS. */
+        this.eventBus = new event_bus_1.EventBus();
     }
+    // Optional: expose it to systems
+    get events() {
+        return this.eventBus;
+    }
+    /** Creates a entity. No event bus! */
     createEntity() {
-        const id = this.nextEntityId++;
-        this.entities.add(id);
-        return id;
+        const entity = this.nextEntityId++;
+        this.entities.add(entity);
+        return entity;
+    }
+    createEntityWithComponents(components) {
+        const entity = this.createEntity();
+        for (const comp of components) {
+            this.addComponent(entity, comp);
+        }
+        this.events.emit('entity-added', entity);
+        return entity;
     }
     // loadPrefabFile(path:string) {
     //     const jsonString = null
@@ -30,6 +49,7 @@ class ECS {
     //         }
     //     }
     // }
+    /** Destroys the entity and all its components. */
     destroyEntity(entity) {
         var _a;
         if (!this.entities.has(entity))
@@ -49,21 +69,27 @@ class ECS {
             store.remove(entity);
         }
         this.entities.delete(entity);
+        this.eventBus.emit('entity-removed', { entity });
     }
+    /** Check if entity is part of the ECS. */
     entityExists(entity) {
         return this.entities.has(entity);
     }
+    /** Add a component to an entity. Makes a new ComponentStore if not existant. */
     addComponent(entity, component) {
         const type = component.constructor;
         if (!this.componentStores.has(type)) {
             this.componentStores.set(type, new component_1.ComponentStore());
         }
         this.componentStores.get(type).add(entity, component);
+        this.eventBus.emit('component-added', { entity, component });
     }
+    /** Returns the component of an entity by component class name. */
     getComponent(entity, componentClass) {
         var _a;
         return (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.get(entity);
     }
+    /** Returns all components of an entity */
     getAllComponents(entity) {
         const components = [];
         for (let [componentClass, store] of this.componentStores.entries()) {
@@ -73,18 +99,28 @@ class ECS {
         }
         return components;
     }
+    /** Returns all entities. */
     getAllEntities() {
         return this.entities;
     }
+    /** Removes a component */
     removeComponent(entity, componentClass) {
-        var _a;
-        (_a = this.componentStores.get(componentClass)) === null || _a === void 0 ? void 0 : _a.remove(entity);
+        const store = this.componentStores.get(componentClass);
+        if (!store)
+            return;
+        const component = store.get(entity);
+        if (component && component.destroy)
+            component.destroy();
+        this.eventBus.emit('component-removed', { entity, component });
     }
     registerSystem(system) {
         this.systems.push(system);
+        system.init(this);
+        this.eventBus.emit('system-registered', { system });
     }
     unregisterSystem(system) {
         this.systems.splice(this.systems.indexOf(system), 1);
+        this.eventBus.emit('system-unregistered', { system });
     }
     update(dt) {
         for (const system of this.systems) {
@@ -167,12 +203,6 @@ class ECS {
                 yield [entity, [...components, ...childComponents]];
             }
         }
-    }
-    addName(entity, name) {
-        this.addComponent(entity, new name_component_1.NameComponent({ name }));
-    }
-    addTag(entity, tagName) {
-        this.addComponent(entity, new tag_component_1.TagComponent({ tagName }));
     }
     hasTag(entity, tagName) {
         const tag = this.getComponent(entity, tag_component_1.TagComponent);

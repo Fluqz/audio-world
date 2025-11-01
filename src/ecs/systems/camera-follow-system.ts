@@ -6,8 +6,15 @@ import { System } from "./system";
 import { VelocityComponent } from "../components/velocity-component";
 import { InputComponent } from "../components/input-component";
 import { MovementComponent } from "../components/movement-component";
+import { ComponentClass } from "../components/component";
+import { Entity } from "../entity";
 
 export class CameraFollowSystem extends System {
+  
+  private player: Entity
+
+  entities: Map<Entity, [TransformationComponent, VelocityComponent, InputComponent, MovementComponent]> = new Map()
+  components: ComponentClass<any>[] = [TransformationComponent, VelocityComponent, InputComponent, MovementComponent]
   
   private maxDistance = 6
   private minDistance = 3
@@ -24,12 +31,24 @@ export class CameraFollowSystem extends System {
     controls.minZoom = .2
   }
 
-  update(ecs: ECS, dt: number): void {
-
+  init(ecs: ECS): void {
+    
     const result = ecs.getTaggedEntity("player", TransformationComponent, VelocityComponent, InputComponent, MovementComponent)
+
     if (!result) return
 
-    const [_, [ transform, velocity, input, move ]] = result
+    const [entity, components] = result
+
+    this.player = entity
+
+    this.tryTrackEntity(ecs, entity)
+  }
+
+  update(ecs: ECS, dt: number): void {
+
+    const result = this.entities.get(this.player)
+
+    const transform = result[0]
 
     const offset = new Vector3().copy(this.controls.object.position).sub(transform.position)
     const moveOffset = new Vector3().copy(transform.position).sub(this.oldPosition)

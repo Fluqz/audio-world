@@ -85,10 +85,10 @@ export class App {
             
             this.game.start()
 
+            console.log('Save', JSON.stringify(this.game.sceneManager.saveScene(this.game.sceneManager.scene)))
         }
         else {
 
         }
-        console.log('Save', JSON.stringify(this.game.sceneManager.saveScene(this.game.sceneManager.scene)))
     }
 }

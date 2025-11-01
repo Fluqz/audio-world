@@ -9,7 +9,7 @@ export enum Materials {
 
 export class MaterialFactory {
 
-    static create(materialTag: Materials) {
+    static create(materialTag: Materials, options?) {
 
         switch(materialTag) {
 

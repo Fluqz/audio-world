@@ -25,7 +25,6 @@ import { SceneManager } from './scene-manager'
 import { defaultActionMap, InputSystem } from '../ecs/systems/input-system'
 import { ThirdPersonMovementSystem } from '../ecs/systems/third-person-movement-system'
 import { CameraFollowSystem } from '../ecs/systems/camera-follow-system'
-import { CollisionSystem } from '../ecs/systems/collision-system'
 import { AudioListenerSystem } from '../ecs/systems/audio-listener-system'
 
 
@@ -135,6 +134,12 @@ export class Game {
 
             console.log('LOOP')
             this.loop()
+
+            setInterval(() => {
+
+                this.instanciateRandomly(Prefabs.Stone, 1, 100)
+
+            }, 2000)
         })
     }
     
@@ -209,7 +214,7 @@ export class Game {
         this.ecs.registerSystem(new AnimationSystem())
 
         
-        this.ecs.registerSystem(new RenderSyncSystem(this.ecs))
+        this.ecs.registerSystem(new RenderSyncSystem())
         
         this.ecs.registerSystem(new ScriptSystem())
 
@@ -241,6 +246,8 @@ export class Game {
                 )
             }
         }
+
+        this.sceneManager.scene.resolveAllReferences()
     }
 
     start() {

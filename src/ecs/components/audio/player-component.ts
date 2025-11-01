@@ -29,16 +29,18 @@ export class PlayerComponent extends AudioSourceComponent {
 
     resolveReferences(ecs: ECS) {
 
+        console.log('path',this.path)
+
         this.player = new Tone.Player(Globals.path + this.path)
         this.player.loop = this.loop
-        this.player.start()
+        this.player.autostart = true
 
         // Create a 3D panner
         this.panner = new Tone.Panner3D({
             panningModel: "HRTF",   // more realistic
             distanceModel: "exponential", // controls volume falloff
-            maxDistance: 50,
-            rolloffFactor: 1,
+            maxDistance: 100,
+            rolloffFactor: 1.3,
         })
 
         this.player.connect(this.panner)

@@ -1,3 +1,4 @@
+import { ComponentClass } from "../components/component";
 import { TransformationComponent } from "../components/transformation-component";
 import { ECS } from "../ecs";
 import { Entity } from "../entity";
@@ -8,6 +9,18 @@ export class SpatialSystem extends System {
     private octree: Octree;
     private trackedEntities: Set<Entity> = new Set();
 
+    entities: Map<number, [TransformationComponent]> = new Map()
+
+    components: ComponentClass<any>[] = [TransformationComponent]
+
+    init(ecs: ECS): void {
+        
+        const entities = ecs.queryEntities(TransformationComponent)
+
+        for(let [e] of entities)
+            this.tryTrackEntity(ecs, e)
+    }
+
     constructor(octree: Octree) {
         super();
         this.octree = octree;
@@ -15,7 +28,7 @@ export class SpatialSystem extends System {
 
     update(ecs: ECS, dt: number): void {
 
-        for (const [entity, [transform]] of ecs.queryEntities(TransformationComponent)) {
+        for (const [entity, [transform]] of this.entities.entries()) {
 
             this.octree.insert(entity, transform.position) // internally handles updates
             this.trackedEntities.add(entity)
