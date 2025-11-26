@@ -2,22 +2,22 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/client/index.ts',
+    entry: path.resolve(process.cwd(), 'src/client/index.ts'),
 
     module: {
         rules: [
-            // TypeScript
             {
                 test: /\.tsx?$/,
                 use: {
-                loader: 'ts-loader',
-                options: {
-                    configFile: 'tsconfig.client.json' // 👈 Important fix
-                }
+                    loader: 'ts-loader',
+                    options: {
+                        configFile: 'tsconfig.client.json'
+                    }
                 },
+                exclude: /node_modules/
             },
 
-            // Images and graphics
+            // Images
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
                 type: 'asset/resource',
@@ -26,7 +26,7 @@ module.exports = {
                 },
             },
 
-            // 3D model files
+            // 3D models
             {
                 test: /\.(glb|gltf)$/i,
                 type: 'asset/resource',
@@ -35,47 +35,43 @@ module.exports = {
                 },
             },
 
-            // JSON files used as static assets
+            // Audio
             {
-                test: /\.json$/,
-                type: 'asset/resource',
-                generator: {
-                    filename: 'assets/data/[name][hash][ext][query]',
-                },
-                type: 'json',
-                parser: {
-                    parse: JSON.parse
-                }
-            },
-
-            // Audio files
-            {
-                test: /\.(mp3|wav|ogg|m4a)$/,
+                test: /\.(mp3|wav|ogg|m4a)$/i,
                 type: 'asset/resource',
                 generator: {
                     filename: 'assets/audio/[name][hash][ext][query]',
                 },
             },
+
+            // JSON (use default Webpack parser)
+            {
+                test: /\.json$/,
+                type: 'json',
+                parser: {
+                    parse: JSON.parse
+                }
+            }
         ],
     },
 
     resolve: {
         alias: {
-            three: path.resolve('./node_modules/three'),
+            three: path.resolve(process.cwd(), 'node_modules/three')
         },
         extensions: ['.tsx', '.ts', '.js'],
     },
 
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, '../dist'), // Make sure this matches your folder layout
+        path: path.resolve(process.cwd(), 'dist'),
         clean: true,
     },
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: './public/index.html',
+            template: path.resolve(process.cwd(), 'public/index.html'),
             inject: 'body',
         }),
-    ],
+    ]
 };

@@ -50,6 +50,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
 
+console.log('SERVER INDEX.JS FILE WORKING')
+
 io.on('connection', (socket) => {
   console.log('a user connected');
   // Your socket handlers here

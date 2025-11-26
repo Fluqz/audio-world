@@ -5,15 +5,16 @@ const path = require('path');
 module.exports = merge(common, {
     mode: 'development',
     devtool: 'eval-source-map',
+
     devServer: {
         static: {
-            directory: path.join(__dirname, 'public/'),
+            directory: path.resolve(process.cwd(), 'public')
         },
         hot: true,
+        port: 3000,
         proxy: {
-            "/socket.io": {
-                target: "http://localhost:8080",
-                // target: "http://127.0.0.1:3000",
+            '/socket.io': {
+                target: 'http://localhost:8080',
                 ws: true
             }
         }

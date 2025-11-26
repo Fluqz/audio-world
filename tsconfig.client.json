@@ -1,21 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES6",                      // Modern browsers support ES6+
-    "module": "ESNext",                   // Let Webpack handle module bundling
-    "lib": ["DOM", "ES6", "DOM.Iterable"], // Needed libs for browser
-    "jsx": "preserve",                    // If you use React; otherwise can remove
-    "strict": false,                      // Enable strict type checking
-    "moduleResolution": "node",          // Resolve modules like Node.js
-    "strictNullChecks": false,
-    "esModuleInterop": true,              // For compatibility with commonjs modules
-    "skipLibCheck": true,                 // Skip type checking of declaration files
-    "sourceMap": true,                    // Generate source maps for debugging
-    "outDir": "./dist/client",            // Output directory, Webpack usually handles this
-    "baseUrl": "./src/client",            // Base path for imports
-    "paths": {                           // Optional, your aliases (if any)
-      "*": ["*"]
-    }
+    "target": "ES6",
+    "module": "ESNext",
+
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "strict": false,
+    "skipLibCheck": true,
+
+    // Source maps for dev tools
+    "sourceMap": true,
+
+    // Webpack handles bundling — just emit JS
+    "outDir": "./dist/client",
+
+    // Optional but tidy: help IDE resolve imports
+    "baseUrl": "./src/client"
   },
+
   "include": ["src/client/**/*"],
   "exclude": ["node_modules", "dist", "src/server"]
 }
