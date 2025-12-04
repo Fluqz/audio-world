@@ -14,12 +14,12 @@
 
     // Source maps for dev tools
     "sourceMap": true,
-
-    // Webpack handles bundling — just emit JS
-    "outDir": "./dist/client",
+    "declaration": false,
+    "declarationMap": false,
 
     // Optional but tidy: help IDE resolve imports
-    "baseUrl": "./src/client"
+    "baseUrl": "./src/client",
+    "noEmit": true
   },
 
   "include": ["src/client/**/*"],

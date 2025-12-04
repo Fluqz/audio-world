@@ -132,12 +132,11 @@ export class Game {
         
         this.loadScene(Globals.path + '/assets/scenes/single-object.scene.json').then(scene => {
 
-            console.log('LOOP')
             this.loop()
 
             setInterval(() => {
 
-                this.instanciateRandomly(Prefabs.Stone, 1, 100)
+                this.instanciateRandomly(Prefabs.Stone, 5, 50)
 
             }, 2000)
         })
@@ -182,15 +181,32 @@ export class Game {
 
     instanciatePrefab() {
 
-        const prefab = Prefabs.Stone(this.ecs)
+        this.sceneManager.loadPrefabFromFile(Globals.path + '/assets/prefabs/stone.json').then((e: Entity) => {
 
-        for(let e of this.ecs.entities.keys()) {
+            let transform = this.ecs.getComponent<TransformationComponent>(e, TransformationComponent)
 
-            for(let comp of this.ecs.getAllComponents(e)) {
-                
-                if(comp.resolveReferences) comp.resolveReferences(this.ecs)
+            if (transform) {
+
+                const range = 100
+
+                transform.position.set(
+                    (Math.random() * range) - (range / 2),
+                    0,
+                    (Math.random() * range) - (range / 2),
+                )
+
+                transform.rotation.set(
+                    0,
+                    (Math.random() * 2 * Math.PI),
+                    0
+                )
             }
-        }
+
+            this.sceneManager.scene.resolveAllReferences()
+
+        })
+
+
     }
 
     registerSystems() {
@@ -252,12 +268,12 @@ export class Game {
 
     start() {
 
-        Tone.Destination.volume.exponentialRampTo(0, .5)
+        Tone.getDestination().volume.exponentialRampTo(0, .5)
     }
 
     stop() {
 
-        Tone.Transport.stop()
+        Tone.getTransport().stop()
     }
 
     private isMuted: boolean = false
@@ -284,18 +300,18 @@ export class Game {
             setTimeout(() => {
 
                 Game.master.mute = true
-                Tone.Destination.mute = true
-                Game.master.volume.setValueAtTime(Number.NEGATIVE_INFINITY, Tone.context.currentTime)
+                Tone.getDestination().mute = true
+                Game.master.volume.setValueAtTime(Number.NEGATIVE_INFINITY, Tone.getContext().currentTime)
 
             }, 200)
 
-            Game.master.volume.linearRampToValueAtTime(-80, Tone.context.currentTime + .2)
+            Game.master.volume.linearRampToValueAtTime(-80, Tone.getContext().currentTime + .2)
         }
         else {
             
             Game.master.mute = false
-            Tone.Destination.mute = false
-            Game.master.volume.linearRampToValueAtTime(this.stored_volume, Tone.context.currentTime + .2)
+            Tone.getDestination().mute = false
+            Game.master.volume.linearRampToValueAtTime(this.stored_volume, Tone.getContext().currentTime + .2)
         }
     }
 

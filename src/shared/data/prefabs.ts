@@ -106,9 +106,9 @@ export const Prefabs = {
     //     // ecs.addComponent(new BoundingboxComponent())
     //     ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
-    //         transform.scale.x = Math.sin(Tone.context.currentTime) + 1.8
-    //         transform.scale.y = Math.cos(Tone.context.currentTime) + 2
-    //         transform.scale.z = Math.sin(Tone.context.currentTime) + 1.8
+    //         transform.scale.x = Math.sin(Tone.getContext().currentTime) + 1.8
+    //         transform.scale.y = Math.cos(Tone.getContext().currentTime) + 2
+    //         transform.scale.z = Math.sin(Tone.getContext().currentTime) + 1.8
     //         transform.needsUpdate = true
     //     }))
 
@@ -149,11 +149,11 @@ export const Prefabs = {
     //     // ecs.addComponent(e, new BoundingboxComponent())
     //     ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
-    //         // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-    //         // transform.scale.y = Math.cos(Tone.context.currentTime) + 2
-    //         // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+    //         // transform.scale.x = Math.sin(Tone.getContext().currentTime) + 1.5
+    //         // transform.scale.y = Math.cos(Tone.getContext().currentTime) + 2
+    //         // transform.scale.z = Math.sin(Tone.getContext().currentTime) + 1.5
 
-    //         transform.rotation.y = Math.sin(Tone.context.currentTime / 10)
+    //         transform.rotation.y = Math.sin(Tone.getContext().currentTime / 10)
     //         transform.needsUpdate = true
     //     }))
 
@@ -193,9 +193,9 @@ export const Prefabs = {
 
         // ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
-        //     // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-        //     transform.scale.y = Math.cos(Tone.context.currentTime) + 2
-        //     // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+        //     // transform.scale.x = Math.sin(Tone.getContext().currentTime) + 1.5
+        //     transform.scale.y = Math.cos(Tone.getContext().currentTime) + 2
+        //     // transform.scale.z = Math.sin(Tone.getContext().currentTime) + 1.5
         //     transform.needsUpdate = true
         // }))
 
@@ -225,9 +225,9 @@ export const Prefabs = {
     //     ecs.addComponent(e, new TransformationComponent())
     //     ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
-    //         // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-    //         transform.scale.y = Math.cos(Tone.context.currentTime) + 2
-    //         // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+    //         // transform.scale.x = Math.sin(Tone.getContext().currentTime) + 1.5
+    //         transform.scale.y = Math.cos(Tone.getContext().currentTime) + 2
+    //         // transform.scale.z = Math.sin(Tone.getContext().currentTime) + 1.5
     //         transform.needsUpdate = true
     //     }))
 
@@ -261,9 +261,9 @@ export const Prefabs = {
     //     ecs.addComponent(e, new TransformationComponent())
     //     ecs.addComponent(e, new AnimationComponent((e: Entity, transform: TransformationComponent) => {
 
-    //         // transform.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-    //         transform.scale.y = Math.cos(Tone.context.currentTime) + 2
-    //         // transform.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+    //         // transform.scale.x = Math.sin(Tone.getContext().currentTime) + 1.5
+    //         transform.scale.y = Math.cos(Tone.getContext().currentTime) + 2
+    //         // transform.scale.z = Math.sin(Tone.getContext().currentTime) + 1.5
     //         transform.needsUpdate = true
     //     }))
 

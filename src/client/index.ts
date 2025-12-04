@@ -15,7 +15,7 @@ const app = new App()
 
 const startGame = () => {
 
-    Tone.Transport.start()
+    Tone.getTransport().start()
 
 }
 document.addEventListener('click', startGame)

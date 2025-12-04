@@ -48,28 +48,6 @@ export class ECS {
         return entity
     }
 
-    // loadPrefabFile(path:string) {
-        
-    //     const jsonString = null
-
-    //     return jsonString
-    // }
-
-    // createFromPrefab(prefab: Prefab) {
-
-    //     const entity = this.createEntity()
-
-    //     if(prefab.name) this.addName(entity, prefab.name)
-
-    //     if(prefab.components) {
-
-    //         for(let comp of prefab.components) {
-
-    //             console.log('comp', comp)
-    //         }
-    //     }
-    // }
-
     /** Destroys the entity and all its components. */
     destroyEntity(entity: Entity): void {
 

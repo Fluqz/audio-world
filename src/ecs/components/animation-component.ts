@@ -13,9 +13,9 @@ export class AnimationComponent implements Component {
         this.animation = animation
 
         // Animation
-        // o.scale.x = Math.sin(Tone.context.currentTime) + 1.5
-        // o.scale.y = Math.cos(Tone.context.currentTime) + 2
-        // o.scale.z = Math.sin(Tone.context.currentTime) + 1.5
+        // o.scale.x = Math.sin(Tone.getContext().currentTime) + 1.5
+        // o.scale.y = Math.cos(Tone.getContext().currentTime) + 2
+        // o.scale.z = Math.sin(Tone.getContext().currentTime) + 1.5
         // o.updateMatrix()
 
 

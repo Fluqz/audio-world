@@ -20,7 +20,7 @@ export class App {
     init() {
         console.log('App init()');
         
-        Tone.Destination.volume.setValueAtTime(-80, Tone.now())
+        Tone.getDestination().volume.setValueAtTime(-80, Tone.now())
 
         Globals.dom = document.getElementById('webGL') as HTMLElement
 
@@ -78,10 +78,10 @@ export class App {
 
             this.hasStarted = true
             
-            if (Tone.context.state !== 'running')
-                Tone.context.resume()
+            if (Tone.getContext().state !== 'running')
+                Tone.getContext().resume()
 
-            Tone.Transport.start()
+            Tone.getTransport().start()
             
             this.game.start()
 

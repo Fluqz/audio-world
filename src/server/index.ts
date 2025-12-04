@@ -49,6 +49,7 @@ import { Server as SocketIOServer } from 'socket.io';
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
+const port = 8080
 
 console.log('SERVER INDEX.JS FILE WORKING')
 
@@ -57,6 +58,6 @@ io.on('connection', (socket) => {
   // Your socket handlers here
 });
 
-server.listen(9000, () => {
-  console.log('Server listening on port 9000');
+server.listen(port, () => {
+  console.log('Server listening on port ${port}');
 });

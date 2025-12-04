@@ -21,9 +21,9 @@ export class AudioListenerSystem extends System {
   constructor() {
     super()
 
-    Tone.Listener.upX.value = 0
-    Tone.Listener.upY.value = 1
-    Tone.Listener.upZ.value = 0
+    Tone.getListener().upX.value = 0
+    Tone.getListener().upY.value = 1
+    Tone.getListener().upZ.value = 0
   }
   
 
@@ -43,15 +43,15 @@ export class AudioListenerSystem extends System {
     if(!this.playerTransform) return
 
     // Update listener position
-    Tone.Listener.positionX.value = this.playerTransform.position.x
-    Tone.Listener.positionY.value = this.playerTransform.position.y
-    Tone.Listener.positionZ.value = this.playerTransform.position.z
+    Tone.getListener().positionX.value = this.playerTransform.position.x
+    Tone.getListener().positionY.value = this.playerTransform.position.y
+    Tone.getListener().positionZ.value = this.playerTransform.position.z
 
     this.forward.copy(M.FORWARD).applyQuaternion(this.playerTransform.quaternion)
 
     // Update listener orientation
-    Tone.Listener.forwardX.value = this.forward.x
-    Tone.Listener.forwardY.value = this.forward.y
-    Tone.Listener.forwardZ.value = this.forward.z
+    Tone.getListener().forwardX.value = this.forward.x
+    Tone.getListener().forwardY.value = this.forward.y
+    Tone.getListener().forwardZ.value = this.forward.z
   }
 }

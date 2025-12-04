@@ -14,8 +14,6 @@ export type SceneData = {
     entities: SceneEntityData[];
 }
 
-
-
 export class SceneManager {
 
     scene: Scene
@@ -25,16 +23,38 @@ export class SceneManager {
       return scene.serialize()
     }
     
+    /** Loads a scene.json file and creates a new scene with the entities from the file. */
     async loadScene(path: string): Promise<Scene> {
 
       const sceneJson: SceneData = await fetch(path).then(res => res.json());
 
       const scene = new Scene(sceneJson.name ?? 'Scene');
 
-
       for (const entityData of sceneJson.entities) {
 
         // if (entityData.name) ecs.addName(entity, entityData.name)
+
+        const components = this.getComponentsFromEntityData(entityData);
+
+        scene.ecs.createEntityWithComponents(components)
+      }
+
+      return scene;
+    }
+
+    /** Loads a prefab.json file and creates and adds an entity to the scene */
+    async loadPrefabFromFile(path: string) {
+
+      const entityData: SceneEntityData = await fetch(path).then(res => res.json());
+
+      const components = this.getComponentsFromEntityData(entityData);
+
+      return this.scene.ecs.createEntityWithComponents(components)
+    }
+
+
+    /** Returns an array of components from the given entity data */
+    private getComponentsFromEntityData(entityData: SceneEntityData) {
 
         const components: Component[] = []
 
@@ -52,9 +72,6 @@ export class SceneManager {
             components.push(componentInstance);
         }
 
-        scene.ecs.createEntityWithComponents(components)
-      }
-
-      return scene;
+        return components
     }
 }
