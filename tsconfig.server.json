@@ -3,8 +3,8 @@
     "target": "ES2020",
     "module": "CommonJS",
     "lib": ["ES2020"],
-    "outDir": "./dist/server",
-    "rootDir": "./src/server",
+    "outDir": "./dist",
+    "rootDir": "./src",
 
     // Node-friendly settings
     "moduleResolution": "node",
@@ -23,6 +23,6 @@
     "sourceMap": true
   },
 
-  "include": ["src/server/**/*", "src/ecs/**/*", "src/shared/**/*"],
-  "exclude": ["node_modules", "dist", "src/client"]
+  "include": ["src/server"],
+  "exclude": ["node_modules", "dist", "src/client", "src/ecs", "src/shared"]
 }

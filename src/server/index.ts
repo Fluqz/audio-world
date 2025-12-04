@@ -48,16 +48,23 @@ import { Server as SocketIOServer } from 'socket.io';
 
 const app = express();
 const server = http.createServer(app);
-const io = new SocketIOServer(server);
-const port = 8080
-
-console.log('SERVER INDEX.JS FILE WORKING')
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  // Your socket handlers here
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
 });
 
-server.listen(port, () => {
-  console.log('Server listening on port ${port}');
+const PORT = 8080;
+
+io.on('connection', (socket) => {
+  console.log('Player connected:', socket.id);
+  
+  socket.on('disconnect', () => {
+    console.log('Player disconnected:', socket.id);
+  });
+});
+
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`, PORT);
 });

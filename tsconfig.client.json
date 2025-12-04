@@ -1,27 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-
-    "lib": ["DOM", "DOM.Iterable", "ES2020"],
-
-    "moduleResolution": "node",
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-
     "strict": false,
-    "skipLibCheck": true,
-
-    // Source maps for dev tools
-    "sourceMap": true,
-    "declaration": false,
-    "declarationMap": false,
-
-    // Optional but tidy: help IDE resolve imports
-    "baseUrl": "./src/client",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "noEmit": true
   },
-
-  "include": ["src/client/**/*"],
-  "exclude": ["node_modules", "dist", "src/server"]
+  "include": ["src/client"]
 }

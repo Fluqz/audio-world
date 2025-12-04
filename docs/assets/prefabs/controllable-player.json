@@ -1,0 +1,24 @@
+{
+    "name": "ControllablePlayer",
+    "components": {
+        "TagComponent": { "tagName": "ControllablePlayer" },
+        "TransformationComponent": {
+            "position": [0, 0.3, 0],
+            "rotation": [0, 0, 0, "XYZ"],
+            "quaternion": [0, 0, 0, 1],
+            "scale": [0, 0, 0]
+        },
+        "GraphicsComponent": null,
+        "VelocityComponent": null,
+        "AudioListenerComponent": {
+            "TransformationComponent": {
+                "position": [0, 0.3, 0],
+                "rotation": [0, 0, 0, "XYZ"],
+                "quaternion": [0, 0, 0, 1],
+                "scale": [0, 0, 0]
+            }
+        },
+        "ScriptComponent": null,
+        "ThirdPersonControllerComponent": null
+    }
+}

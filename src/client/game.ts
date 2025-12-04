@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import * as Stats from 'stats.js'
+import Stats from 'stats.js'
 import * as Tone from 'tone'
 
 import { Globals } from '../globals'
@@ -130,13 +130,13 @@ export class Game {
 
         if(this.sceneManager.scene) this.sceneManager.scene.unload()
         
-        this.loadScene(Globals.path + '/assets/scenes/single-object.scene.json').then(scene => {
+        this.loadScene('/assets/scenes/single-object.scene.json').then(scene => {
 
             this.loop()
 
             setInterval(() => {
 
-                this.instanciateRandomly(Prefabs.Stone, 5, 50)
+                this.instanciateRandomly(Prefabs.Stone, 1, 50)
 
             }, 2000)
         })

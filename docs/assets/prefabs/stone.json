@@ -1,0 +1,20 @@
+{
+    "name": "Stone",
+    "components": {
+        "NameComponent": { "name": "Stone" },
+        "TagComponent": { "tagName": "organism" },
+        "TransformationComponent": {
+            "position": [-5.5012022341754445, 0, 14.873361974895175],
+            "rotation": [0, 0.43113268897138757, 0, "XYZ"],
+            "quaternion": [0, 0, 0, 1],
+            "scale": [1, 1, 1]
+        },
+        "PrimitiveMeshComponent": {
+            "primitive": "CUBOID",
+            "options": { "name": "Cuboid", "w": 3, "h": 3, "d": 3 },
+            "materialTag": "FACE_DISPLACEMENT"
+        },
+        "AudibleRadiusComponent": { "radius": 100 },
+        "OscillatorComponent": { "waveform": "triangle", "frequency": 300, "volume": -10 }
+    }
+}
