@@ -1,24 +1,19 @@
 {
-    "name": "ControllablePlayer",
+    "name": "player",
     "components": {
-        "TagComponent": { "tagName": "ControllablePlayer" },
+        "NameComponent": { "name": "player" },
+        "TagComponent": { "tagName": "player" },
+        "RigidbodyComponent": { "isKinematic": false },
         "TransformationComponent": {
-            "position": [0, 0.3, 0],
+            "position": [-5.657227454980887, 0.3, -20.15238837319676],
             "rotation": [0, 0, 0, "XYZ"],
-            "quaternion": [0, 0, 0, 1],
-            "scale": [0, 0, 0]
+            "quaternion": [0, -0.9935972561904114, 0, 0.11298005350895404],
+            "scale": [1, 1, 1]
         },
-        "GraphicsComponent": null,
         "VelocityComponent": null,
-        "AudioListenerComponent": {
-            "TransformationComponent": {
-                "position": [0, 0.3, 0],
-                "rotation": [0, 0, 0, "XYZ"],
-                "quaternion": [0, 0, 0, 1],
-                "scale": [0, 0, 0]
-            }
-        },
-        "ScriptComponent": null,
-        "ThirdPersonControllerComponent": null
+        "InputComponent": null,
+        "MovementComponent": null,
+        "PrimitiveMeshComponent": { "primitive": "CUBOID", "options": { "name": "Cuboid", "w": 0.1, "h": 1, "d": 1 }, "materialTag": "PLAYER" },
+        "AudibleRadiusComponent": { "radius": 100 }
     }
 }
