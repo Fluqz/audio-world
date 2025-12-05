@@ -3,7 +3,7 @@ const { resolve } = require('path')
 
 module.exports = defineConfig({
   root: './src/client',
-  base: '/',
+  base: '/audio-world/',
   publicDir: '../../public',
   server: {
     port: 3000,
