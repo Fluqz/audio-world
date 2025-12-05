@@ -13,10 +13,14 @@ import * as Tone from 'tone'
 
 const app = new App()
 
+let init = true
 const startGame = () => {
 
-    Tone.getTransport().start()
+    if(init) {
 
+        init = false
+        Tone.getTransport().start()
+    }
 }
 document.addEventListener('click', startGame)
 document.addEventListener('touchstart', startGame)

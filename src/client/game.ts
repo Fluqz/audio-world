@@ -26,6 +26,10 @@ import { defaultActionMap, InputSystem } from '../ecs/systems/input-system'
 import { ThirdPersonMovementSystem } from '../ecs/systems/third-person-movement-system'
 import { CameraFollowSystem } from '../ecs/systems/camera-follow-system'
 import { AudioListenerSystem } from '../ecs/systems/audio-listener-system'
+import { NetworkManager } from './network-manager'
+import { NetworkSystem } from '../ecs/systems/network-system'
+import { PlayerState } from '../shared/network'
+import { InputComponent } from '../ecs/components/input-component'
 
 
 export class Game {
@@ -37,13 +41,14 @@ export class Game {
     public ecs: ECS
     public octree: Octree
 
-    public player: Entity
-
     public sceneManager: SceneManager
 
     public renderManager: RenderManager
 
     public static master: Tone.Volume
+
+    public networkManager: NetworkManager
+    private networkSystem: NetworkSystem
 
     private updateClock: THREE.Clock
     private fixedUpdateClock: THREE.Clock
@@ -75,6 +80,8 @@ export class Game {
 
         new Input(this.dom)
 
+        // Init Network Manager
+        this.networkManager = new NetworkManager()
 
         // Init Tonejs Master
         Game.master = new Tone.Volume(-2)
@@ -123,22 +130,30 @@ export class Game {
         }
     }
 
-    init() {
+    async init() {
 
         this.fixedUpdateClock = new THREE.Clock()
         this.updateClock = new THREE.Clock()
 
         if(this.sceneManager.scene) this.sceneManager.scene.unload()
         
+        // Connect to server before loading scene
+        try {
+            await this.networkManager.connect()
+            console.log('Connected to multiplayer server')
+        } catch (error) {
+            console.error('Failed to connect to server:', error)
+        }
+
         this.loadScene('/assets/scenes/single-object.scene.json').then(scene => {
 
             this.loop()
 
-            setInterval(() => {
+            // setInterval(() => {
 
-                this.instanciateRandomly(Prefabs.Stone, 1, 50)
+            //     this.instanciateRandomly(Prefabs.Stone, 1, 50)
 
-            }, 2000)
+            // }, 2000)
         })
     }
     
@@ -170,7 +185,7 @@ export class Game {
 
         this.setScene(scene, (ecs: ECS) => {
 
-            this.player = Prefabs.Player(scene.ecs)
+            // this.player = Prefabs.Player(scene.ecs)
 
             this.instanciateRandomly(Prefabs.Stone, 5, 50)
         })
@@ -213,6 +228,10 @@ export class Game {
 
         if(!this.ecs) return 
 
+        // Network system for remote players
+        this.networkSystem = new NetworkSystem()
+        this.ecs.registerSystem(this.networkSystem)
+
         // Inputs
         this.ecs.registerSystem(new InputSystem(defaultActionMap))
         // Player Controller
@@ -236,6 +255,52 @@ export class Game {
 
         this.ecs.registerSystem(new AudioSystem(this.octree))
         this.ecs.registerSystem(new AudioListenerSystem())
+
+        // Setup network callbacks
+        this.setupNetworkCallbacks()
+    }
+
+    private setupNetworkCallbacks(): void {
+        // Handle world state updates
+        this.networkManager.onStateUpdate = (state) => {
+
+            const remotePlayersMap = new Map<string, PlayerState>()
+            for (const player of state.players) {
+                remotePlayersMap.set(player.id, player)
+            }
+            this.networkSystem.update(this.ecs, 0, remotePlayersMap)
+        }
+
+        // Handle player joined
+        this.networkManager.onPlayerJoined = (player) => {
+
+            console.log('onplayerjoined')
+            // Create a visual representation for remote player
+            this.sceneManager.loadPrefabFromFile('/assets/prefabs/guest.json').then((remotePlayer: Entity) => {
+
+                const transform = this.ecs.getComponent<TransformationComponent>(remotePlayer, TransformationComponent)
+                
+                if (transform) {
+                    transform.position.set(player.position.x, player.position.y, player.position.z)
+                }
+                console.log('GUEST ADDED', remotePlayer)
+                
+                this.networkSystem.addRemotePlayer(player.id, remotePlayer)
+
+                this.sceneManager.scene.resolveAllReferences()
+                console.log('Remote player joined:', player.id)
+            })
+        }
+
+        // Handle player left
+        this.networkManager.onPlayerLeft = (playerId) => {
+            const entity = this.networkSystem.getRemotePlayer(playerId)
+            if (entity) {
+                this.ecs.destroyEntity(entity)
+            }
+            this.networkSystem.removeRemotePlayer(playerId)
+            console.log('Remote player left:', playerId)
+        }
     }
 
     private instanciateRandomly(instaciateFunc: (...args) => Entity, amount: number, range: number) {
@@ -319,7 +384,31 @@ export class Game {
 
         if(this.sceneManager.scene) this.sceneManager.scene.update(this.updateClock.getDelta())
 
+        // Send player input to server every frame
+        this.sendPlayerInput()
+
         this.renderManager.render()
+    }
+
+    private sendPlayerInput(): void {
+
+        if (!this.networkManager.isConnected()) return
+
+        // Extract input from the player's InputComponent or Input state
+        const input = {
+            forward: this.isKeyPressed('w'),
+            backward: this.isKeyPressed('s'),
+            left: this.isKeyPressed('a'),
+            right: this.isKeyPressed('d'),
+            jump: this.isKeyPressed(' '),
+        }
+
+        this.networkManager.sendInput(input)
+    }
+
+    private isKeyPressed(key: string): boolean {
+        const keyMap = Globals.keyMap || {}
+        return keyMap[key.toLowerCase()] ?? false
     }
 
     private fixedUpdateTiming: number = 20;

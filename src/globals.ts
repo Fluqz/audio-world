@@ -12,4 +12,6 @@ export class Globals {
     static path = window.location.origin + window.location.pathname
 
     static debug: boolean = true
+
+    static keyMap: Record<string, boolean>
 }

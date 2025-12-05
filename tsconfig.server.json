@@ -20,9 +20,15 @@
     "noEmitOnError": false,
 
     // Optional: helpful for debugging
-    "sourceMap": true
+    "sourceMap": true,
+
+    // Path mappings
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["src/shared/*"]
+    }
   },
 
-  "include": ["src/server"],
-  "exclude": ["node_modules", "dist", "src/client", "src/ecs", "src/shared"]
+  "include": ["src/server/**/*", "src/shared/network.ts"],
+  "exclude": ["node_modules", "dist", "src/client/**/*", "src/ecs/**/*", "src/globals.ts"]
 }

@@ -1,0 +1,19 @@
+{
+    "name": "player",
+    "components": {
+        "NameComponent": { "name": "guest" },
+        "TagComponent": { "tagName": "guest" },
+        "RigidbodyComponent": { "isKinematic": false },
+        "TransformationComponent": {
+            "position": [0, 0.3, 0],
+            "rotation": [0, 0, 0, "XYZ"],
+            "quaternion": [0, 0, 0, 1],
+            "scale": [1, 1, 1]
+        },
+        "VelocityComponent": null,
+        "MovementComponent": null,
+        "PrimitiveMeshComponent": { "primitive": "CUBOID", "options": { "name": "Cuboid", "w": 1, "h": 1, "d": 1 }, "materialTag": "PLAYER" },
+        "AudibleRadiusComponent": { "radius": 100 },
+        "OscillatorComponent": { "waveform": "triangle", "frequency": 300, "volume": -10 }
+    }
+}

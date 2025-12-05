@@ -42,26 +42,26 @@ export class App {
             
         })
 
-        window.addEventListener('focus', () => {
+        // window.addEventListener('focus', () => {
 
-            this.game.toggleMute(false)
-        })
-        window.addEventListener('blur', () => {
+        //     this.game.toggleMute(false)
+        // })
+        // window.addEventListener('blur', () => {
 
-            this.game.toggleMute(true)
+        //     this.game.toggleMute(true)
 
-            // console.log('blur')
+        //     // console.log('blur')
 
-        })
-        window.onbeforeunload = () => {
+        // })
+        // window.onbeforeunload = () => {
 
-            this.game.toggleMute(true)
+        //     this.game.toggleMute(true)
 
-            // console.log('onbeforeunload')
+        //     // console.log('onbeforeunload')
             
-            // this.game.destroy()
-            return
-        }
+        //     // this.game.destroy()
+        //     return
+        // }
         window.onresize = () => {
 
             this.game.resize()

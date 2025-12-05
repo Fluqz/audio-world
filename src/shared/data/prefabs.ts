@@ -54,6 +54,10 @@ export const Prefabs = {
 
         ])
 
+        const t = ecs.getComponent(e, TransformationComponent)
+
+        t.position.y = .3
+
         return e
     },
 

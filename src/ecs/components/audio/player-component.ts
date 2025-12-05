@@ -29,8 +29,6 @@ export class PlayerComponent extends AudioSourceComponent {
 
     resolveReferences(ecs: ECS) {
 
-        console.log('path',this.path)
-
         this.player = new Tone.Player(Globals.path + this.path)
         this.player.loop = this.loop
         this.player.autostart = true

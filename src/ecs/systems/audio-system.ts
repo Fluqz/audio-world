@@ -32,8 +32,6 @@ export class AudioSystem extends System {
 
     init(ecs: ECS): void {
 
-        console.log('audio init')
-
         ecs.events.on('component-added', ({ entity }) => this.tryTrackEntity(ecs, entity));
         ecs.events.on('component-removed', ({ entity }) => this.tryTrackEntity(ecs, entity));
         ecs.events.on('entity-removed', (entity) => this.entities.delete(entity));
@@ -43,8 +41,6 @@ export class AudioSystem extends System {
         for(let [e, []] of queried) {
             this.tryTrackEntity(ecs, e)
         }
-
-        console.log('init', this.entities)
     }
 
     update(ecs: ECS, dt: number): void {
@@ -56,8 +52,6 @@ export class AudioSystem extends System {
             if(source == undefined) continue
 
             if(source.isConnected == false) source.connect(this.master)
-
-            console.log('source', source, source.panner)
 
             if(source.panner) {
 

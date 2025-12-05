@@ -11,7 +11,7 @@ export abstract class System {
     onEntityAdded?(entity: Entity, components: Component[]): void;
     onEntityRemoved?(entity: Entity): void;
 
-    abstract update(ecs: ECS, dt: number): void;
+    abstract update(ecs: ECS, dt: number, ...args): void;
 
     init(ecs: ECS): void {
 
@@ -35,13 +35,10 @@ export abstract class System {
      */
     protected tryTrackEntity(ecs: ECS, entity: Entity): void {
 
-
         const hasAll = this.components.every(cls => ecs.getComponent(entity, cls));
         const isTracked = this.entities.has(entity);
 
         if (hasAll && !isTracked) {
-
-            console.log('track', entity)
 
             const comps = this.components.map(cls => ecs.getComponent(entity, cls)!);
             this.entities.set(entity, comps);

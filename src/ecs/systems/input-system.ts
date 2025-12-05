@@ -4,6 +4,7 @@ import { System } from "./system"
 import { InputComponent } from '../components/input-component';
 import { Component, ComponentClass } from "../components/component";
 import { Entity } from "../entity";
+import { Globals } from "../../globals";
 
 export type GamepadButton = number;
 export type KeyboardKey = string;
@@ -55,7 +56,15 @@ export class InputSystem extends System {
     this.actionMap = actionMap;
 
     window.addEventListener('keydown', (e: KeyboardEvent) => {console.log('keydown', e.key);this.keys[e.key.toLowerCase()] = true })
-    window.addEventListener('keyup', (e: KeyboardEvent) => {console.log('keydown', e.key); delete this.keys[e.key.toLowerCase()] })
+    window.addEventListener('keyup', (e: KeyboardEvent) => {
+
+      console.log('keydown', e.key); 
+      
+      delete this.keys[e.key.toLowerCase()] 
+    })
+
+    // Store keys globally for network input
+    Globals.keyMap = this.keys
   }
 
   init(ecs: ECS): void {
